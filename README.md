@@ -1,5 +1,8 @@
 # Football Salary Efficiency — TFG Bachelor's Thesis
 
+
+> 🌐 **Live project page:** [pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET](https://pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET)
+
 Econometric analysis of salary efficiency in European football. The project estimates position-specific wage models using OLS regression, computes individual efficiency scores (observed vs. predicted log-wage), and applies the framework to scouting, squad restructuring, and market intelligence.
 
 **Leagues covered:** Premier League, La Liga, Bundesliga, Serie A, Ligue 1  
