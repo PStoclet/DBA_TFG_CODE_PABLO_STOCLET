@@ -1,0 +1,42 @@
+# Claude Code local settings
+.claude/
+
+# Data files (large, not for version control)
+data/raw/**/*.xlsx
+data/raw/**/*.csv
+data/processed/**/*.xlsx
+data/processed/**/*.csv
+data/results/**/*.csv
+data/results/**/*.html
+
+# Dashboard caches
+src/dashboard/photo_cache/
+src/dashboard/logo_cache/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv/
+venv/
+
+# macOS
+.DS_Store
+*.DS_Store
+
+# Temp / Office lock files
+~$*
+
+# Docs binaries
+docs/*.docx
+docs/*.pdf
+
+# Zip artifacts
+*.zip
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Streamlit (abandoned prototype)
+.streamlit/

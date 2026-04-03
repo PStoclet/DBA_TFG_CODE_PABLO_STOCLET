@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% block title %}Player Rankings · FSI{% endblock %}
+{% block head_extra %}
+<style>
+.page-hero{
+  padding:3.5rem 2rem 2.5rem;
+  border-bottom:1px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.page-hero::before {
+  content:''; position:absolute; top:-60%; left:-10%;
+  width:700px; height:600px;
+  background:radial-gradient(ellipse at 20% 40%, rgba(99,102,241,.07) 0%, transparent 60%);
+  pointer-events:none;
+}
+.page-hero h1{font-family:var(--font-head);font-size:2.2rem;font-weight:800;margin-bottom:.4rem;letter-spacing:-.03em}
+
+/* 3-way type toggle */
+.type-toggle{display:flex;gap:.4rem;background:rgba(255,255,255,.04);padding:.3rem;border-radius:10px;width:fit-content}
+.type-btn{
+  font-family:var(--font-head);font-size:.82rem;font-weight:600;
+  padding:.4rem 1.1rem;border-radius:7px;border:none;
+  background:transparent;color:var(--t4);cursor:pointer;
+  transition:all var(--dur) var(--ease);letter-spacing:.2px;
+}
+.type-btn:hover{color:var(--t2);background:rgba(255,255,255,.05)}
+.type-btn.active-under{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.type-btn.active-fair {background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.25)}
+.type-btn.active-over {background:rgba(239,68,68,.15); color:#f87171;border:1px solid rgba(239,68,68,.25)}
+
+/* Efficiency interpretation badge */
+.eff-interp{
+  font-size:.66rem;font-weight:700;letter-spacing:.8px;
+  padding:.22rem .65rem;border-radius:9999px;margin-top:.25rem;
+  display:inline-block;text-transform:uppercase;
+}
+.eff-interp.under{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.25);box-shadow:0 0 8px rgba(34,197,94,.1)}
+.eff-interp.fair {background:rgba(59,130,246,.1);color:#93c5fd;border:1px solid rgba(59,130,246,.25);box-shadow:0 0 8px rgba(59,130,246,.1)}
+.eff-interp.over {background:rgba(239,68,68,.1); color:#f87171;border:1px solid rgba(239,68,68,.25);box-shadow:0 0 8px rgba(239,68,68,.1)}
+
+/* Category explanation banner */
+.cat-banner{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:.9rem 1.2rem;margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:.8rem;font-size:.84rem;color:var(--t3);
+  transition:all var(--dur) var(--ease);
+}
+.cat-banner strong{color:var(--t2)}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+<div class="page-hero">
+  <div class="container">
+    <div class="section-eyebrow">Player Rankings</div>
+    <h1>Who Is Over or Underpaid?</h1>
+    <p style="color:var(--t3);font-size:.95rem;max-width:640px;margin-top:.4rem">Efficiency score = log(actual wage) − log(model-predicted wage). Negative scores indicate wages below the position benchmark — potential bargains. Positive scores indicate wages above prediction. Filter by position and category.</p>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Season</span>
+    {% for s in seasons %}<button class="season-btn" data-s="{{ s }}">{{ s }}</button>{% endfor %}
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Leagues</span>
+    {% for l in leagues %}<button class="league-pill" data-l="{{ l }}">{{ l }}</button>{% endfor %}
+  </div>
+</div>
+
+<div class="container" style="padding-top:2rem;padding-bottom:4rem">
+
+  <!-- KPI tiles -->
+  <div class="stat-grid reveal reveal-stagger mb-4">
+    <div class="stat-tile blue-tile"><div class="num blue" id="pl-n">—</div><div class="lbl">Player-Seasons</div></div>
+    <div class="stat-tile green-tile"><div class="num green" id="pl-un">—</div><div class="lbl">% Underpaid</div></div>
+    <div class="stat-tile purple-tile"><div class="num" style="color:var(--purple)" id="pl-fair">—</div><div class="lbl">% Fairly Paid</div></div>
+    <div class="stat-tile red-tile"><div class="num red" id="pl-ov">—</div><div class="lbl">% Overpaid</div></div>
+    <div class="stat-tile amber-tile"><div class="num amber" id="pl-median">—</div><div class="lbl">Median Annual Wage</div></div>
+  </div>
+
+  <!-- Type + Position controls -->
+  <div class="reveal" style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1rem;flex-wrap:wrap">
+    <div class="type-toggle">
+      <button class="type-btn active-under" data-t="underpaid">🟢 Most Underpaid</button>
+      <button class="type-btn" data-t="fairly_paid">🔵 Fairly Priced</button>
+      <button class="type-btn" data-t="overpaid">🔴 Most Overpaid</button>
+    </div>
+    <div class="tab-bar" id="posFilter">
+      <button class="tab active" data-pos="all">All</button>
+      <button class="tab" data-pos="Goalkeepers">🧤 GK</button>
+      <button class="tab" data-pos="Defenders">🛡 DEF</button>
+      <button class="tab" data-pos="Midfielders">⚙️ MID</button>
+      <button class="tab" data-pos="Forwards">⚡ FWD</button>
+    </div>
+  </div>
+
+  <!-- Category explanation -->
+  <div class="cat-banner reveal" id="catBanner">
+    <span style="font-size:1.2rem">🟢</span>
+    <span id="catDesc">Players paid <strong>significantly below</strong> what the OLS model predicts given their stats. These represent bargains — clubs extracting surplus value from their contracts.</span>
+  </div>
+
+  <!-- Cards grid -->
+  <div class="grid-auto reveal" id="playersGrid">
+    <div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading players…</div>
+  </div>
+
+  <!-- Scatter chart -->
+  <div class="divider"></div>
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">Wage vs Efficiency</div>
+    <h2 class="section-title">Salary vs Efficiency Score</h2>
+    <p class="section-desc">Each dot = one player-season. Green = underpaid (below model), Red = overpaid (above model), Blue = fairly priced (within ±20%). Hover for details.</p>
+  </div>
+  <div class="card card-pad reveal">
+    <div style="height:440px"><canvas id="scatterChart"></canvas></div>
+  </div>
+
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let playerType = 'underpaid';
+let playerPos  = 'all';
+
+const CAT_META = {
+  underpaid: {
+    icon:'🟢', cls:'active-under',
+    desc:'Players paid <strong>significantly below</strong> what the OLS model predicts given their stats. These represent bargains — clubs extracting surplus value from their contracts.',
+    interpCls:'under', interpTxt: pct => `${pct}% below model`
+  },
+  fairly_paid: {
+    icon:'🔵', cls:'active-fair',
+    desc:'Players whose actual wage is <strong>within ±20% of the model prediction</strong>. This validates model accuracy — most players cluster here, confirming the OLS specification captures market pricing well.',
+    interpCls:'fair', interpTxt: pct => `±${pct}% of model`
+  },
+  overpaid: {
+    icon:'🔴', cls:'active-over',
+    desc:'Players paid <strong>significantly above</strong> what the model predicts. This can reflect brand value, negotiation power, or information asymmetry — wages exceeding statistical performance.',
+    interpCls:'over', interpTxt: pct => `${pct}% above model`
+  }
+};
+
+initFilters({{ seasons|tojson }}, {{ leagues|tojson }}, {{ latest|tojson }}, loadAll);
+
+async function loadAll() {
+  loadStats(); loadPlayers(); loadScatter();
+}
+
+async function loadStats() {
+  const d = await apiFetch('/api/stats');
+  document.getElementById('pl-n').textContent      = (d.total||0).toLocaleString();
+  document.getElementById('pl-un').textContent     = (d.pct_underpaid||0).toFixed(1)+'%';
+  document.getElementById('pl-fair').textContent   = (d.pct_fairly_paid||0).toFixed(1)+'%';
+  document.getElementById('pl-ov').textContent     = (d.pct_overpaid||0).toFixed(1)+'%';
+  document.getElementById('pl-median').textContent = fmtWage(d.median_wage||0);
+}
+
+async function loadPlayers() {
+  const grid = document.getElementById('playersGrid');
+  grid.innerHTML = '<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div></div>';
+  const n   = playerPos==='all' ? 18 : 12;
+  const url = `/api/top-players?n=${n}&type=${playerType}&position=${encodeURIComponent(playerPos)}`;
+  const players = await apiFetch(url);
+  renderPlayerCards(grid, players);
+}
+
+function renderPlayerCards(grid, players) {
+  if (!players.length) {
+    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><p>No players found for this filter.</p></div>';
+    return;
+  }
+  const meta = CAT_META[playerType];
+  grid.innerHTML = '';
+  players.forEach((p, idx) => {
+    const eff  = p.efficiency_score || 0;
+    const pct  = Math.abs(p.efficiency_pct || 0);
+    const pos  = p.position_group || '';
+    const col  = eff < 0 ? 'var(--green)' : eff > 0 ? 'var(--red)' : 'var(--blue)';
+    const pHex = pc(pos);
+    const ini  = (p.Player||'??').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const bw   = Math.min(pct, 100);
+    const badge= lbadge(p.Comp);
+    const interpCls = eff < -0.18 ? 'under' : eff > 0.18 ? 'over' : 'fair';
+    const interpTxt = meta.interpTxt(pct.toFixed(1));
+
+    const card = document.createElement('div');
+    card.className = 'player-card';
+    card.style.setProperty('--pos-c', pHex);
+    card.innerHTML = `
+      <div class="pc-photo-area">
+        <img src="${p.photo_url||''}" alt="${p.Player}" loading="lazy" onerror="this.style.display='none'">
+        <div class="pc-photo-fallback">${ini}</div>
+        <div class="pc-photo-overlay"></div>
+        <div class="pc-pos-bar"></div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-name">${p.Player||'—'}</div>
+        <div class="pc-sub" style="gap:.5rem;flex-wrap:wrap">
+          <img class="team-logo" src="/api/team-logo?team=${encodeURIComponent(p.Team||'')}&league=${encodeURIComponent(p.Comp||'')}"
+               alt="${p.Team}" onerror="this.style.display='none'">
+          <span class="badge ${badge}">${lshort(p.Comp)}</span>
+          <span style="color:var(--t3)">${p.Team||''}</span>
+          <span style="color:var(--t4)">· ${pe(pos)} Age ${p.Age||'?'}</span>
+        </div>
+        <div class="eff-display" style="margin-top:.6rem">
+          <div>
+            <div class="eff-num" style="color:${col}">${fmtEff(eff)}</div>
+            <div class="eff-pct" style="margin-top:.1rem">${p.Nation||''}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="eff-interp ${interpCls}">${interpTxt}</div>
+          </div>
+        </div>
+        <div class="pc-bar-wrap" style="margin-top:.5rem">
+          <div class="pc-bar" style="width:0%;background:${col}" data-w="${bw}"></div>
+        </div>
+      </div>
+      <div class="pc-footer">
+        <span class="pc-wage">${fmtWage(p.Annual_Wages_EUR)}</span>
+        <span style="color:var(--t4)">${p.Season||''}</span>
+      </div>`;
+    grid.appendChild(card);
+    setTimeout(() => { const b=card.querySelector('.pc-bar'); if(b) b.style.width=b.dataset.w+'%'; }, 60+idx*35);
+  });
+}
+
+// Type buttons
+document.querySelectorAll('.type-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.type-btn').forEach(b=>{
+      b.classList.remove('active-under','active-fair','active-over');
+    });
+    playerType = this.dataset.t;
+    const meta = CAT_META[playerType];
+    this.classList.add(meta.cls);
+    document.getElementById('catBanner').querySelector('span:first-child').textContent = meta.icon;
+    document.getElementById('catDesc').innerHTML = meta.desc;
+    loadPlayers();
+  });
+});
+
+// Position tabs
+document.querySelectorAll('#posFilter .tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('#posFilter .tab').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active'); playerPos = this.dataset.pos; loadPlayers(); loadScatter();
+  });
+});
+
+let scatterInst = null;
+async function loadScatter() {
+  const data = await apiFetch(`/api/scatter?position=${encodeURIComponent(playerPos)}`);
+  // 3-way split
+  const ds = {
+    under:  {label:'Underpaid',  data:[], backgroundColor:'rgba(34,197,94,.55)', pointRadius:3.5, pointHoverRadius:6},
+    fair:   {label:'Fairly Paid',data:[], backgroundColor:'rgba(59,130,246,.45)', pointRadius:3, pointHoverRadius:5},
+    over:   {label:'Overpaid',   data:[], backgroundColor:'rgba(239,68,68,.55)',  pointRadius:3.5, pointHoverRadius:6},
+  };
+  data.forEach(p => {
+    const eff = p.efficiency_score || 0;
+    const key = eff < -0.18 ? 'under' : eff > 0.18 ? 'over' : 'fair';
+    ds[key].data.push({x:Math.log(p.Annual_Wages_EUR||1), y:eff, player:p.Player, team:p.Team, comp:p.Comp, wage:p.Annual_Wages_EUR});
+  });
+  if (scatterInst) scatterInst.destroy();
+  scatterInst = new Chart(document.getElementById('scatterChart'), {
+    type:'scatter',
+    data:{datasets:Object.values(ds)},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{labels:{color:'#94a3b8',padding:16}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw.player} (${ctx.raw.comp}) · Eff: ${fmtEff(ctx.raw.y)} · ${fmtWage(ctx.raw.wage)}`}},
+        annotation:{
+          annotations:{
+            zeroLine:{type:'line',yMin:0,yMax:0,borderColor:'rgba(255,255,255,.1)',borderWidth:1,borderDash:[4,4]},
+            fairBandTop:{type:'line',yMin:0.18,yMax:0.18,borderColor:'rgba(59,130,246,.15)',borderWidth:1,borderDash:[3,6]},
+            fairBandBot:{type:'line',yMin:-0.18,yMax:-0.18,borderColor:'rgba(59,130,246,.15)',borderWidth:1,borderDash:[3,6]},
+          }
+        }
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#64748b'},title:{display:true,text:'Log Annual Wage (€)',color:'#64748b'}},
+        y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#64748b'},title:{display:true,text:'Efficiency Score (log units)',color:'#64748b'}}
+      }}
+  });
+}
+
+loadAll();
+</script>
+{% endblock %}

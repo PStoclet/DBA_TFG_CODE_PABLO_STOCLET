@@ -1,0 +1,518 @@
+{% extends 'base.html' %}
+{% block title %}League Data · FSI{% endblock %}
+{% block head_extra %}
+<style>
+/* ═══ HEATMAP GRID ═══ */
+.hm-table { width:100%; border-collapse:separate; border-spacing:4px }
+.hm-cell {
+  padding:.7rem .5rem; border-radius:8px; text-align:center;
+  font-family:var(--font-mono); font-size:.82rem; font-weight:600;
+  transition:transform .2s, box-shadow .2s;
+  cursor:default;
+}
+.hm-cell:hover { transform:scale(1.06); z-index:2; position:relative; box-shadow:0 4px 20px rgba(0,0,0,.5) }
+.hm-header { font-family:var(--font-head); font-size:.65rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--t4); padding:.4rem .5rem; text-align:center }
+.hm-row-label { font-family:var(--font-head); font-size:.78rem; font-weight:600; color:var(--t3); padding:.4rem .8rem .4rem 0; white-space:nowrap; text-align:right }
+
+/* ═══ LEAGUE INSIGHT PILLS ═══ */
+.insight-row { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1rem }
+.insight-pill {
+  display:inline-flex; align-items:center; gap:.45rem;
+  padding:.35rem .9rem; border-radius:9999px; font-size:.75rem; font-weight:600;
+  border:1px solid var(--border); background:var(--card2); color:var(--t3);
+}
+.insight-pill .dot { width:7px; height:7px; border-radius:50%; flex-shrink:0 }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+<div class="page-hdr">
+  <div class="container">
+    <div class="section-eyebrow">League Data</div>
+    <h1>Wage Efficiency by Competition</h1>
+    <p style="color:var(--t3);font-size:.95rem;max-width:640px;margin-top:.4rem">How each of the Big Five leagues prices players relative to the position model. Ranked by mean efficiency, broken down by position, and tracked across three seasons.</p>
+  </div>
+</div>
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Season</span>
+    {% for s in seasons %}<button class="season-btn" data-s="{{ s }}">{{ s }}</button>{% endfor %}
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Leagues</span>
+    {% for l in leagues %}<button class="league-pill" data-l="{{ l }}">{{ l }}</button>{% endfor %}
+  </div>
+</div>
+<div class="container" style="padding-top:2rem;padding-bottom:4rem">
+
+  <!-- KPI tiles -->
+  <div class="stat-grid reveal reveal-stagger mb-4">
+    <div class="stat-tile blue-tile"><div class="num blue" id="mk-n">—</div><div class="lbl">Player-Seasons</div></div>
+    <div class="stat-tile green-tile"><div class="num green" id="mk-un">—</div><div class="lbl">% Underpaid</div></div>
+    <div class="stat-tile purple-tile"><div class="num" style="color:var(--purple)" id="mk-fair">—</div><div class="lbl">% Fairly Priced</div></div>
+    <div class="stat-tile red-tile"><div class="num red" id="mk-ov">—</div><div class="lbl">% Overpaid</div></div>
+    <div class="stat-tile amber-tile"><div class="num amber" id="mk-eff">—</div><div class="lbl">Mean Efficiency</div></div>
+  </div>
+
+  <!-- ── Section 1: League Rankings ── -->
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">League Comparison</div>
+    <h2 class="section-title">Efficiency Rankings</h2>
+    <p class="section-desc">Leagues ranked by mean efficiency score. Negative = more underpaid players (club-friendly). Positive = more overpaid players. The spread (σ) indicates how uniform wages are within each league.</p>
+  </div>
+  <div class="grid-2 reveal mb-4">
+    <div class="card card-pad">
+      <div class="card-header">Mean Efficiency Score — Ranked</div>
+      <div style="height:300px"><canvas id="ch-bar-h"></canvas></div>
+    </div>
+    <div class="card card-pad">
+      <div class="card-header">Wage Classification Breakdown per League</div>
+      <div style="height:300px"><canvas id="ch-tribar"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ── Section 2: Wage Context ── -->
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">Wage Context</div>
+    <h2 class="section-title">Do Higher Wages Mean Better Efficiency?</h2>
+    <p class="section-desc">Each bubble = one league. X-axis = mean efficiency score, Y-axis = median annual wage. Bubble size = number of player-seasons. Reveals whether spending more correlates with smarter allocation.</p>
+  </div>
+  <div class="grid-2 reveal mb-4">
+    <div class="card card-pad">
+      <div class="card-header">Wage vs Efficiency Bubble Chart</div>
+      <div style="height:300px"><canvas id="ch-bubble"></canvas></div>
+    </div>
+    <div class="card card-pad">
+      <div class="card-header">Efficiency Score Distribution</div>
+      <div style="height:300px"><canvas id="ch-hist"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ── Section 3: Position × League Heatmap ── -->
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">Position Analysis</div>
+    <h2 class="section-title">Position × League Efficiency Heatmap</h2>
+    <p class="section-desc">Mean efficiency score for each position in each league. Green = wages below model prediction (underpaid); red = wages above (overpaid). Which leagues overpay which positions?</p>
+  </div>
+  <div class="card card-pad reveal mb-4">
+    <div id="heatmapGrid"><div class="loading-state"><div class="spinner"></div></div></div>
+    <div class="insight-row" id="heatInsights"></div>
+  </div>
+
+  <!-- ── Section 4: Trend Over Time ── -->
+  <div class="section-header reveal mt-6">
+    <div class="section-eyebrow">Temporal Analysis</div>
+    <h2 class="section-title">Mean Efficiency Across Three Seasons</h2>
+    <p class="section-desc">Track how each league's wage efficiency evolves. Ligue 1 shows a distinctive compression post-PSR enforcement (2023–24), while Premier League wages grow increasingly misaligned.</p>
+  </div>
+  <div class="card card-pad reveal">
+    <div style="height:380px"><canvas id="ch-trend"></canvas></div>
+  </div>
+
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let barC=null,triC=null,bubC=null,histC=null,trendC=null;
+
+initFilters({{ seasons|tojson }}, {{ leagues|tojson }}, {{ latest|tojson }}, loadAll);
+
+async function loadAll() {
+  const [stats, lgs, heat, era] = await Promise.all([
+    apiFetch('/api/stats'), apiFetch('/api/league-stats'),
+    apiFetch('/api/position-league'), fetch('/api/psr-era').then(r=>r.json()),
+  ]);
+  // KPI tiles
+  document.getElementById('mk-n').textContent    = (stats.total||0).toLocaleString();
+  document.getElementById('mk-un').textContent   = (stats.pct_underpaid||0).toFixed(1)+'%';
+  document.getElementById('mk-fair').textContent = (stats.pct_fairly_paid||0).toFixed(1)+'%';
+  document.getElementById('mk-ov').textContent   = (stats.pct_overpaid||0).toFixed(1)+'%';
+  document.getElementById('mk-eff').textContent  = (stats.mean_eff>=0?'+':'')+Number(stats.mean_eff||0).toFixed(4);
+
+  renderBarH(lgs);
+  renderTriBar(lgs);
+  renderBubble(lgs);
+  renderHist();
+  renderHeatmap(heat, lgs);
+  renderTrend(era);
+}
+
+/* ── Base chart options ── */
+function baseOpts(extra={}) {
+  return Object.assign({
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{ labels:{ color:'#64748b', padding:16, font:{size:11} } },
+      tooltip:{
+        backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+        titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+      }
+    },
+    scales:{
+      x:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'} },
+      y:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'} }
+    }
+  }, extra);
+}
+
+/* ── 1. Horizontal ranked efficiency bar ── */
+function renderBarH(lgs) {
+  if(barC) barC.destroy();
+  const sorted = [...lgs].sort((a,b) => a.mean - b.mean); // most underpaid first
+  const ctx = document.getElementById('ch-bar-h');
+  barC = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: sorted.map(l=>l.Comp),
+      datasets:[{
+        label:'Mean Efficiency',
+        data: sorted.map(l=>Number(l.mean||0)),
+        backgroundColor: sorted.map(l=>lc(l.Comp)+'44'),
+        borderColor: sorted.map(l=>lc(l.Comp)),
+        borderWidth: 2, borderRadius:8, borderSkipped:false,
+      }]
+    },
+    options: {
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+          callbacks:{
+            label: ctx => {
+              const l = sorted[ctx.dataIndex];
+              const pct_fair = (100 - (l.pct_ov||0) - (l.pct_un||0)).toFixed(1);
+              return [
+                ` Mean: ${Number(ctx.raw).toFixed(4)}`,
+                ` σ: ${Number(l.std||0).toFixed(3)}`,
+                ` N: ${Number(l.n||0).toLocaleString()}`,
+                ` Underpaid: ${Number(l.pct_un||0).toFixed(1)}%`,
+                ` Overpaid: ${Number(l.pct_ov||0).toFixed(1)}%`,
+              ];
+            }
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{
+            color: ctx => ctx.tick.value === 0 ? 'rgba(255,255,255,.25)' : 'rgba(255,255,255,.05)',
+            lineWidth: ctx => ctx.tick.value === 0 ? 2 : 1,
+          },
+          ticks:{color:'#64748b'},
+          title:{display:true, text:'Mean Efficiency Score (0 = fairly priced)', color:'#64748b', font:{size:10}},
+        },
+        y:{ grid:{display:false}, ticks:{color:'#94a3b8', font:{size:11, weight:'600'}} }
+      }
+    }
+  });
+}
+
+/* ── 2. 3-category stacked horizontal bar (under/fair/over) ── */
+function renderTriBar(lgs) {
+  if(triC) triC.destroy();
+  const sorted = [...lgs].sort((a,b) => a.mean - b.mean);
+  triC = new Chart(document.getElementById('ch-tribar'), {
+    type:'bar',
+    data:{
+      labels: sorted.map(l=>l.Comp),
+      datasets:[
+        {
+          label:'% Underpaid',
+          data: sorted.map(l=>Number(l.pct_un||0).toFixed(1)),
+          backgroundColor:'rgba(34,197,94,.55)', borderRadius:4, borderSkipped:false,
+        },
+        {
+          label:'% Fairly Priced',
+          data: sorted.map(l=>Math.max(0, 100 - Number(l.pct_ov||0) - Number(l.pct_un||0)).toFixed(1)),
+          backgroundColor:'rgba(99,102,241,.45)', borderRadius:4, borderSkipped:false,
+        },
+        {
+          label:'% Overpaid',
+          data: sorted.map(l=>Number(l.pct_ov||0).toFixed(1)),
+          backgroundColor:'rgba(239,68,68,.55)', borderRadius:4, borderSkipped:false,
+        },
+      ]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ labels:{ color:'#64748b', padding:16, font:{size:11} } },
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+          callbacks:{label: ctx => ` ${ctx.dataset.label}: ${Number(ctx.raw).toFixed(1)}%`}
+        }
+      },
+      scales:{
+        x:{
+          stacked:true, grid:{color:'rgba(255,255,255,.04)'},
+          ticks:{color:'#64748b', callback:v=>v+'%'},
+          max:100,
+        },
+        y:{ stacked:true, grid:{display:false}, ticks:{color:'#94a3b8', font:{size:11, weight:'600'}} }
+      }
+    }
+  });
+}
+
+/* ── 3. Bubble: median wage vs mean efficiency ── */
+const bubbleLabelPlugin = {
+  id: 'bubbleLabels',
+  afterDatasetsDraw(chart) {
+    const {ctx, data} = chart;
+    data.datasets.forEach((ds, i) => {
+      const meta = chart.getDatasetMeta(i);
+      if (!meta.visible) return;
+      meta.data.forEach((el, j) => {
+        const r = el.options?.radius ?? 14;
+        const label = ds.label || '';
+        const fontSize = Math.max(9, Math.min(11, r * 0.38));
+        ctx.save();
+        ctx.font = `700 ${fontSize}px 'Onest', 'Inter', sans-serif`;
+        ctx.fillStyle = ds.borderColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        // Draw league name just below the bubble, with a small gap
+        ctx.fillText(label, el.x, el.y + r + 4);
+        ctx.restore();
+      });
+    });
+  }
+};
+
+function renderBubble(lgs) {
+  if(bubC) bubC.destroy();
+  bubC = new Chart(document.getElementById('ch-bubble'), {
+    type:'bubble',
+    data:{
+      datasets: lgs.map(l=>({
+        label: l.Comp,
+        data:[{
+          x: Number(l.mean||0),
+          y: Number(l.median_wage||0) / 1e6,
+          r: Math.max(10, Math.min(32, Math.sqrt(Number(l.n||1)) * 1.4)),
+        }],
+        backgroundColor: lc(l.Comp)+'33',
+        borderColor: lc(l.Comp),
+        borderWidth: 2.5,
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{ bottom:22 } }, // room for labels below bottom bubbles
+      plugins:{
+        legend:{ display:false }, // labels are drawn directly on chart — no need for legend
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+          callbacks:{
+            title: ctx => ctx[0].dataset.label,
+            label: ctx => [
+              ` Mean efficiency: ${Number(ctx.parsed.x).toFixed(4)}`,
+              ` Median wage: €${Number(ctx.parsed.y).toFixed(2)}M/yr`,
+              ` Players: ${lgs.find(l=>l.Comp===ctx.dataset.label)?.n?.toLocaleString()||'—'}`,
+            ]
+          }
+        }
+      },
+      scales:{
+        x:{
+          title:{display:true, text:'Mean Efficiency Score', color:'#64748b', font:{size:10}},
+          grid:{color:'rgba(255,255,255,.05)'}, ticks:{color:'#64748b'},
+        },
+        y:{
+          title:{display:true, text:'Median Annual Wage (€M)', color:'#64748b', font:{size:10}},
+          grid:{color:'rgba(255,255,255,.05)'}, ticks:{color:'#64748b', callback:v=>'€'+v+'M'},
+        }
+      }
+    },
+    plugins:[bubbleLabelPlugin],
+  });
+}
+
+/* ── 4. Histogram ── */
+async function renderHist() {
+  if(histC) histC.destroy();
+  const hist = await apiFetch('/api/efficiency-histogram');
+  const labels = hist.map(h=>Number(h.bin).toFixed(2));
+  const data   = hist.map(h=>h.count);
+  const colors = hist.map(h=>
+    h.mid < -0.18 ? 'rgba(34,197,94,.65)' :
+    h.mid >  0.18 ? 'rgba(239,68,68,.6)'  : 'rgba(99,102,241,.5)');
+
+  histC = new Chart(document.getElementById('ch-hist'), {
+    type:'bar',
+    data:{ labels, datasets:[{
+      label:'Players', data, backgroundColor:colors,
+      borderRadius:3, borderSkipped:false, borderWidth:0,
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+          callbacks:{
+            title: ctx => {
+              const h = hist[ctx[0].dataIndex];
+              const cat = h.mid < -0.18 ? 'Underpaid' : h.mid > 0.18 ? 'Overpaid' : 'Fairly Priced';
+              return `${cat} · bin ${Number(h.bin).toFixed(2)}`;
+            },
+            label: ctx => ` ${ctx.raw} players`
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{display:false}, ticks:{color:'#64748b', maxTicksLimit:9},
+          title:{display:true, text:'Efficiency score (0 = fairly priced)', color:'#64748b', font:{size:10}},
+        },
+        y:{
+          grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'},
+          title:{display:true, text:'# Players', color:'#64748b', font:{size:10}},
+        }
+      }
+    }
+  });
+}
+
+/* ── 5. CSS Heatmap ── */
+function renderHeatmap(heat, lgs) {
+  const container = document.getElementById('heatmapGrid');
+  const positions = ['Goalkeepers','Defenders','Midfielders','Forwards'];
+  const leagues   = lgs.map(l=>l.Comp);
+
+  // Build lookup
+  const lookup = {};
+  heat.forEach(h=>{ lookup[`${h.league}|${h.position}`] = Number(h.mean||0); });
+
+  // Find min/max for color scale
+  const vals = Object.values(lookup);
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+
+  function cellColor(v) {
+    if(v === undefined) return { bg:'var(--card2)', color:'var(--t4)', border:'var(--border)' };
+    // negative = underpaid = green; positive = overpaid = red
+    if(v < -0.05) {
+      const a = Math.min(0.75, 0.12 + Math.abs(v) * 2);
+      return { bg:`rgba(34,197,94,${a})`, color:'#4ade80', border:`rgba(34,197,94,${a*0.7})` };
+    } else if(v > 0.05) {
+      const a = Math.min(0.75, 0.12 + v * 2);
+      return { bg:`rgba(239,68,68,${a})`, color:'#fca5a5', border:`rgba(239,68,68,${a*0.7})` };
+    } else {
+      return { bg:'rgba(99,102,241,.15)', color:'#a5b4fc', border:'rgba(99,102,241,.3)' };
+    }
+  }
+
+  const EMOJI = { Goalkeepers:'🧤', Defenders:'🛡', Midfielders:'⚙', Forwards:'⚡' };
+
+  let html = `<table class="hm-table"><thead><tr>
+    <th class="hm-header" style="width:110px;text-align:right">Position</th>`;
+  leagues.forEach(lg=>{
+    const sc = lshort(lg);
+    const c  = lc(lg);
+    html += `<th class="hm-header" style="color:${c}">${sc}</th>`;
+  });
+  html += `<th class="hm-header">Best</th></tr></thead><tbody>`;
+
+  positions.forEach(pos=>{
+    html += `<tr><td class="hm-row-label">${EMOJI[pos]||''} ${pos}</td>`;
+    let rowBest = { v:Infinity, lg:'' };
+    leagues.forEach(lg=>{
+      const v = lookup[`${lg}|${pos}`];
+      if(v!==undefined && v < rowBest.v) rowBest = { v, lg };
+      const {bg,color,border} = cellColor(v);
+      const label = v!==undefined ? (v>0?'+':'')+v.toFixed(3) : '—';
+      html += `<td class="hm-cell" style="background:${bg};color:${color};border:1px solid ${border}" title="${pos} in ${lg}: ${label}">${label}</td>`;
+    });
+    // Best league for this position
+    const bc = rowBest.lg ? lc(rowBest.lg) : 'var(--t4)';
+    html += `<td class="hm-cell" style="background:rgba(0,0,0,.2);color:${bc};border:1px solid ${bc}44;font-size:.7rem">${rowBest.lg ? lshort(rowBest.lg) : '—'}</td>`;
+    html += `</tr>`;
+  });
+  html += `</tbody></table>`;
+  container.innerHTML = html;
+
+  // Insight pills
+  const insights = [];
+  leagues.forEach(lg=>{
+    const rows = positions.map(p=>lookup[`${lg}|${p}`]).filter(v=>v!==undefined);
+    if(!rows.length) return;
+    const avg = rows.reduce((a,b)=>a+b,0)/rows.length;
+    insights.push({ lg, avg, c:lc(lg) });
+  });
+  insights.sort((a,b)=>a.avg-b.avg);
+  const insightHtml = insights.map(i=>`
+    <div class="insight-pill">
+      <span class="dot" style="background:${i.c}"></span>
+      <span>${i.lg}: avg ${(i.avg>0?'+':'')+i.avg.toFixed(3)}</span>
+    </div>`).join('');
+  document.getElementById('heatInsights').innerHTML = insightHtml;
+}
+
+/* ── 6. Trend with gradient fills ── */
+function renderTrend(era) {
+  if(trendC) trendC.destroy();
+  const seasons    = [...new Set(era.map(d=>d.Season))].sort();
+  const leagueList = [...new Set(era.map(d=>d.Comp))];
+  const ctx2d      = document.getElementById('ch-trend');
+
+  trendC = new Chart(ctx2d, {
+    type:'line',
+    data:{
+      labels: seasons,
+      datasets: leagueList.map(league=>{
+        const isL1    = league==='Ligue 1';
+        const color   = lc(league);
+        return {
+          label:    league,
+          data:     seasons.map(s=>{ const r=era.find(d=>d.Comp===league&&d.Season===s); return r?r.mean_efficiency:null; }),
+          borderColor:   color,
+          backgroundColor: color+'18',
+          borderWidth: isL1 ? 3.5 : 2,
+          pointRadius:  isL1 ? 7   : 4,
+          pointHoverRadius: isL1 ? 10 : 6,
+          pointBackgroundColor: color,
+          pointBorderColor: 'rgba(0,0,0,.5)',
+          pointBorderWidth: 1.5,
+          tension: .35, fill: isL1, // area fill only for Ligue 1
+        };
+      })
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ labels:{ color:'#64748b', padding:18, font:{size:11} } },
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:13, cornerRadius:10,
+          callbacks:{
+            label: ctx => {
+              const v = ctx.raw;
+              return v != null ? ` ${ctx.dataset.label}: ${(v>=0?'+':'')+v.toFixed(4)}` : ` ${ctx.dataset.label}: —`;
+            }
+          }
+        }
+      },
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'} },
+        y:{
+          grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'},
+          title:{display:true, text:'Mean Efficiency Score', color:'#64748b', font:{size:10}},
+        }
+      }
+    }
+  });
+}
+
+loadAll();
+</script>
+{% endblock %}

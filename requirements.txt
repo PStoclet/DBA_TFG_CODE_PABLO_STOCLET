@@ -1,0 +1,23 @@
+# Dashboard
+flask>=3.0
+requests>=2.31
+
+# Data processing
+pandas>=2.0
+numpy>=1.26
+openpyxl>=3.1       # xlsx read/write
+
+# Econometrics / statistics
+statsmodels>=0.14
+scipy>=1.11
+scikit-learn>=1.4
+
+# Notebooks / scraping
+jupyter>=1.0
+beautifulsoup4>=4.12
+lxml>=4.9
+
+# Visualizations
+matplotlib>=3.8
+seaborn>=0.13
+plotly>=5.20

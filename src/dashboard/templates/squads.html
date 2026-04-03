@@ -1,0 +1,429 @@
+{% extends 'base.html' %}
+{% block title %}Squad Analysis · FSI{% endblock %}
+
+{% block head_extra %}
+<style>
+.page-hero{padding:3.5rem 2rem 2.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-50%;left:-5%;width:600px;height:500px;background:radial-gradient(ellipse at 15% 50%,rgba(99,102,241,.07) 0%,transparent 60%);pointer-events:none}
+.page-hero h1{font-family:var(--font-head);font-size:2.2rem;font-weight:800;margin-bottom:.4rem;letter-spacing:-.03em}
+
+/* Squad table */
+.squad-rank{font-family:var(--font-mono);font-size:.78rem;color:var(--t4);width:32px;text-align:right;padding-right:.4rem}
+.squad-team-cell{display:flex;align-items:center;gap:.75rem}
+.squad-team-name{font-family:var(--font-head);font-size:.9rem;font-weight:600}
+.efficiency-bar-cell{min-width:100px}
+.bar-inline{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:.3rem}
+.bar-inline-fill{height:100%;border-radius:3px;transition:width .9s var(--ease)}
+.clickable-row{cursor:pointer;transition:background .15s}
+.clickable-row:hover td{background:rgba(59,130,246,.05)}
+.clickable-row.selected td{background:rgba(59,130,246,.08)}
+
+/* Highlight cards */
+.highlight-pair{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:2rem}
+@media(max-width:640px){.highlight-pair{grid-template-columns:1fr}}
+.highlight-card{border-radius:var(--radius);overflow:hidden;position:relative}
+.highlight-card .hc-header{padding:1.3rem 1.5rem .9rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.highlight-card .hc-top{display:flex;align-items:center;gap:1rem;margin-bottom:.7rem}
+.highlight-card .hc-team{font-family:var(--font-head);font-size:1.25rem;font-weight:700}
+.highlight-card .hc-sub{font-size:.8rem;color:var(--t3);margin-top:.1rem}
+.highlight-card .hc-eff{font-family:var(--font-mono);font-size:2.2rem;font-weight:500;margin-top:.2rem;line-height:1}
+.highlight-card .hc-stats{display:flex;gap:1.5rem;padding:1rem 1.5rem;flex-wrap:wrap}
+.highlight-card .hc-stat .k{font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4)}
+.highlight-card .hc-stat .v{font-family:var(--font-mono);font-size:.95rem;margin-top:.15rem}
+.highlight-card.green-card{background:linear-gradient(135deg,rgba(22,163,74,.1),var(--card));border:1px solid rgba(22,163,74,.2)}
+.highlight-card.red-card  {background:linear-gradient(135deg,rgba(220,38,38,.1),var(--card));border:1px solid rgba(220,38,38,.2)}
+
+/* Squad detail panel */
+#squadPanel{display:none}
+#squadPanel.open{display:block}
+.close-btn{
+  font-size:.82rem;font-weight:500;color:var(--t3);padding:.35rem .9rem;
+  border-radius:6px;border:1px solid var(--border2);background:transparent;
+  cursor:pointer;transition:all var(--dur) var(--ease);
+}
+.close-btn:hover{color:var(--t1);background:rgba(255,255,255,.06)}
+
+/* Player rows in squad detail */
+.squad-player-row{display:flex;align-items:center;gap:1rem;padding:.65rem 1rem;border-radius:8px;transition:background .15s}
+.squad-player-row:hover{background:rgba(255,255,255,.04)}
+.sp-photo{width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:top;flex-shrink:0;border:1px solid var(--border2)}
+.sp-photo-fb{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.72rem;color:var(--t4);background:var(--card2);flex-shrink:0}
+.sp-info{flex:1;min-width:0}
+.sp-name{font-family:var(--font-head);font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-meta{font-size:.7rem;color:var(--t4)}
+.sp-eff{font-family:var(--font-mono);font-size:.95rem;font-weight:500;flex-shrink:0}
+.sp-wage{font-family:var(--font-mono);font-size:.75rem;color:var(--amber);flex-shrink:0;width:68px;text-align:right}
+.sp-label{font-size:.62rem;font-weight:600;padding:.15rem .4rem;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+.sp-label.under{background:rgba(34,197,94,.1);color:#4ade80}
+.sp-label.fair {background:rgba(59,130,246,.1);color:#93c5fd}
+.sp-label.over {background:rgba(239,68,68,.1); color:#f87171}
+
+/* Mini distribution bar in squad detail header */
+.squad-dist{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:.6rem;gap:1px}
+.squad-dist-seg{height:100%;transition:width 1s var(--ease)}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+<div class="page-hero">
+  <div class="container">
+    <div class="section-eyebrow">Squad Analysis</div>
+    <h1>Club-by-Club Salary Efficiency</h1>
+    <p style="color:var(--t3);font-size:.95rem;max-width:640px;margin-top:.4rem">How well does each club's wage bill align with the position model? Negative mean efficiency = squad paid below predictions (surplus value). Click any club to drill into individual player contracts and composition.</p>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Season</span>
+    {% for s in seasons %}<button class="season-btn" data-s="{{ s }}">{{ s }}</button>{% endfor %}
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Leagues</span>
+    {% for l in leagues %}<button class="league-pill" data-l="{{ l }}">{{ l }}</button>{% endfor %}
+  </div>
+</div>
+
+<div class="container" style="padding-top:2rem;padding-bottom:4rem">
+
+  <!-- KPI Row -->
+  <div class="stat-grid reveal reveal-stagger mb-4">
+    <div class="stat-tile blue-tile"><div class="num blue" id="sq-clubs">—</div><div class="lbl">Clubs</div></div>
+    <div class="stat-tile green-tile"><div class="num green" id="sq-underpaid">—</div><div class="lbl">% Value Squads</div></div>
+    <div class="stat-tile purple-tile"><div class="num" style="color:var(--purple)" id="sq-fair">—</div><div class="lbl">% Fairly Paid</div></div>
+    <div class="stat-tile red-tile"><div class="num red" id="sq-overpaid">—</div><div class="lbl">% Overpaid Squads</div></div>
+    <div class="stat-tile amber-tile"><div class="num amber" id="sq-mean">—</div><div class="lbl">Mean Squad Efficiency</div></div>
+  </div>
+
+  <!-- Highlight pair -->
+  <div class="highlight-pair reveal">
+    <div class="highlight-card green-card" id="bestClub" style="cursor:pointer" onclick="loadSquadDetail(_bestTeam)">
+      <div class="hc-header">
+        <div style="font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:.7rem">🏆 Best Value Squad</div>
+        <div class="hc-top">
+          <img id="bc-logo" class="team-logo-lg" src="" alt="" onerror="this.style.display='none'">
+          <div>
+            <div class="hc-team" id="bc-name">—</div>
+            <div class="hc-sub" id="bc-league">—</div>
+          </div>
+        </div>
+        <div class="hc-eff green" id="bc-eff">—</div>
+      </div>
+      <div class="hc-stats" id="bc-stats"></div>
+    </div>
+    <div class="highlight-card red-card" id="worstClub" style="cursor:pointer" onclick="loadSquadDetail(_worstTeam)">
+      <div class="hc-header">
+        <div style="font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:.7rem">⚠ Most Overpaid Squad</div>
+        <div class="hc-top">
+          <img id="wc-logo" class="team-logo-lg" src="" alt="" onerror="this.style.display='none'">
+          <div>
+            <div class="hc-team" id="wc-name">—</div>
+            <div class="hc-sub" id="wc-league">—</div>
+          </div>
+        </div>
+        <div class="hc-eff red" id="wc-eff">—</div>
+      </div>
+      <div class="hc-stats" id="wc-stats"></div>
+    </div>
+  </div>
+
+  <!-- Table + Detail split -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start" class="reveal" id="mainGrid">
+
+    <!-- Rankings Table -->
+    <div class="card">
+      <div class="card-header">Club Efficiency Rankings — click to drill into squad</div>
+      <div style="overflow:auto;max-height:700px">
+        <table class="data-table" id="squadsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Club</th>
+              <th>Mean Eff.</th>
+              <th style="text-align:center">Under / Fair / Over</th>
+              <th>N</th>
+            </tr>
+          </thead>
+          <tbody id="squadsBody">
+            <tr><td colspan="5"><div class="loading-state"><div class="spinner"></div> Loading…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Squad Detail Panel -->
+    <div id="squadPanel">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.4rem .8rem">
+          <div style="display:flex;align-items:center;gap:.9rem">
+            <img id="panelLogo" class="team-logo-lg" src="" alt="" onerror="this.style.display='none'">
+            <div>
+              <div style="font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t4);margin-bottom:.15rem">Squad Detail</div>
+              <div class="head" style="font-size:1.1rem;font-weight:700" id="panelTeamName">—</div>
+            </div>
+          </div>
+          <button class="close-btn" onclick="closePanel()">✕ Close</button>
+        </div>
+
+        <!-- Distribution bar -->
+        <div style="padding:.3rem 1.4rem .8rem;border-bottom:1px solid var(--border)">
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.4rem">Squad composition</div>
+          <div class="squad-dist" id="squadDist">
+            <div class="squad-dist-seg" style="background:var(--green);width:0%" id="distUnder"></div>
+            <div class="squad-dist-seg" style="background:var(--blue);width:0%"  id="distFair"></div>
+            <div class="squad-dist-seg" style="background:var(--red);width:0%"   id="distOver"></div>
+          </div>
+          <div style="display:flex;gap:1.2rem;margin-top:.5rem;font-size:.72rem;color:var(--t4)" id="distLabels"></div>
+        </div>
+
+        <div style="padding:.7rem 1rem;display:flex;gap:.5rem;flex-wrap:wrap;border-bottom:1px solid var(--border)">
+          <div class="tab-bar" id="squadPosTabs">
+            <button class="tab active" data-pos="all">All</button>
+            <button class="tab" data-pos="Goalkeepers">GK</button>
+            <button class="tab" data-pos="Defenders">DEF</button>
+            <button class="tab" data-pos="Midfielders">MID</button>
+            <button class="tab" data-pos="Forwards">FWD</button>
+          </div>
+        </div>
+
+        <div style="padding:.8rem;max-height:520px;overflow-y:auto" id="squadPlayerList">
+          <div class="empty-state"><p>← Select a club from the table</p></div>
+        </div>
+
+        <!-- Squad chart -->
+        <div style="padding:1rem;border-top:1px solid var(--border)">
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.6rem">Efficiency score per player</div>
+          <div style="height:160px"><canvas id="squadChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder -->
+    <div id="noSquadSelected" class="card card-pad" style="display:flex;align-items:center;justify-content:center;min-height:200px">
+      <div class="empty-state">
+        <div style="font-size:2rem">⬅</div>
+        <p>Click any club in the table to see their full squad — individual efficiency scores, position breakdown, and wage comparison.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let allSquads = [];
+let squadChartInst = null;
+let currentTeam = null;
+let allSquadPlayers = [];
+let _bestTeam = null;
+let _worstTeam = null;
+
+initFilters({{ seasons|tojson }}, {{ leagues|tojson }}, {{ latest|tojson }}, loadSquads);
+
+async function loadSquads() {
+  document.getElementById('squadsBody').innerHTML =
+    '<tr><td colspan="5"><div class="loading-state"><div class="spinner"></div> Loading…</div></td></tr>';
+  allSquads = await apiFetch('/api/squads');
+  renderSquadsTable(allSquads);
+  updateKpis(allSquads);
+  if (currentTeam) loadSquadDetail(currentTeam);
+}
+
+function updateKpis(squads) {
+  const n = squads.length || 1;
+  document.getElementById('sq-clubs').textContent = n;
+  const nUnder = squads.filter(s => s.mean_eff < -0.18).length;
+  const nOver  = squads.filter(s => s.mean_eff > 0.18).length;
+  const nFair  = n - nUnder - nOver;
+  document.getElementById('sq-underpaid').textContent = Math.round(nUnder/n*100) + '%';
+  document.getElementById('sq-fair').textContent      = Math.round(nFair/n*100)  + '%';
+  document.getElementById('sq-overpaid').textContent  = Math.round(nOver/n*100)  + '%';
+  const mean = squads.reduce((a,s)=>a+(s.mean_eff||0),0)/n;
+  document.getElementById('sq-mean').textContent = (mean>=0?'+':'') + mean.toFixed(4);
+
+  const sorted = [...squads].sort((a,b)=>a.mean_eff - b.mean_eff);
+  const best   = sorted[0];
+  const worst  = sorted[sorted.length-1];
+  _bestTeam  = best?.Team;
+  _worstTeam = worst?.Team;
+
+  if (best) {
+    document.getElementById('bc-name').textContent = best.Team;
+    document.getElementById('bc-league').textContent = best.Comp;
+    document.getElementById('bc-eff').textContent = fmtEff(best.mean_eff);
+    document.getElementById('bc-logo').src = best.logo_url || '';
+    document.getElementById('bc-stats').innerHTML = squadStatsMini(best, 'green');
+  }
+  if (worst) {
+    document.getElementById('wc-name').textContent = worst.Team;
+    document.getElementById('wc-league').textContent = worst.Comp;
+    document.getElementById('wc-eff').textContent = fmtEff(worst.mean_eff);
+    document.getElementById('wc-logo').src = worst.logo_url || '';
+    document.getElementById('wc-stats').innerHTML = squadStatsMini(worst, 'red');
+  }
+}
+
+function squadStatsMini(s, colorCls) {
+  return `<div class="hc-stat"><div class="k">Players</div><div class="v">${s.n||0}</div></div>
+  <div class="hc-stat"><div class="k">Underpaid</div><div class="v green">${Math.round(s.pct_un||0)}%</div></div>
+  <div class="hc-stat"><div class="k">Fairly Paid</div><div class="v blue">${Math.round(s.pct_fair||0)}%</div></div>
+  <div class="hc-stat"><div class="k">Overpaid</div><div class="v red">${Math.round(s.pct_ov||0)}%</div></div>
+  <div class="hc-stat"><div class="k">Avg Wage</div><div class="v amber">${fmtWage(s.mean_wage)}</div></div>`;
+}
+
+function renderSquadsTable(squads) {
+  const sorted = [...squads].sort((a,b) => a.mean_eff - b.mean_eff);
+  const maxAbs = Math.max(...squads.map(s=>Math.abs(s.mean_eff||0)), .01);
+  const body = document.getElementById('squadsBody');
+
+  body.innerHTML = sorted.map((s, i) => {
+    const eff  = s.mean_eff || 0;
+    const col  = eff < -0.18 ? 'var(--green)' : eff > 0.18 ? 'var(--red)' : 'var(--blue)';
+    const lCol = lc(s.Comp);
+    const bw   = Math.min(Math.abs(eff)/maxAbs*100, 100);
+    const badge = lbadge(s.Comp);
+    const sel  = currentTeam === s.Team ? 'selected' : '';
+    const un   = Math.round(s.pct_un||0);
+    const fa   = Math.round(s.pct_fair||0);
+    const ov   = Math.round(s.pct_ov||0);
+    const safeTeam = s.Team.replace(/'/g,"\\'");
+
+    return `<tr class="clickable-row ${sel}" data-team="${s.Team}" onclick="loadSquadDetail('${safeTeam}')">
+      <td class="squad-rank">${i+1}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:.6rem">
+          <img class="team-logo" src="${s.logo_url||''}" alt="${s.Team}" onerror="this.style.display='none'">
+          <div>
+            <div class="squad-team-name">${s.Team}</div>
+            <span class="badge ${badge}" style="margin-top:.1rem">${lshort(s.Comp)}</span>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="mono" style="color:${col};font-size:.88rem">${fmtEff(eff)}</div>
+        <div class="efficiency-bar-cell">
+          <div class="bar-inline"><div class="bar-inline-fill" style="width:${bw}%;background:${col}"></div></div>
+        </div>
+      </td>
+      <td>
+        <div style="display:flex;gap:2px;align-items:center;min-width:90px">
+          <div style="flex:${un};height:8px;background:var(--green);border-radius:2px 0 0 2px;opacity:.75" title="${un}% underpaid"></div>
+          <div style="flex:${fa};height:8px;background:var(--blue);opacity:.6" title="${fa}% fairly paid"></div>
+          <div style="flex:${ov};height:8px;background:var(--red);border-radius:0 2px 2px 0;opacity:.75" title="${ov}% overpaid"></div>
+        </div>
+        <div style="font-size:.68rem;color:var(--t4);margin-top:.25rem">
+          <span class="green">${un}%</span> · <span style="color:var(--blue)">${fa}%</span> · <span class="red">${ov}%</span>
+        </div>
+      </td>
+      <td class="mono muted" style="font-size:.8rem">${s.n||0}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function loadSquadDetail(team) {
+  currentTeam = team;
+  document.getElementById('noSquadSelected').style.display = 'none';
+  document.getElementById('squadPanel').classList.add('open');
+  document.getElementById('panelTeamName').textContent = team;
+  document.getElementById('squadPlayerList').innerHTML =
+    '<div class="loading-state"><div class="spinner"></div> Loading squad…</div>';
+
+  // Update logo in panel header
+  const sq = allSquads.find(s => s.Team === team);
+  if (sq) {
+    document.getElementById('panelLogo').src = sq.logo_url || '';
+  }
+
+  document.querySelectorAll('.clickable-row').forEach(r =>
+    r.classList.toggle('selected', r.dataset.team === team));
+
+  allSquadPlayers = await apiFetch(`/api/squad-detail?team=${encodeURIComponent(team)}`);
+  renderSquadPlayers(allSquadPlayers, 'all');
+  renderSquadChart(allSquadPlayers);
+  renderDistBar(allSquadPlayers);
+
+  document.querySelectorAll('#squadPosTabs .tab').forEach(tab => {
+    tab.onclick = function() {
+      document.querySelectorAll('#squadPosTabs .tab').forEach(t=>t.classList.remove('active'));
+      this.classList.add('active');
+      renderSquadPlayers(allSquadPlayers, this.dataset.pos);
+    };
+  });
+}
+
+function renderDistBar(players) {
+  const n = players.length || 1;
+  const nU = players.filter(p => (p.efficiency_score||0) < -0.18).length;
+  const nO = players.filter(p => (p.efficiency_score||0) > 0.18).length;
+  const nF = n - nU - nO;
+  document.getElementById('distUnder').style.width = (nU/n*100) + '%';
+  document.getElementById('distFair').style.width  = (nF/n*100) + '%';
+  document.getElementById('distOver').style.width  = (nO/n*100) + '%';
+  document.getElementById('distLabels').innerHTML =
+    `<span class="green">🟢 ${nU} underpaid (${Math.round(nU/n*100)}%)</span>
+     <span style="color:var(--blue)">🔵 ${nF} fairly paid (${Math.round(nF/n*100)}%)</span>
+     <span class="red">🔴 ${nO} overpaid (${Math.round(nO/n*100)}%)</span>`;
+}
+
+function renderSquadPlayers(players, posFilter) {
+  const list = document.getElementById('squadPlayerList');
+  let filtered = posFilter === 'all' ? players : players.filter(p=>p.position_group===posFilter);
+  if (!filtered.length) { list.innerHTML='<div class="empty-state"><p>No players for this filter.</p></div>'; return; }
+
+  list.innerHTML = filtered.map(p => {
+    const eff  = p.efficiency_score || 0;
+    const col  = eff < -0.18 ? 'var(--green)' : eff > 0.18 ? 'var(--red)' : 'var(--blue)';
+    const pCol = pc(p.position_group||'');
+    const ini  = (p.Player||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const label= eff < -0.18 ? 'under' : eff > 0.18 ? 'over' : 'fair';
+    const labelTxt = label === 'under' ? 'Underpaid' : label === 'over' ? 'Overpaid' : 'Fair';
+    const pct  = Math.abs(p.efficiency_pct||0).toFixed(0);
+    return `<div class="squad-player-row">
+      <img class="sp-photo" src="${p.photo_url||''}" alt="${p.Player}" loading="lazy"
+           onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+      <div class="sp-photo-fb" style="display:none;border:1.5px solid ${pCol}">${ini}</div>
+      <div class="sp-info">
+        <div class="sp-name">${p.Player||'—'}</div>
+        <div class="sp-meta">${pe(p.position_group||'')} ${p.position_group||''} · Age ${p.Age||'?'}</div>
+      </div>
+      <div class="sp-label ${label}">${labelTxt}</div>
+      <div class="sp-eff" style="color:${col}">${fmtEff(eff)}</div>
+      <div class="sp-wage">${fmtWage(p.Annual_Wages_EUR)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderSquadChart(players) {
+  const sorted = [...players].sort((a,b)=>(a.efficiency_score||0)-(b.efficiency_score||0));
+  const labels = sorted.map(p=>(p.Player||'').split(' ').pop());
+  const data   = sorted.map(p=>p.efficiency_score||0);
+  const colors = data.map(v=>v<-0.18?'rgba(34,197,94,.75)':v>0.18?'rgba(239,68,68,.7)':'rgba(59,130,246,.6)');
+
+  if (squadChartInst) squadChartInst.destroy();
+  squadChartInst = new Chart(document.getElementById('squadChart'), {
+    type:'bar',
+    data:{labels, datasets:[{label:'Efficiency',data,backgroundColor:colors,borderRadius:3,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${labels[ctx.dataIndex]}: ${fmtEff(ctx.raw)}`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#64748b',font:{size:8},maxRotation:45}},
+        y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#64748b',font:{size:9}},
+          title:{display:true,text:'Efficiency',color:'#64748b',font:{size:9}}}
+      }}
+  });
+}
+
+function closePanel() {
+  currentTeam = null;
+  document.getElementById('squadPanel').classList.remove('open');
+  document.getElementById('noSquadSelected').style.display = 'flex';
+  document.querySelectorAll('.clickable-row').forEach(r=>r.classList.remove('selected'));
+}
+
+loadSquads();
+</script>
+{% endblock %}

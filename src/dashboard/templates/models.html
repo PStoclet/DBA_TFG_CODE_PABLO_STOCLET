@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}The Model · FSI{% endblock %}
+{% block body %}
+<div class="page">
+<div class="page-hdr">
+  <div class="container">
+    <div class="section-eyebrow">The Model</div>
+    <h1>What Drives Player Wages?</h1>
+    <p style="color:var(--t3);font-size:.95rem;max-width:680px;margin-top:.4rem">Four position-specific OLS regressions with HC3 heteroskedasticity-robust standard errors. Dependent variable: log(annual wage). Each bar shows a coefficient — highlighted bars are significant at p&lt;0.05. This is the model that generates every efficiency score in the dashboard.</p>
+  </div>
+</div>
+<div class="container" style="padding-top:2.5rem;padding-bottom:4rem">
+
+  <!-- Model summaries -->
+  <div class="grid-auto reveal mb-4" id="modelSummaries"></div>
+
+  <!-- Coefficient chart -->
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">Coefficient Estimates</div>
+    <h2 class="section-title">Forest Plot by Position</h2>
+    <p class="section-desc">Sorted by absolute magnitude. Error bars = ±1.96 SE (95% CI). Colored = p&lt;0.05.</p>
+  </div>
+
+  <div class="tab-bar reveal mb-4" id="posTabs">
+    <button class="tab active" data-pos="Defenders">🛡 Defenders</button>
+    <button class="tab" data-pos="Midfielders">⚙️ Midfielders</button>
+    <button class="tab" data-pos="Forwards">⚡ Forwards</button>
+    <button class="tab" data-pos="Goalkeepers">🧤 Goalkeepers</button>
+  </div>
+
+  <div class="card card-pad reveal">
+    <div class="card-header" id="coefTitle">Defenders — OLS Coefficients</div>
+    <div style="overflow-y:auto;overflow-x:hidden">
+      <div style="position:relative" id="coefWrap"><canvas id="ch-coef"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Variable Interpretation -->
+  <div class="section-header reveal mt-6">
+    <div class="section-eyebrow">Economic Interpretation</div>
+    <h2 class="section-title">What do the coefficients mean?</h2>
+    <p class="section-desc">Since the dependent variable is log(wage), each coefficient represents an approximate percentage change in annual salary.</p>
+  </div>
+  <div class="grid-2 reveal">
+    <div class="card card-pad">
+      <div class="card-header">Age (concave effect)</div>
+      <p style="font-size:.9rem;color:var(--t2);margin-bottom:.8rem">The quadratic age specification captures <strong>concave productivity</strong>: wages rise through peak years (~28–30) then decline as physical performance deteriorates.</p>
+      <p style="font-size:.83rem;color:var(--t4)">β(Age) ≈ +0.59 · β(Age²) ≈ −0.009 → peak at ~33 years for Defenders</p>
+    </div>
+    <div class="card card-pad">
+      <div class="card-header">Minutes Played % (Min_pct)</div>
+      <p style="font-size:.9rem;color:var(--t2);margin-bottom:.8rem"><strong>Signal of manager trust</strong>: a higher share of available minutes played signals that the coach considers the player first-choice, directly commanding a wage premium.</p>
+      <p style="font-size:.83rem;color:var(--t4)">One percentage point increase in Min% → approx. 0.8–1.2% higher wage</p>
+    </div>
+    <div class="card card-pad">
+      <div class="card-header">Club Wage Rank (Club_Wage_Rank_Pct)</div>
+      <p style="font-size:.9rem;color:var(--t2);margin-bottom:.8rem">A player's <strong>within-club wage rank</strong> captures tournament theory effects: clubs pay disproportionately for perceived top earners, creating convex pay structures.</p>
+      <p style="font-size:.83rem;color:var(--t4)">Strongest for Forwards — the #1 earner at a club earns 40–80% more than #5</p>
+    </div>
+    <div class="card card-pad">
+      <div class="card-header">Non-Penalty Goals per 90 (NPGls_p90)</div>
+      <p style="font-size:.9rem;color:var(--t2);margin-bottom:.8rem">Goals remain the most <strong>legible signal</strong> of forward value — clubs pay heavily for scoring records, even controlling for shot volume (goal/shot ratio separately identified).</p>
+      <p style="font-size:.83rem;color:var(--t4)">For Forwards: 1 additional NPG/90 → ≈ 35–50% wage premium (on log scale)</p>
+    </div>
+  </div>
+
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+let coefInst=null;
+
+(async function(){
+  const [summaries,coefs]=await Promise.all([
+    fetch('/api/model-summaries').then(r=>r.json()),
+    fetch('/api/coefficients').then(r=>r.json()),
+  ]);
+
+  // Model summary tiles
+  const sumWrap=document.getElementById('modelSummaries');
+  summaries.forEach(m=>{
+    const col=pc(m.position);
+    sumWrap.innerHTML+=`<div class="card card-pad" style="border-top:3px solid ${col}">
+      <div style="font-size:.72rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.6rem">${pe(m.position)} ${m.position}</div>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin-bottom:.8rem">
+        <div><div class="mono" style="font-size:1.6rem;color:${col}">${m.r2.toFixed(3)}</div><div style="font-size:.7rem;color:var(--t4);text-transform:uppercase;letter-spacing:1px">Adj. R²</div></div>
+        <div><div class="mono" style="font-size:1.6rem">${m.rmse.toFixed(2)}</div><div style="font-size:.7rem;color:var(--t4);text-transform:uppercase;letter-spacing:1px">RMSE</div></div>
+        <div><div class="mono" style="font-size:1.6rem">${m.n.toLocaleString()}</div><div style="font-size:.7rem;color:var(--t4);text-transform:uppercase;letter-spacing:1px">Obs.</div></div>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${m.r2*100}%;background:${col};border-radius:3px;transition:width 1s ease"></div>
+      </div>
+    </div>`;
+  });
+  setTimeout(()=>{ document.querySelectorAll('[style*="width:0"]').forEach(b=>{const w=b.getAttribute('data-w');if(w)b.style.width=w;}); },200);
+
+  // Coefficient chart
+  window._allCoefs=coefs;
+  function renderCoef(pos){
+    document.getElementById('coefTitle').textContent=`${pe(pos)} ${pos} — OLS Coefficients (top 18 by |coef|)`;
+    const data=coefs.filter(d=>d.model===pos);
+    const sorted=[...data].sort((a,b)=>Math.abs(b.coef)-Math.abs(a.coef)).slice(0,18);
+    const col=pc(pos);
+    if(coefInst)coefInst.destroy();
+    const canvas=document.getElementById('ch-coef');
+    const h=Math.max(320,sorted.length*26);
+    canvas.style.height=h+'px'; canvas.height=h;
+    document.getElementById('coefWrap').style.height=h+'px';
+    coefInst=new Chart(canvas,{type:'bar',data:{
+      labels:sorted.map(d=>d.variable.replace(/_/g,' ')),
+      datasets:[{label:'Coefficient',data:sorted.map(d=>d.coef),
+        backgroundColor:sorted.map(d=>d.significant?col+'55':'rgba(255,255,255,.07)'),
+        borderColor:sorted.map(d=>d.significant?col:'rgba(255,255,255,.18)'),
+        borderWidth:2,borderRadius:4}]
+    },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{
+        const d=sorted[ctx.dataIndex];
+        return [`Coef: ${d.coef.toFixed(4)}`,`SE: ${d.se.toFixed(4)}`,`p: ${d.pvalue<.001?'<0.001':d.pvalue.toFixed(4)}`,d.significant?'★ Significant (p<0.05)':'Not significant'];
+      }}}},
+      scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#64748b'},title:{display:true,text:'Coefficient estimate (log wage)',color:'#64748b'}},
+              y:{grid:{display:false},ticks:{color:'#94a3b8',font:{size:11}}}}}});
+  }
+
+  document.querySelectorAll('#posTabs .tab').forEach(tab=>{
+    tab.addEventListener('click',function(){
+      document.querySelectorAll('#posTabs .tab').forEach(t=>t.classList.remove('active'));
+      this.classList.add('active'); renderCoef(this.dataset.pos);
+    });
+  });
+  renderCoef('Defenders');
+})();
+</script>
+{% endblock %}

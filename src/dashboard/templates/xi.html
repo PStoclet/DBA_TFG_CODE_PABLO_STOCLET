@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% block title %}Best XI · FSI{% endblock %}
+{% block head_extra %}
+<style>
+.page-hero{padding:3.5rem 2rem 2.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-50%;left:-5%;width:600px;height:500px;background:radial-gradient(ellipse at 15% 50%,rgba(99,102,241,.07) 0%,transparent 60%);pointer-events:none}
+.page-hero h1{font-family:var(--font-head);font-size:2.2rem;font-weight:800;margin-bottom:.4rem;letter-spacing:-.03em}
+svg.pitch{width:100%;height:auto;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.06)}
+.p-g{cursor:pointer}.p-circ{transition:filter .2s}.p-g:hover .p-circ{filter:brightness(1.4)}
+.xi-info-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;min-height:130px;transition:all .3s}
+.xi-info-panel h3{font-family:var(--font-head);font-size:1.1rem;font-weight:700}
+.xi-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.8rem}
+.xi-item label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--t4);display:block}
+.xi-item span{font-size:.88rem;font-weight:600}
+.xi-photo-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem}
+.xi-photo-row img{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid var(--border2)}
+.xi-stat-bar{margin-top:1.5rem}
+.xi-stat-row{display:flex;align-items:center;justify-content:space-between;margin:.4rem 0;font-size:.83rem}
+.xi-stat-row .lbl{color:var(--t3)}
+.xi-stat-row .val{font-family:var(--font-mono);font-size:.8rem}
+</style>
+{% endblock %}
+{% block body %}
+<div class="page">
+<div class="page-hero">
+  <div class="container">
+    <div class="section-eyebrow">Best XI</div>
+    <h1>The Bargain Dream Team</h1>
+    <p style="color:var(--t3);font-size:.95rem;max-width:640px;margin-top:.4rem">The most undervalued player at each position, assembled into a <strong style="color:var(--t2)">4-4-2 formation</strong>. Toggle to see the most overpaid XI. Click any player on the pitch for details.</p>
+  </div>
+</div>
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Season</span>
+    {% for s in seasons %}<button class="season-btn" data-s="{{ s }}">{{ s }}</button>{% endfor %}
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Leagues</span>
+    {% for l in leagues %}<button class="league-pill" data-l="{{ l }}">{{ l }}</button>{% endfor %}
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">View</span>
+    <button class="season-btn active" data-t="underpaid" id="xiUnd">🟢 Underpaid XI</button>
+    <button class="season-btn" data-t="overpaid" id="xiOvp">🔴 Overpaid XI</button>
+  </div>
+</div>
+<div class="container" style="padding-top:2.5rem;padding-bottom:4rem">
+
+  <!-- Summary stats -->
+  <div class="stat-grid reveal mb-4" id="xiStats">
+    <div class="stat-tile green-tile"><div class="num green" id="xi-total-eff">—</div><div class="lbl">Total Eff. Score</div></div>
+    <div class="stat-tile amber-tile"><div class="num amber" id="xi-total-wage">—</div><div class="lbl">Combined Wage Bill</div></div>
+    <div class="stat-tile blue-tile"><div class="num blue" id="xi-savings">—</div><div class="lbl">Model Predicts Worth</div></div>
+    <div class="stat-tile"><div class="num" id="xi-leagues">—</div><div class="lbl">Leagues Represented</div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:360px 1fr;gap:2.5rem;align-items:start" class="reveal">
+    <!-- Pitch SVG -->
+    <div>
+      <svg class="pitch" viewBox="0 0 340 520" id="pitchSVG" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0e3d12"/><stop offset="100%" stop-color="#0a2c0d"/>
+          </linearGradient>
+        </defs>
+        <rect width="340" height="520" fill="url(#gg)" rx="8"/>
+        <rect x="0" y="0"   width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="0" y="104" width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="0" y="208" width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="0" y="312" width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="0" y="416" width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="16" y="16" width="308" height="488" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5" rx="2"/>
+        <line x1="16" y1="260" x2="324" y2="260" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
+        <circle cx="170" cy="260" r="50" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
+        <circle cx="170" cy="260" r="3" fill="rgba(255,255,255,.45)"/>
+        <rect x="80"  y="16"  width="180" height="80" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <rect x="120" y="16"  width="100" height="44" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <rect x="80"  y="424" width="180" height="80" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <rect x="120" y="476" width="100" height="44" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <circle cx="170" cy="76"  r="3" fill="rgba(255,255,255,.35)"/>
+        <circle cx="170" cy="444" r="3" fill="rgba(255,255,255,.35)"/>
+        <rect x="130" y="3"   width="80" height="14" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5"/>
+        <rect x="130" y="503" width="80" height="14" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5"/>
+        <!-- Formation label -->
+        <text x="170" y="248" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="9" font-weight="700" fill="rgba(255,255,255,.12)" letter-spacing="4">4 – 4 – 2</text>
+        <g id="pitchPlayers"></g>
+      </svg>
+    </div>
+
+    <!-- Info panel -->
+    <div>
+      <div class="xi-info-panel" id="xiInfoPanel">
+        <p style="color:var(--t4);font-size:.9rem">← Click a player on the pitch to see their details</p>
+      </div>
+
+      <!-- Team composition -->
+      <div class="card card-pad mt-3" id="xiComposition" style="display:none">
+        <div class="card-header">Full XI Composition</div>
+        <div id="xiPlayerList" style="display:flex;flex-direction:column;gap:.3rem"></div>
+        <div class="xi-stat-bar" id="xiLeagueDist"></div>
+      </div>
+
+      <!-- Legend -->
+      <div style="display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.2rem">
+        {% for pos, meta in [('Defenders','🛡'),('Midfielders','⚙️'),('Forwards','⚡'),('Goalkeepers','🧤')] %}
+        <div style="display:flex;align-items:center;gap:.35rem;font-size:.8rem;color:var(--t3)">
+          <div style="width:9px;height:9px;border-radius:50%;background:{% if pos=='Defenders' %}#3b82f6{% elif pos=='Midfielders' %}#a855f7{% elif pos=='Forwards' %}#f97316{% else %}#f59e0b{% endif %}"></div>
+          {{ meta }} {{ pos }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+let xiType='underpaid', xiData=[];
+
+document.querySelectorAll('[data-t]').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('[data-t]').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active'); xiType=this.dataset.t; loadXI();
+  });
+});
+
+const LAYOUTS={GK:[[170,472]],DEF:[[62,388],[128,378],[212,378],[278,388]],MID:[[58,278],[124,260],[216,260],[282,278]],FWD:[[118,152],[222,152]]};
+
+initFilters({{ seasons|tojson }}, {{ leagues|tojson }}, {{ latest|tojson }}, loadXI);
+
+async function loadXI() {
+  const url=`/api/formation-xi?type=${xiType}`;
+  xiData = await apiFetch(url);
+  renderPitch(xiData);
+  renderSummary(xiData);
+}
+
+function renderPitch(xi) {
+  const g=document.getElementById('pitchPlayers');
+  g.innerHTML='';
+  xi.forEach((p, idx)=>{
+    const coords=(LAYOUTS[p.abbr]||[])[p.slot||0];
+    if(!coords)return;
+    const [cx,cy]=coords;
+    const col=pc(p.position);
+    const ini=p.player.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const isOvp=xiType==='overpaid';
+    const ringCol=isOvp?'var(--red)':col;
+
+    const node=document.createElementNS('http://www.w3.org/2000/svg','g');
+    node.setAttribute('class','p-g');
+    node.setAttribute('transform',`translate(${cx},${cy})`);
+
+    // Pulse ring
+    const pulse=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    pulse.setAttribute('r','23');pulse.setAttribute('fill','none');
+    pulse.setAttribute('stroke',ringCol);pulse.setAttribute('stroke-width','1');pulse.setAttribute('opacity','.3');
+    node.appendChild(pulse);
+
+    // Clip
+    const clipId=`c-${cx}-${cy}`;
+    const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+    const clip=document.createElementNS('http://www.w3.org/2000/svg','clipPath');
+    clip.setAttribute('id',clipId);
+    const cc=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    cc.setAttribute('r','16');cc.setAttribute('cx','0');cc.setAttribute('cy','0');
+    clip.appendChild(cc);defs.appendChild(clip);node.appendChild(defs);
+
+    const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    bg.setAttribute('r','17');bg.setAttribute('fill',col+'33');
+    bg.setAttribute('stroke',ringCol);bg.setAttribute('stroke-width','2');bg.setAttribute('class','p-circ');
+    node.appendChild(bg);
+
+    if(p.photo_url){
+      const img=document.createElementNS('http://www.w3.org/2000/svg','image');
+      img.setAttribute('href',p.photo_url);img.setAttribute('x','-16');img.setAttribute('y','-16');
+      img.setAttribute('width','32');img.setAttribute('height','32');
+      img.setAttribute('clip-path',`url(#${clipId})`);img.setAttribute('preserveAspectRatio','xMidYMin slice');
+      img.addEventListener('error',()=>{img.remove();addInitialsText(node,ini);});
+      node.appendChild(img);
+    } else { addInitialsText(node,ini); }
+
+    const nm=document.createElementNS('http://www.w3.org/2000/svg','text');
+    nm.setAttribute('text-anchor','middle');nm.setAttribute('y','30');
+    nm.setAttribute('fill','rgba(255,255,255,.9)');nm.setAttribute('font-size','5.8');nm.setAttribute('font-family','Space Grotesk,sans-serif');
+    nm.textContent=p.player.split(' ').slice(-1)[0];node.appendChild(nm);
+
+    const et=document.createElementNS('http://www.w3.org/2000/svg','text');
+    et.setAttribute('text-anchor','middle');et.setAttribute('y','41');
+    et.setAttribute('fill',isOvp?'#f87171':'#4ade80');et.setAttribute('font-size','5.5');et.setAttribute('font-family','JetBrains Mono,monospace');
+    et.textContent=fmtEff(p.efficiency);node.appendChild(et);
+
+    node.addEventListener('click',()=>showXIInfo(p,col,ringCol));
+    node.style.animationDelay = `${idx * 0.08}s`;
+    g.appendChild(node);
+  });
+}
+
+function addInitialsText(node,ini){
+  const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','middle');
+  t.setAttribute('fill','#94a3b8');t.setAttribute('font-size','7');t.setAttribute('font-family','JetBrains Mono,monospace');
+  t.textContent=ini;node.appendChild(t);
+}
+
+function showXIInfo(p,col,ringCol){
+  const badge=lbadge(p.league);
+  const ini=p.player.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('xiInfoPanel').innerHTML=`
+    <div class="xi-photo-row">
+      <div style="position:relative;width:48px;height:48px;flex-shrink:0">
+        <div style="position:absolute;inset:0;border-radius:50%;background:${col}22;border:2px solid ${ringCol};display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1rem;font-weight:800;color:${col}">${ini}</div>
+        <img src="${p.photo_url||''}" onerror="this.style.display='none'" style="position:relative;z-index:1;width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid ${ringCol}">
+      </div>
+      <div><h3>${p.player}</h3><span class="badge ${badge}">${p.league}</span></div>
+    </div>
+    <div class="xi-grid">
+      <div class="xi-item"><label>Club</label><span>${p.team}</span></div>
+      <div class="xi-item"><label>Position</label><span style="color:${col}">${p.position}</span></div>
+      <div class="xi-item"><label>Annual Wage</label><span class="amber mono">${fmtWage(p.wage)}</span></div>
+      <div class="xi-item"><label>Efficiency</label><span class="mono" style="color:${ringCol}">${fmtEff(p.efficiency)}</span></div>
+      <div class="xi-item"><label>${xiType==='underpaid'?'Undervalued':'Overvalued'} by</label><span style="color:${ringCol}">${Math.abs(p.eff_pct||0).toFixed(1)}%</span></div>
+    </div>`;
+}
+
+function renderSummary(xi){
+  const totalEff=xi.reduce((a,p)=>a+(p.efficiency||0),0);
+  const totalWage=xi.reduce((a,p)=>a+(p.wage||0),0);
+  document.getElementById('xi-total-eff').textContent=fmtEff(totalEff);
+  document.getElementById('xi-total-wage').textContent=fmtWage(totalWage);
+  const leagues=[...new Set(xi.map(p=>p.league))];
+  document.getElementById('xi-leagues').textContent=leagues.length;
+
+  // Composition
+  const comp=document.getElementById('xiComposition');
+  comp.style.display='block';
+  const list=document.getElementById('xiPlayerList');
+  list.innerHTML=xi.map(p=>{
+    const col=xiType==='overpaid'?'var(--red)':'var(--green)';
+    return `<div style="display:flex;align-items:center;gap:.7rem;padding:.4rem 0;border-bottom:1px solid var(--border)">
+      <div style="width:28px;height:28px;border-radius:50%;background:${pc(p.position)}33;border:1px solid ${pc(p.position)};flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-family:JetBrains Mono,monospace;color:#94a3b8">${pe(p.position)}</div>
+      <div style="flex:1;min-width:0"><div style="font-size:.85rem;font-weight:600;font-family:Space Grotesk,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.player}</div>
+      <div style="font-size:.7rem;color:var(--t4)">${p.team}</div></div>
+      <span class="mono" style="color:${col};font-size:.85rem">${fmtEff(p.efficiency)}</span>
+    </div>`;
+  }).join('');
+
+  // League distribution
+  const leagueCount={};
+  xi.forEach(p=>{leagueCount[p.league]=(leagueCount[p.league]||0)+1;});
+  const dist=document.getElementById('xiLeagueDist');
+  dist.innerHTML='<div style="margin-top:1rem;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.5rem">League Representation</div>'+
+    Object.entries(leagueCount).map(([l,n])=>`<div style="display:flex;align-items:center;gap:.6rem;margin:.25rem 0">
+      <div style="width:8px;height:8px;border-radius:50%;background:${lc(l)};flex-shrink:0"></div>
+      <span class="badge ${lbadge(l)}">${lshort(l)}</span>
+      <span style="font-size:.8rem;color:var(--t3)">${l}</span>
+      <span class="mono" style="font-size:.78rem;color:var(--t4);margin-left:auto">${n} player${n>1?'s':''}</span>
+    </div>`).join('');
+  const predicted=xi.reduce((a,p)=>a+Math.exp(Math.log(p.wage||1)+(xiType==='underpaid'?Math.abs(p.efficiency):0)),0);
+  document.getElementById('xi-savings').textContent=fmtWage(predicted);
+}
+
+loadXI();
+</script>
+{% endblock %}

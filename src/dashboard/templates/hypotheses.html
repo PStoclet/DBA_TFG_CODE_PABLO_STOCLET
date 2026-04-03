@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% block title %}Research · FSI{% endblock %}
+{% block head_extra %}
+<style>
+.hyp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.hyp-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;gap:1rem;align-items:flex-start}
+.hyp-number{font-family:var(--font-mono);font-size:3rem;font-weight:500;line-height:1;opacity:.15;flex-shrink:0}
+.hyp-body{padding:1.5rem}
+.hyp-body p{font-size:.9rem;color:var(--t3);margin-bottom:1rem;line-height:1.7}
+.result-tag{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border-radius:6px;font-family:var(--font-head);font-size:.82rem;font-weight:600;margin-bottom:1rem}
+.result-tag.confirmed{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2);color:#4ade80}
+.result-tag.rejected{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171}
+.result-tag.nuanced{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:#fbbf24}
+.stat-block{background:var(--surface);border-radius:8px;padding:1rem;margin-top:.8rem}
+.stat-block-row{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;font-size:.84rem;border-bottom:1px solid var(--border)}
+.stat-block-row:last-child{border:none}
+.stat-block-row .k{color:var(--t4)}
+.stat-block-row .v{font-family:var(--font-mono);font-size:.8rem}
+
+/* PSR */
+.psr-flow{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:center;margin:1.5rem 0}
+.psr-box{background:var(--card2);border-radius:var(--radius-sm);padding:1.2rem;text-align:center}
+.psr-val{font-family:var(--font-mono);font-size:2.8rem;font-weight:500;line-height:1}
+.psr-lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--t4);margin-top:.3rem}
+.psr-arrow{font-size:2.5rem;text-align:center;color:var(--amber)}
+
+/* Chow */
+.chow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.chow-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem}
+.chow-card.sig{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.04)}
+.chow-f{font-family:var(--font-mono);font-size:1.6rem;font-weight:500;color:var(--amber);margin-bottom:.2rem}
+</style>
+{% endblock %}
+{% block body %}
+<div class="page">
+<div class="page-hdr">
+  <div class="container">
+    <div class="section-eyebrow">Research</div>
+    <h1>Hypotheses &amp; Statistical Results</h1>
+    <p style="color:var(--t3);font-size:.95rem;max-width:680px;margin-top:.4rem">Three core hypotheses tested with standard econometric methods, plus extended analyses on PSR policy effects (Chow structural break test) and wage-setting persistence. Each result links back to the OLS model on the previous page.</p>
+  </div>
+</div>
+<div class="container" style="padding-top:2.5rem;padding-bottom:4rem">
+
+  <!-- Core Hypotheses -->
+  <div class="section-header reveal"><div class="section-eyebrow">Core Hypotheses</div><h2 class="section-title">H1 · H2 · H3</h2></div>
+  <div style="display:flex;flex-direction:column;gap:1.2rem;margin-bottom:3.5rem" id="hypCards"></div>
+
+  <!-- PSR -->
+  <div class="divider"></div>
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">Extended Analysis · H4</div>
+    <h2 class="section-title">PSR Persistence Effect</h2>
+    <p class="section-desc">Profitability & Sustainability Regulations (PSR) in France impose wage ceilings that <em>freeze</em> salaries. When wages can't adjust, market mispricing becomes persistent.</p>
+  </div>
+  <div class="reveal">
+    <div class="psr-flow">
+      <div class="psr-box">
+        <div class="psr-val green" id="psr-n">0.33</div>
+        <div class="psr-lbl">Persistence<br>Normal Wages</div>
+        <div style="font-size:.78rem;color:var(--t4);margin-top:.4rem">Wages adjust → mispricing corrects itself season-to-season</div>
+      </div>
+      <div class="psr-arrow">→</div>
+      <div class="psr-box" style="border:1px solid rgba(239,68,68,.2);background:rgba(239,68,68,.04)">
+        <div class="psr-val red" id="psr-f">0.88</div>
+        <div class="psr-lbl">Persistence<br>Frozen Wages</div>
+        <div style="font-size:.78rem;color:var(--red);margin-top:.4rem" id="psr-note">Loading…</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card card-pad">
+        <div class="card-header">PSR Era Efficiency — Ligue 1</div>
+        <div class="chart-wrap"><canvas id="ch-psr-line"></canvas></div>
+      </div>
+      <div class="card card-pad">
+        <div class="card-header">% Overpaid vs Underpaid — Ligue 1</div>
+        <div class="chart-wrap"><canvas id="ch-psr-pct"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chow Tests -->
+  <div class="divider"></div>
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">Extended Analysis · H5</div>
+    <h2 class="section-title">Chow Structural Break Tests</h2>
+    <p class="section-desc">Tests whether the OLS wage-setting regression coefficients changed significantly before vs. after PSR enforcement (2022–23 → 2023–24 cutoff). Only Ligue 1 shows significant breaks.</p>
+  </div>
+  <div class="chow-grid reveal" id="chowGrid"></div>
+
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(async function(){
+  const [hyp,era]=await Promise.all([
+    fetch('/api/hypotheses').then(r=>r.json()),
+    fetch('/api/psr-era').then(r=>r.json()),
+  ]);
+
+  /* ── H1, H2, H3 ── */
+  const defs=[
+    {key:'H1',title:'Non-linear Wage Structure',subtitle:'Do wage returns follow a concave (inverted-U) productivity curve?',
+     desc:'<strong>Theory:</strong> As players age, their productivity peaks then declines. If clubs accurately price this, wages should rise to peak age then fall — a concave relationship. We test this by including a quadratic age term (Age²) in all position models.<br><br><strong>Test:</strong> Is the coefficient on Age² significantly negative?',
+     metric:'Quadratic age coefficient (β₂)',interpret:'Confirmed in all 4 positions. Age² is negative and significant — wages peak around 28–33 years depending on position, then decline. The effect is strongest for Defenders (β₂ = −0.009) and weakest for Goalkeepers.'},
+    {key:'H2',title:'League Heterogeneity',subtitle:'Do leagues follow different salary-setting norms?',
+     desc:'<strong>Theory:</strong> Institutional differences between leagues (salary caps, PSR rules, broadcast revenue sharing, transfer market depth) should lead to heterogeneous efficiency variance. A Levene\'s test compares efficiency score variance across leagues.<br><br><strong>Test:</strong> Is the between-league variance in efficiency scores significantly different (Levene\'s F test)?',
+     metric:"Levene's W statistic (homogeneity of variances)",interpret:'Confirmed in all positions. Efficiency variance differs significantly across leagues (p<0.0001 for all). The Premier League shows wider efficiency distributions; Ligue 1 shows compressed variance post-PSR — consistent with frozen wages reducing natural adjustment.'},
+    {key:'H3',title:'Intra-Club Wage Clustering',subtitle:'Do clubs set wages uniformly, or does individual performance dominate?',
+     desc:'<strong>Theory:</strong> If clubs compress wages internally (e.g. pay scales, solidarity norms), players within the same club should show similar efficiency scores. This is measured by the <strong>Intraclass Correlation Coefficient (ICC)</strong> from a mixed-effects model.<br><br><strong>Test:</strong> Is ICC > 0.1, indicating meaningful club-level clustering?',
+     metric:'ICC (Intraclass Correlation Coefficient)',interpret:'Not confirmed as a major driver. ICC is close to zero across all positions (< 0.01%), meaning club membership explains almost none of the wage variation after controlling for individual performance. Individual statistics — not club identity — drive salary levels.'},
+  ];
+
+  const wrap=document.getElementById('hypCards');
+  defs.forEach(d=>{
+    const rows=hyp[d.key]||[];
+    const nSig=rows.filter(r=>r.significant).length;
+    const result=d.key==='H3'?'nuanced':nSig>0?'confirmed':'rejected';
+    const tag=d.key==='H3'?{cls:'nuanced',icon:'ℹ',txt:'Nuanced — ICC minimal'}:nSig>0?{cls:'confirmed',icon:'✓',txt:`Confirmed — ${nSig}/${rows.length} positions`}:{cls:'rejected',icon:'✗',txt:'Not confirmed'};
+    wrap.innerHTML+=`<div class="hyp-card reveal">
+      <div class="hyp-header">
+        <div class="hyp-number">${d.key}</div>
+        <div>
+          <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:.2rem">${d.title}</div>
+          <div style="font-size:.85rem;color:var(--t3)">${d.subtitle}</div>
+          <div class="result-tag ${tag.cls}" style="margin-top:.7rem">${tag.icon} ${tag.txt}</div>
+        </div>
+      </div>
+      <div class="hyp-body">
+        <p>${d.desc}</p>
+        <div class="stat-block">
+          <div style="font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.6rem">${d.metric}</div>
+          ${rows.map(r=>`<div class="stat-block-row">
+            <span class="k">${r.model}</span>
+            <span class="v ${r.significant?'green':'muted'}">
+              ${d.key==='H1'?`β²=${r.coef}`:d.key==='H2'?`W=${r.levene_W}`:``}
+              ${d.key==='H3'?`ICC=${(r.icc*100).toFixed(4)}% (${r.clubs} clubs)`:''}
+              · p=${d.key==='H3'?'—':r.pvalue<.001?'<0.001':Number(r.pvalue).toFixed(4)}
+            </span>
+          </div>`).join('')}
+        </div>
+        <p style="margin-top:1rem;font-size:.85rem;color:var(--t2)"><strong>Interpretation:</strong> ${d.interpret}</p>
+      </div>
+    </div>`;
+  });
+
+  /* ── PSR ── */
+  if(hyp.psr_persist&&hyp.psr_persist.normal!=null){
+    const p=hyp.psr_persist;
+    countUp(document.getElementById('psr-n'),p.normal,1200,2);
+    countUp(document.getElementById('psr-f'),p.frozen,1200,2);
+    const delta=((p.frozen-p.normal)*100).toFixed(0);
+    document.getElementById('psr-note').textContent=`+${delta}pp amplification · t=${p.t} · p<1×10⁻⁶⁴`;
+  }
+
+  // PSR line chart
+  const seasons=[...new Set(era.map(d=>d.Season))].sort();
+  const leagueList=[...new Set(era.map(d=>d.Comp))];
+  new Chart(document.getElementById('ch-psr-line'),{type:'line',data:{labels:seasons,datasets:leagueList.map(lg=>({
+    label:lg,
+    data:seasons.map(s=>{const r=era.find(d=>d.Comp===lg&&d.Season===s);return r?r.mean_efficiency:null;}),
+    borderColor:lc(lg),backgroundColor:lc(lg)+'22',
+    borderWidth:lg==='Ligue 1'?3:1.5,pointRadius:lg==='Ligue 1'?6:3,tension:.35,fill:false,
+  }))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}}},
+    scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#64748b'}},
+            y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#64748b'},title:{display:true,text:'Mean efficiency',color:'#64748b'}}}}});
+
+  const l1=era.filter(d=>d.Comp==='Ligue 1');
+  new Chart(document.getElementById('ch-psr-pct'),{type:'bar',data:{labels:l1.map(d=>d.Season),datasets:[
+    {label:'% Overpaid', data:l1.map(d=>d.pct_overpaid*100),  backgroundColor:'rgba(239,68,68,.55)',borderRadius:6},
+    {label:'% Underpaid',data:l1.map(d=>d.pct_underpaid*100), backgroundColor:'rgba(34,197,94,.5)', borderRadius:6},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}}},
+    scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#64748b'}},
+            y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#64748b',callback:v=>v+'%'}}}}});
+
+  /* ── Chow ── */
+  const cg=document.getElementById('chowGrid');
+  (hyp.chow||[]).forEach(c=>{
+    cg.innerHTML+=`<div class="chow-card ${c.significant?'sig':''} reveal">
+      <div style="font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.4rem">${c.league}</div>
+      <div style="font-family:var(--font-head);font-size:.95rem;font-weight:600;margin-bottom:.6rem">${c.position}</div>
+      <div class="chow-f">${c.F}</div>
+      <div style="font-size:.7rem;color:var(--t4);margin-bottom:.6rem">F-statistic</div>
+      <div class="stat-block-row"><span class="k">p-value</span><span class="v ${c.significant?'red':'green'}">${c.pvalue<.0001?'<0.0001':Number(c.pvalue).toFixed(4)}</span></div>
+      <div class="stat-block-row"><span class="k">N obs.</span><span class="v">${c.n}</span></div>
+      <div class="result-tag ${c.significant?'confirmed':'nuanced'}" style="margin-top:.7rem;font-size:.78rem">${c.significant?'⚡ Structural Break':'– No break detected'}</div>
+    </div>`;
+  });
+
+  // Re-observe new reveals
+  document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+})();
+</script>
+{% endblock %}
