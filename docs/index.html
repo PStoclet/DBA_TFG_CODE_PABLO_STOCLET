@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Salary Efficiency · TFG — Pablo Stoclet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#071009; --surface:#0c1a0e; --card:#0f2213; --card2:#152a19;
+  --border:rgba(74,222,128,.09); --border2:rgba(74,222,128,.18);
+  --accent:#22c55e; --accent2:#4ade80; --accent3:#86efac;
+  --red:#f87171; --amber:#fbbf24; --blue:#60a5fa; --purple:#c084fc;
+  --t1:#f0fdf4; --t2:#dcfce7; --t3:#86efac; --t4:#4ade80;
+  --font-head:'Onest',sans-serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+  --radius:14px; --radius-sm:10px;
+  --shadow-md:0 8px 40px rgba(0,0,0,.65),0 2px 8px rgba(0,0,0,.5);
+  --glow-g:0 0 32px rgba(74,222,128,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:var(--font-body);line-height:1.6;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  height:62px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;background:rgba(7,16,9,.85);
+  backdrop-filter:blur(18px);border-bottom:1px solid var(--border2)}
+.nav-brand{font-family:var(--font-head);font-weight:800;font-size:1.05rem;
+  background:linear-gradient(90deg,var(--accent2),var(--accent3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:2rem;font-size:.85rem;font-weight:500;color:var(--t3)}
+.nav-links a:hover{color:var(--t1)}
+.nav-badge{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent2);border:1px solid rgba(74,222,128,.3);padding:.25rem .85rem;
+  border-radius:9999px;background:rgba(34,197,94,.08)}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:8rem 2rem 5rem;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:-30%;left:50%;transform:translateX(-50%);
+  width:1200px;height:900px;
+  background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(34,197,94,.2) 0%,rgba(74,222,128,.08) 40%,transparent 70%);
+  pointer-events:none;animation:aurPulse 8s ease-in-out infinite}
+@keyframes aurPulse{0%,100%{opacity:.8;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.07)}}
+.eyebrow{display:inline-flex;align-items:center;gap:.55rem;
+  font-size:.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--accent2);border:1px solid rgba(34,197,94,.3);padding:.4rem 1.2rem;
+  border-radius:9999px;margin-bottom:2rem;background:rgba(34,197,94,.08)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);
+  animation:dotPulse 2s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 6px rgba(34,197,94,.6)}50%{box-shadow:0 0 14px rgba(74,222,128,.95)}}
+h1{font-family:var(--font-head);font-size:clamp(2.4rem,6vw,4.5rem);font-weight:800;
+  line-height:1.1;letter-spacing:-.02em;margin-bottom:1.5rem}
+.h1-line2{background:linear-gradient(135deg,var(--accent2) 0%,var(--accent3) 60%,#a7f3d0 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{max-width:580px;margin:0 auto 2.5rem;font-size:1.1rem;color:var(--t3);font-weight:400}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;
+  background:var(--accent);color:#071009;font-weight:700;font-size:.9rem;
+  border-radius:var(--radius);transition:all .2s;letter-spacing:.3px}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:var(--glow-g)}
+.btn-outline{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;
+  border:1px solid var(--border2);color:var(--t2);font-weight:600;font-size:.9rem;
+  border-radius:var(--radius);transition:all .2s}
+.btn-outline:hover{border-color:var(--accent2);color:var(--accent2);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:4rem;flex-wrap:wrap}
+.hstat{text-align:center}
+.hstat-n{font-family:var(--font-head);font-size:2.2rem;font-weight:800;color:var(--accent2)}
+.hstat-l{font-size:.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-top:.2rem}
+
+/* ── SECTIONS ── */
+section{padding:5rem 2rem}
+.container{max-width:1140px;margin:0 auto}
+.section-label{font-size:.7rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--accent2);margin-bottom:.8rem}
+.section-title{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;
+  letter-spacing:-.02em;margin-bottom:1rem}
+.section-sub{color:var(--t3);max-width:540px;font-size:1rem}
+
+/* ── MODEL CARDS ── */
+.model-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;margin-top:2.5rem}
+.model-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.75rem;transition:all .25s}
+.model-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.mc-pos{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--accent2);margin-bottom:.6rem}
+.mc-title{font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.mc-r2{font-family:var(--font-mono);font-size:1.6rem;font-weight:500;color:var(--accent2);margin-bottom:.3rem}
+.mc-r2 span{font-size:.8rem;color:var(--t3)}
+.mc-desc{font-size:.82rem;color:var(--t3);line-height:1.5}
+.mc-bar{height:4px;border-radius:2px;background:rgba(74,222,128,.15);margin-top:1rem}
+.mc-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+/* ── VIZ GRID ── */
+.viz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-top:2.5rem}
+.viz-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.5rem;transition:all .25s;cursor:pointer;position:relative;overflow:hidden}
+.viz-card::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(74,222,128,.04) 0%,transparent 60%);
+  opacity:0;transition:opacity .25s}
+.viz-card:hover::before{opacity:1}
+.viz-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.viz-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:1.2rem;margin-bottom:1rem}
+.viz-card h3{font-family:var(--font-head);font-size:.95rem;font-weight:700;margin-bottom:.5rem}
+.viz-card p{font-size:.8rem;color:var(--t3);line-height:1.5}
+.viz-arrow{position:absolute;bottom:1.25rem;right:1.25rem;color:var(--accent2);font-size:.9rem;
+  opacity:0;transition:opacity .2s}
+.viz-card:hover .viz-arrow{opacity:1}
+
+/* ── FINDINGS ── */
+.findings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.25rem;margin-top:2.5rem}
+.finding-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem}
+.finding-card.supported{border-left:3px solid var(--accent)}
+.finding-card.partial{border-left:3px solid var(--amber)}
+.finding-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.3rem .8rem;
+  border-radius:9999px;margin-bottom:.8rem}
+.badge-sup{background:rgba(34,197,94,.12);color:var(--accent2);border:1px solid rgba(34,197,94,.25)}
+.badge-part{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
+.finding-card h3{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.finding-card p{font-size:.82rem;color:var(--t3);line-height:1.5}
+
+/* ── FOOTER ── */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
+.footer-brand{font-family:var(--font-head);font-weight:800;font-size:1.1rem;
+  background:linear-gradient(90deg,var(--accent2),var(--accent3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+footer p{font-size:.83rem;color:var(--t3)}
+footer a{color:var(--accent2)}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 auto;max-width:800px}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">⚽ Football Salary Intelligence</span>
+  <div class="nav-links">
+    <a href="#models">Models</a>
+    <a href="#findings">Findings</a>
+    <a href="#visualizations">Visualizations</a>
+    <a href="https://github.com/PStoclet/DBA_TFG_CODE_PABLO_STOCLET" target="_blank">GitHub</a>
+  </div>
+  <span class="nav-badge">TFG · IE University</span>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div>
+    <div class="eyebrow"><span class="dot"></span> Bachelor's Thesis · Data Analytics · IE University</div>
+    <h1>Salary Efficiency in<br><span class="h1-line2">European Football</span></h1>
+    <p class="hero-sub">Position-specific OLS regression models identifying underpaid and overpaid players across Europe's Big Five leagues — 6,702 player-season observations.</p>
+    <div class="hero-btns">
+      <a href="#visualizations" class="btn-primary">↓ Interactive Charts</a>
+      <a href="thesis.pdf" class="btn-outline" target="_blank">📄 Read Thesis</a>
+      <a href="https://github.com/PStoclet/DBA_TFG_CODE_PABLO_STOCLET" class="btn-outline" target="_blank">⬡ GitHub Repo</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">6,702</div><div class="hstat-l">Player-Seasons</div></div>
+      <div class="hstat"><div class="hstat-n">5</div><div class="hstat-l">Leagues</div></div>
+      <div class="hstat"><div class="hstat-n">4</div><div class="hstat-l">OLS Models</div></div>
+      <div class="hstat"><div class="hstat-n">0.71</div><div class="hstat-l">Max Adj. R²</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MODELS -->
+<section id="models">
+  <div class="container">
+    <div class="section-label">Methodology</div>
+    <h2 class="section-title">Position-Specific Wage Models</h2>
+    <p class="section-sub">Four OLS models with club and season fixed effects — each calibrated to the unique performance drivers of each positional role.</p>
+    <div class="model-grid">
+      <div class="model-card">
+        <div class="mc-pos">Forwards</div>
+        <div class="mc-title">Attacking Output Model</div>
+        <div class="mc-r2">0.713 <span>Adj. R²</span></div>
+        <div class="mc-desc">Goals, xG, progressive runs, and pressing metrics. Captures finishing quality and off-ball movement.</div>
+        <div class="mc-bar"><div class="mc-bar-fill" style="width:71.3%"></div></div>
+      </div>
+      <div class="model-card">
+        <div class="mc-pos">Midfielders</div>
+        <div class="mc-title">Transition &amp; Creation Model</div>
+        <div class="mc-r2">0.698 <span>Adj. R²</span></div>
+        <div class="mc-desc">Key passes, progressive passes, ball recoveries, and press resistance. Dual creative-defensive role.</div>
+        <div class="mc-bar"><div class="mc-bar-fill" style="width:69.8%"></div></div>
+      </div>
+      <div class="model-card">
+        <div class="mc-pos">Defenders</div>
+        <div class="mc-title">Defensive Solidity Model</div>
+        <div class="mc-r2">0.667 <span>Adj. R²</span></div>
+        <div class="mc-desc">Duels won, interceptions, aerial dominance, and build-up contribution metrics.</div>
+        <div class="mc-bar"><div class="mc-bar-fill" style="width:66.7%"></div></div>
+      </div>
+      <div class="model-card">
+        <div class="mc-pos">Goalkeepers</div>
+        <div class="mc-title">Shot-Stopping Model</div>
+        <div class="mc-r2">0.634 <span>Adj. R²</span></div>
+        <div class="mc-desc">PSxG, save percentage, sweeper-keeper actions, and distribution. Penalty-adjusted efficiency.</div>
+        <div class="mc-bar"><div class="mc-bar-fill" style="width:63.4%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FINDINGS -->
+<section id="findings">
+  <div class="container">
+    <div class="section-label">Key Results</div>
+    <h2 class="section-title">Research Findings</h2>
+    <p class="section-sub">Six hypotheses tested across efficiency residuals, league differences, injury context, and positional wage dynamics.</p>
+    <div class="findings-grid">
+      <div class="finding-card supported">
+        <span class="finding-badge badge-sup">✓ Supported</span>
+        <h3>Performance Drives Wages</h3>
+        <p>Position-specific performance metrics explain 63–71% of wage variance. Forwards show the strongest salary-performance link.</p>
+      </div>
+      <div class="finding-card supported">
+        <span class="finding-badge badge-sup">✓ Supported</span>
+        <h3>Significant Efficiency Mismatch</h3>
+        <p>A substantial proportion of players are systematically over- or underpaid relative to their performance output.</p>
+      </div>
+      <div class="finding-card supported">
+        <span class="finding-badge badge-sup">✓ Supported</span>
+        <h3>League-Level Wage Premiums</h3>
+        <p>Premier League and La Liga exhibit significant positive wage premiums vs. Bundesliga, Ligue 1 and Serie A benchmarks.</p>
+      </div>
+      <div class="finding-card partial">
+        <span class="finding-badge badge-part">~ Partial</span>
+        <h3>Injury Adjustment Effect</h3>
+        <p>Injury context modestly shifts efficiency rankings, with high-injury players showing larger residual volatility on re-estimation.</p>
+      </div>
+      <div class="finding-card supported">
+        <span class="finding-badge badge-sup">✓ Supported</span>
+        <h3>Positional Wage Hierarchy</h3>
+        <p>Forwards command the largest wage premiums; goalkeepers exhibit the most compressed salary distributions across leagues.</p>
+      </div>
+      <div class="finding-card partial">
+        <span class="finding-badge badge-part">~ Partial</span>
+        <h3>Temporal Stability</h3>
+        <p>Out-of-sample RMSE increases modestly across seasons, suggesting wage-setting norms shift faster than performance signals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VISUALIZATIONS -->
+<section id="visualizations">
+  <div class="container">
+    <div class="section-label">Interactive Visualizations</div>
+    <h2 class="section-title">Explore the Data</h2>
+    <p class="section-sub">Click any chart to open the full interactive Plotly visualization in a new tab.</p>
+    <div class="viz-grid">
+
+      <a href="../data/results/09_interactive_visualizations/viz_club_efficiency_frontier.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(34,197,94,.12)">🏟️</div>
+        <h3>Club Efficiency Frontier</h3>
+        <p>Wage spend vs. weighted team performance — identify clubs punching above or below their salary budget.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+      <a href="../data/results/09_interactive_visualizations/viz_distribution_efficiency_by_league_position.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(96,165,250,.12)">📊</div>
+        <h3>Efficiency by League &amp; Position</h3>
+        <p>Distribution of wage-efficiency residuals broken down by league and positional group.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+      <a href="../data/results/09_interactive_visualizations/viz_efficiency_state_transitions_sankey.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(192,132,252,.12)">🔀</div>
+        <h3>Efficiency State Transitions</h3>
+        <p>Sankey diagram showing player movement between underpaid, fair value, and overpaid states across seasons.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+      <a href="../data/results/09_interactive_visualizations/viz_wage_setting_density_contours.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(251,191,36,.1)">🌡️</div>
+        <h3>Wage-Setting Density Contours</h3>
+        <p>2D density map of performance scores vs. log wages — reveals where market pricing clusters.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+      <a href="../data/results/09_interactive_visualizations/viz_collinearity_heatmap.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(248,113,113,.1)">🔬</div>
+        <h3>Collinearity Heatmap</h3>
+        <p>Correlation matrix of all model predictors — validates variable independence across positional models.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+      <a href="../data/results/09_interactive_visualizations/viz_temporal_oos_rmse.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(52,211,153,.1)">📈</div>
+        <h3>Temporal Out-of-Sample RMSE</h3>
+        <p>Rolling RMSE on held-out seasons — tests whether wage prediction degrades over time.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+      <a href="../data/results/09_interactive_visualizations/viz_rank_uncertainty_underpaid_corrected.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(34,197,94,.12)">🎯</div>
+        <h3>Rank Uncertainty — Underpaid</h3>
+        <p>Bootstrap confidence intervals around underpaid player rankings — quantifies classification robustness.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+      <a href="../data/results/09_interactive_visualizations/viz_rank_uncertainty_overpaid_corrected.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(248,113,113,.1)">⚠️</div>
+        <h3>Rank Uncertainty — Overpaid</h3>
+        <p>Bootstrap confidence intervals for overpaid classifications — separates clear signals from borderline cases.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+      <a href="../data/results/09_interactive_visualizations/viz_threshold_set_jaccard_underpaid_final.html" target="_blank" class="viz-card">
+        <div class="viz-icon" style="background:rgba(96,165,250,.12)">🧮</div>
+        <h3>Jaccard Stability — Underpaid Set</h3>
+        <p>Jaccard index across threshold variations — tests sensitivity of the underpaid player classification boundary.</p>
+        <span class="viz-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<footer>
+  <div class="footer-brand">Football Salary Intelligence</div>
+  <p>Bachelor's Thesis · IE University · BBA &amp; Data Analytics · 2025–26</p>
+  <p style="margin-top:.4rem">Pablo Stoclet ·
+    <a href="https://github.com/PStoclet/DBA_TFG_CODE_PABLO_STOCLET" target="_blank">GitHub Repository</a>
+  </p>
+</footer>
+
+</body>
+</html>
