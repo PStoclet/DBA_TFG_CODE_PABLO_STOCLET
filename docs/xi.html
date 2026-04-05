@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home · Football Salary Intelligence</title>
+<title>Best XI · Football Salary Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -625,233 +625,22 @@ footer strong { color:var(--t2) }
 
 
 <style>
-/* ═══ HERO ═══ */
-#hero {
-  min-height: 100vh; display:flex; align-items:center; justify-content:center;
-  text-align:center; padding:6rem 2rem 4rem; position:relative; overflow:hidden;
-}
-.hero-glow {
-  position:absolute; top:-30%; left:50%; transform:translateX(-50%);
-  width:1200px; height:900px;
-  background:radial-gradient(ellipse 70% 55% at 50% 0%,
-    rgba(34,197,94,.22) 0%, rgba(74,222,128,.1) 40%, transparent 70%);
-  pointer-events:none; animation:aurPulse 8s ease-in-out infinite;
-}
-.hero-glow-2 {
-  position:absolute; bottom:-20%; right:-10%;
-  width:700px; height:700px;
-  background:radial-gradient(ellipse at 70% 70%, rgba(74,222,128,.09) 0%, transparent 60%);
-  pointer-events:none; animation:aurPulse 10s ease-in-out infinite reverse;
-}
-/* Third aurora orb — left side */
-.hero-glow-3 {
-  position:absolute; top:20%; left:-15%;
-  width:500px; height:500px;
-  background:radial-gradient(ellipse at 30% 50%, rgba(16,185,129,.07) 0%, transparent 65%);
-  pointer-events:none; animation:aurPulse 12s ease-in-out infinite 2s;
-}
-@keyframes aurPulse {
-  0%,100% { opacity:.8; transform:translateX(-50%) scale(1) }
-  50%      { opacity:1; transform:translateX(-50%) scale(1.08) }
-}
-.hero-glow-2 { animation: none }
-.hero-glow-2 { animation:aurPulse2 10s ease-in-out infinite }
-@keyframes aurPulse2 {
-  0%,100% { opacity:.7; transform:scale(1) }
-  50%      { opacity:1; transform:scale(1.1) }
-}
-.hero-eyebrow {
-  display:inline-flex; align-items:center; gap:.55rem;
-  font-size:.68rem; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
-  color:var(--accent2); border:1px solid rgba(34,197,94,.3); padding:.4rem 1.2rem;
-  border-radius:9999px; margin-bottom:2.2rem;
-  background:rgba(34,197,94,.08);
-  box-shadow:0 2px 16px rgba(34,197,94,.15);
-  animation:fadeUp 1s cubic-bezier(0.16,1,0.3,1) both;
-}
-.hero-eyebrow-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--accent);
-  box-shadow:0 0 8px rgba(34,197,94,.8);
-  animation:dotPulse 2s ease-in-out infinite;
-}
-@keyframes dotPulse {
-  0%,100% { box-shadow:0 0 6px rgba(34,197,94,.6); opacity:1 }
-  50%      { box-shadow:0 0 14px rgba(74,222,128,.95); opacity:.8 }
-}
-.hero-title {
-  font-family:var(--font-head); font-size:clamp(3rem,7vw,6.5rem);
-  font-weight:800; line-height:.90; letter-spacing:-3px;
-  margin-bottom:1.8rem; animation:fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both .12s;
-}
-.hero-title .accent {
-  background:linear-gradient(125deg, #22c55e 0%, #4ade80 40%, #86efac 70%, #34d399 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  filter:drop-shadow(0 2px 20px rgba(34,197,94,.4));
-}
-.hero-title .dim { color:var(--t3) }
-.hero-sub {
-  font-size:1.05rem; color:var(--t3); max-width:520px; margin:0 auto 3.5rem;
-  line-height:1.75; animation:fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both .28s;
-}
-/* When word-split is active, the container itself doesn't need to fade — only the words do */
-.hero-sub[data-split-words] { animation:none; opacity:1; }
-.hero-kpi-row {
-  display:flex; justify-content:center; gap:3.5rem; flex-wrap:wrap;
-  animation:fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both .44s; margin-bottom:3rem;
-}
-.hero-kpi { position:relative }
-.hero-kpi .num {
-  font-family:var(--font-mono); font-size:3rem; font-weight:500;
-  line-height:1; display:block; letter-spacing:-.05em;
-}
-.hero-kpi .lbl {
-  font-size:.66rem; font-weight:700; letter-spacing:2px;
-  text-transform:uppercase; color:var(--t4); margin-top:.4rem; display:block;
-}
-/* Separator between KPIs */
-.hero-kpi-row .hero-kpi + .hero-kpi::before {
-  content:''; position:absolute; left:-1.75rem; top:50%; transform:translateY(-50%);
-  height:40px; width:1px;
-  background:linear-gradient(to bottom, transparent, var(--border2), transparent);
-}
-.hero-kpi { position:relative }
-.hero-cta { display:flex; gap:.9rem; justify-content:center; flex-wrap:wrap; animation:fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both .58s }
-.btn-primary {
-  font-family:var(--font-head); font-size:.88rem; font-weight:700;
-  padding:.76rem 1.8rem; border-radius:9px;
-  background:linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #4ade80 100%);
-  color:#071009; border:1px solid rgba(74,222,128,.5);
-  transition:all .3s var(--ease-spring); letter-spacing:-.01em;
-  box-shadow:0 0 24px rgba(34,197,94,.45), 0 0 48px rgba(34,197,94,.2), inset 0 1px 0 rgba(255,255,255,.2);
-  position:relative; overflow:hidden;
-}
-.btn-primary::before {
-  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
-  transition:left .5s var(--ease);
-}
-.btn-primary:hover::before { left:100% }
-.btn-primary:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 0 32px rgba(34,197,94,.6), 0 0 64px rgba(34,197,94,.25), inset 0 1px 0 rgba(255,255,255,.25) }
-.btn-ghost {
-  font-family:var(--font-head); font-size:.88rem; font-weight:600;
-  padding:.76rem 1.8rem; border-radius:9px;
-  background:rgba(15,34,19,.8); color:var(--t3); border:1px solid rgba(74,222,128,.18);
-  transition:all .28s var(--ease); letter-spacing:-.01em;
-  box-shadow: var(--shadow-sm);
-}
-.btn-ghost:hover { background:rgba(34,197,94,.1); color:var(--t1); border-color:rgba(74,222,128,.35); transform:translateY(-1px) }
-.hero-scroll-indicator {
-  position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
-  display:flex; flex-direction:column; align-items:center; gap:.5rem;
-  font-size:.65rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--t4);
-  animation:bob 3s ease infinite;
-}
-.hero-scroll-indicator::after {
-  content:''; width:1px; height:30px; background:linear-gradient(to bottom,var(--accent2),transparent);
-}
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(40px) scale(0.94); filter:blur(6px) }
-  to   { opacity:1; transform:none; filter:none }
-}
-@keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-7px)} }
-
-/* Physics balls override (home-only) */
-#bgCanvas { opacity:1 }
-
-/* Hero KPI — vivid glows on dark pitch */
-.hero-kpi .num.green  { color:var(--green);  text-shadow:0 0 24px rgba(74,222,128,.5) }
-.hero-kpi .num.amber  { color:var(--amber);  text-shadow:0 0 24px rgba(251,191,36,.4) }
-.hero-kpi .num.red    { color:var(--red);    text-shadow:0 0 24px rgba(248,113,113,.4) }
-
-/* ═══ FINDINGS ═══ */
-#findings { padding:5rem 2rem }
-.findings-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:1.1rem }
-.finding-card {
-  background:var(--card);
-  border:1px solid var(--border); border-radius:var(--radius);
-  padding:1.6rem; position:relative; overflow:hidden;
-  box-shadow: var(--shadow-sm);
-  transition:border-color .35s var(--ease), transform .35s var(--ease-spring), box-shadow .35s var(--ease);
-}
-.finding-card:hover {
-  border-color:rgba(74,222,128,.2);
-  transform:translateY(-4px);
-  box-shadow:var(--shadow-md), 0 0 30px rgba(34,197,94,.05);
-}
-/* Gradient top border using pseudo-element */
-.finding-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg, transparent, var(--card-top, var(--accent)), transparent);
-  filter:blur(.5px);
-}
-.finding-card::after {
-  content:''; position:absolute; top:0; left:0; width:100%; height:100%;
-  background:linear-gradient(135deg, rgba(255,255,255,.022) 0%, transparent 45%);
-  pointer-events:none;
-}
-.finding-num {
-  font-family:var(--font-mono); font-size:2.5rem; font-weight:500;
-  line-height:1; margin-bottom:.55rem; letter-spacing:-.04em;
-}
-.finding-label { font-family:var(--font-head); font-size:.68rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--t4); margin-bottom:.75rem }
-.finding-desc { font-size:.86rem; color:var(--t3); line-height:1.65 }
-.finding-detail { margin-top:.85rem; font-size:.75rem; color:var(--t4); font-style:italic; border-top:1px solid var(--border); padding-top:.65rem }
-/* Von Restorff Effect — most significant result stands out visually */
-.finding-card.finding-hero {
-  border-color:rgba(248,113,113,.2);
-  background:linear-gradient(145deg, rgba(248,113,113,.06) 0%, var(--card) 45%);
-  box-shadow:var(--shadow-md), -2px 0 28px rgba(248,113,113,.1);
-}
-.finding-card.finding-hero::before {
-  background:linear-gradient(90deg, transparent, #ef4444 50%, transparent);
-  height:2px; filter:blur(.5px);
-}
-.finding-card.finding-hero:hover {
-  border-color:rgba(248,113,113,.4);
-  box-shadow:var(--shadow-lg), -2px 0 40px rgba(248,113,113,.18);
-}
-
-/* ═══ LEAGUES PREVIEW ═══ */
-#league-preview { padding:4rem 2rem 5rem }
-.league-row {
-  display:flex; align-items:center; justify-content:space-between; gap:1rem;
-  padding:1rem 1.4rem; border-radius:var(--radius-sm);
-  transition:background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease-spring);
-  border:1px solid transparent; cursor:pointer; flex-wrap:wrap;
-}
-.league-row:hover {
-  background:rgba(34,197,94,.06);
-  border-color:rgba(74,222,128,.2);
-  transform:translateX(4px);
-}
-.league-name { font-family:var(--font-head); font-size:.95rem; font-weight:600; display:flex; align-items:center; gap:.7rem }
-.league-dot-big { width:9px; height:9px; border-radius:50%; flex-shrink:0 }
-.league-stats { display:flex; gap:2rem; flex-wrap:wrap }
-.league-stat-item { text-align:right }
-.league-stat-item .val { font-family:var(--font-mono); font-size:.88rem }
-.league-stat-item .lbl { font-size:.65rem; color:var(--t4); text-transform:uppercase; letter-spacing:.6px }
-
-/* ═══ QUOTE ═══ */
-.thesis-quote {
-  max-width:720px; margin:4rem auto; text-align:center; padding:3rem 2.5rem; position:relative;
-  border:1px solid var(--border); border-radius:var(--radius); background:var(--card);
-  backdrop-filter:blur(8px);
-}
-.thesis-quote::before {
-  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
-  background:linear-gradient(90deg, transparent, rgba(34,197,94,.3), transparent);
-}
-.thesis-quote blockquote {
-  font-size:1.05rem; color:var(--t2); line-height:1.9; font-style:italic; margin-bottom:1rem;
-  position:relative;
-}
-.thesis-quote blockquote::before {
-  content:'"';
-  position:absolute; top:-1.5rem; left:50%; transform:translateX(-50%);
-  font-size:5rem; color:rgba(34,197,94,.12); font-family:Georgia,serif; line-height:1;
-}
-.thesis-quote cite { font-size:.78rem; color:var(--t4) }
+.page-hero{padding:3.5rem 2rem 2.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-50%;left:-5%;width:600px;height:500px;background:radial-gradient(ellipse at 15% 50%,rgba(99,102,241,.07) 0%,transparent 60%);pointer-events:none}
+.page-hero h1{font-family:var(--font-head);font-size:2.2rem;font-weight:800;margin-bottom:.4rem;letter-spacing:-.03em}
+svg.pitch{width:100%;height:auto;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.06)}
+.p-g{cursor:pointer}.p-circ{transition:filter .2s}.p-g:hover .p-circ{filter:brightness(1.4)}
+.xi-info-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;min-height:130px;transition:all .3s}
+.xi-info-panel h3{font-family:var(--font-head);font-size:1.1rem;font-weight:700}
+.xi-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.8rem}
+.xi-item label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--t4);display:block}
+.xi-item span{font-size:.88rem;font-weight:600}
+.xi-photo-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem}
+.xi-photo-row img{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid var(--border2)}
+.xi-stat-bar{margin-top:1.5rem}
+.xi-stat-row{display:flex;align-items:center;justify-content:space-between;margin:.4rem 0;font-size:.83rem}
+.xi-stat-row .lbl{color:var(--t3)}
+.xi-stat-row .val{font-family:var(--font-mono);font-size:.8rem}
 </style>
 
 </head>
@@ -871,11 +660,11 @@ footer strong { color:var(--t2) }
     <span class="nav-badge">BBA THESIS</span>
   </a>
   <div class="nav-links">
-    <a href="index.html"              class="nav-link active">Overview</a>
+    <a href="index.html"              class="nav-link ">Overview</a>
     <a href="market.html"        class="nav-link ">League Data</a>
     <a href="players.html"       class="nav-link ">Player Rankings</a>
     <a href="squads.html"        class="nav-link ">Squad Analysis</a>
-    <a href="xi.html"            class="nav-link ">Best XI</a>
+    <a href="xi.html"            class="nav-link active">Best XI</a>
     <a href="applications.html"  class="nav-link ">Applications</a>
     <a href="models.html"        class="nav-link ">The Model</a>
     <a href="hypotheses.html"    class="nav-link ">Research</a>
@@ -883,137 +672,97 @@ footer strong { color:var(--t2) }
 </nav>
 
 
-<div class="page" data-page="home">
-
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow-2"></div>
-  <div class="hero-glow-3"></div>
-  <div>
-    <div class="hero-eyebrow">
-      <span class="hero-eyebrow-dot"></span> IE University · BBA Thesis 2025
-    </div>
-    <h1 class="hero-title">
-      <span class="dim">WHO IS</span><br>
-      <span class="accent">OVERPAID</span><br>
-      <span class="dim">IN FOOTBALL?</span>
-    </h1>
-    <p class="hero-sub" data-split-words data-split-delay="600">
-      OLS wage-efficiency models across the Big Five European leagues reveal which clubs are spending wisely — and which are leaving millions on the pitch.
-    </p>
-    <div class="hero-kpi-row">
-      <div class="hero-kpi"><span class="num green" id="h-records">—</span><span class="lbl">Player-Seasons</span></div>
-      <div class="hero-kpi"><span class="num" style="color:var(--accent2)" id="h-players">—</span><span class="lbl">Unique Players</span></div>
-      <div class="hero-kpi"><span class="num amber" id="h-leagues">5</span><span class="lbl">Leagues</span></div>
-      <div class="hero-kpi"><span class="num" style="color:var(--t2)" id="h-seasons">3</span><span class="lbl">Seasons</span></div>
-    </div>
-    <div class="hero-cta">
-      <a href="squads.html" class="btn-primary" data-magnetic>Explore Squad Analysis</a>
-      <a href="players.html" class="btn-ghost" data-magnetic>Player Rankings</a>
-      <a href="xi.html" class="btn-ghost" data-magnetic>Best XI</a>
-    </div>
-  </div>
-  <div class="hero-scroll-indicator">Scroll</div>
-</section>
-
-<!-- THREE HEADLINE RESULTS -->
-<section id="findings" style="padding:4rem 2rem 0">
+<div class="page">
+<div class="page-hero">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">Three Results Worth Knowing</div>
-      <h2 class="section-title">What the thesis found</h2>
+    <div class="section-eyebrow">Best XI</div>
+    <h1>The Bargain Dream Team</h1>
+    <p style="color:var(--t3);font-size:.95rem;max-width:640px;margin-top:.4rem">The most undervalued player at each position, assembled into a <strong style="color:var(--t2)">4-4-2 formation</strong>. Toggle to see the most overpaid XI. Click any player on the pitch for details.</p>
+  </div>
+</div>
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Season</span>
+    <button class="season-btn" data-s="—">—</button>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Leagues</span>
+    <button class="league-pill" data-l="—">—</button>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">View</span>
+    <button class="season-btn active" data-t="underpaid" id="xiUnd">🟢 Underpaid XI</button>
+    <button class="season-btn" data-t="overpaid" id="xiOvp">🔴 Overpaid XI</button>
+  </div>
+</div>
+<div class="container" style="padding-top:2.5rem;padding-bottom:4rem">
+
+  <!-- Summary stats -->
+  <div class="stat-grid reveal mb-4" id="xiStats">
+    <div class="stat-tile green-tile"><div class="num green" id="xi-total-eff">—</div><div class="lbl">Total Eff. Score</div></div>
+    <div class="stat-tile amber-tile"><div class="num amber" id="xi-total-wage">—</div><div class="lbl">Combined Wage Bill</div></div>
+    <div class="stat-tile blue-tile"><div class="num blue" id="xi-savings">—</div><div class="lbl">Model Predicts Worth</div></div>
+    <div class="stat-tile"><div class="num" id="xi-leagues">—</div><div class="lbl">Leagues Represented</div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:360px 1fr;gap:2.5rem;align-items:start" class="reveal">
+    <!-- Pitch SVG -->
+    <div>
+      <svg class="pitch" viewBox="0 0 340 520" id="pitchSVG" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0e3d12"/><stop offset="100%" stop-color="#0a2c0d"/>
+          </linearGradient>
+        </defs>
+        <rect width="340" height="520" fill="url(#gg)" rx="8"/>
+        <rect x="0" y="0"   width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="0" y="104" width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="0" y="208" width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="0" y="312" width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="0" y="416" width="340" height="52" fill="rgba(255,255,255,.018)"/>
+        <rect x="16" y="16" width="308" height="488" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5" rx="2"/>
+        <line x1="16" y1="260" x2="324" y2="260" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
+        <circle cx="170" cy="260" r="50" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
+        <circle cx="170" cy="260" r="3" fill="rgba(255,255,255,.45)"/>
+        <rect x="80"  y="16"  width="180" height="80" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <rect x="120" y="16"  width="100" height="44" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <rect x="80"  y="424" width="180" height="80" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <rect x="120" y="476" width="100" height="44" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <circle cx="170" cy="76"  r="3" fill="rgba(255,255,255,.35)"/>
+        <circle cx="170" cy="444" r="3" fill="rgba(255,255,255,.35)"/>
+        <rect x="130" y="3"   width="80" height="14" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5"/>
+        <rect x="130" y="503" width="80" height="14" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5"/>
+        <!-- Formation label -->
+        <text x="170" y="248" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="9" font-weight="700" fill="rgba(255,255,255,.12)" letter-spacing="4">4 – 4 – 2</text>
+        <g id="pitchPlayers"></g>
+      </svg>
     </div>
-    <div class="findings-grid reveal reveal-stagger" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-      <div class="finding-card finding-hero" style="--card-top:#ef4444">
-        <div class="finding-num red">0.88</div>
-        <div class="finding-label">PSR Persistence — Ligue 1</div>
-        <div class="finding-desc">PSR enforcement froze wages in Ligue 1. Mispricing persistence jumped from 0.33 to <strong>0.88</strong> — contracts locked into inefficiency regardless of performance. The most significant result: t=17.3, p&lt;1×10⁻⁶⁴.</div>
-        <div class="finding-detail"><a href="hypotheses.html" style="color:inherit">→ See full hypothesis test</a></div>
+
+    <!-- Info panel -->
+    <div>
+      <div class="xi-info-panel" id="xiInfoPanel">
+        <p style="color:var(--t4);font-size:.9rem">← Click a player on the pitch to see their details</p>
       </div>
-      <div class="finding-card" style="--card-top:#22c55e">
-        <div class="finding-num green">63–71%</div>
-        <div class="finding-label">Wage Variance Explained</div>
-        <div class="finding-desc">Position-specific OLS models explain <strong>63–71% of log-wage variance</strong> using only publicly available stats. Age has a concave effect: wages peak around 29, then fall — consistent with declining productivity.</div>
-        <div class="finding-detail"><a href="models.html" style="color:inherit">→ Explore the model</a></div>
+
+      <!-- Team composition -->
+      <div class="card card-pad mt-3" id="xiComposition" style="display:none">
+        <div class="card-header">Full XI Composition</div>
+        <div id="xiPlayerList" style="display:flex;flex-direction:column;gap:.3rem"></div>
+        <div class="xi-stat-bar" id="xiLeagueDist"></div>
       </div>
-      <div class="finding-card" style="--card-top:#f59e0b">
-        <div class="finding-num amber">~20%</div>
-        <div class="finding-label">Players Overpaid Each Season</div>
-        <div class="finding-desc">Roughly 1 in 5 players receives wages above what the model predicts. The gap is not random — it reflects brand value, negotiation power, and information asymmetry between clubs and agents.</div>
-        <div class="finding-detail"><a href="players.html" style="color:inherit">→ See player rankings</a></div>
+
+      <!-- Legend -->
+      <div style="display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.2rem">
+        
+        <div style="display:flex;align-items:center;gap:.35rem;font-size:.8rem;color:var(--t3)">
+          <div style="width:9px;height:9px;border-radius:50%;background:#3b82f6#a855f7#f97316#f59e0b"></div>
+          — —
+        </div>
+        
       </div>
     </div>
   </div>
-</section>
-
-<!-- EXPLORE THE DASHBOARD -->
-<section style="padding:4rem 2rem 2rem">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">Explore the Dashboard</div>
-      <h2 class="section-title">What you can do here</h2>
-    </div>
-    <div class="findings-grid reveal reveal-stagger" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem">
-      <a href="market.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#7dd3fc;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">📊</div>
-          <div class="finding-label" style="color:#7dd3fc">League Data</div>
-          <div class="finding-desc">Efficiency distributions, PSR era trends, and league-by-league comparisons across all 5 competitions and 3 seasons.</div>
-        </div>
-      </a>
-      <a href="players.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#4ade80;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">👤</div>
-          <div class="finding-label" style="color:#4ade80">Player Rankings</div>
-          <div class="finding-desc">Browse the most underpaid and overpaid players by position. Filter by league, season, and efficiency category.</div>
-        </div>
-      </a>
-      <a href="squads.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#93c5fd;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">🏟</div>
-          <div class="finding-label" style="color:#93c5fd">Squad Analysis</div>
-          <div class="finding-desc">Club-by-club efficiency rankings. Drill into any squad to see which contracts align with the model and which don't.</div>
-        </div>
-      </a>
-      <a href="xi.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#a855f7;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">⚽</div>
-          <div class="finding-label" style="color:#a855f7">Best XI</div>
-          <div class="finding-desc">The most statistically undervalued 4-4-2 XI assembled from the dataset. Toggle to see the most overpaid XI.</div>
-        </div>
-      </a>
-      <a href="applications.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#f43f5e;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">🎯</div>
-          <div class="finding-label" style="color:#f43f5e">Applications</div>
-          <div class="finding-desc">Live tools: squad optimizer, transfer screening, cross-league wage reference, and PSR monitoring — all running on real data.</div>
-        </div>
-      </a>
-      <a href="models.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#fbbf24;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">📐</div>
-          <div class="finding-label" style="color:#fbbf24">The Model</div>
-          <div class="finding-desc">OLS coefficient forest plots by position. See what performance variables the model weights and how strongly.</div>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- QUOTE -->
-<section style="padding:2rem 2rem 5rem">
-  <div class="container">
-    <div class="thesis-quote reveal">
-      <blockquote>
-        "Wage-setting in professional football is not irrational — it is systematically biased by institutional rigidities, information asymmetry, and policy distortions such as PSR enforcement."
-      </blockquote>
-      <cite>— Pablo Stoclet, Football Salary Intelligence, IE University 2025</cite>
-    </div>
-  </div>
-</section>
-
-
+</div>
 </div>
 
 
@@ -1311,103 +1060,152 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
 
 
 <script>
-/* Physics bouncing balls — home only */
-(function() {
-  const canvas = document.getElementById('bgCanvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, mouse={x:-9e9,y:-9e9};
-  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-  resize(); window.addEventListener('resize',resize);
-  document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+let xiType='underpaid', xiData=[];
 
-  class Spotlight {
-    constructor(x){this.ox=x;this.a=(Math.random()-.5)*.3;this.sp=(Math.random()-.5)*.0012;this.al=Math.random()*.04+.015;}
-    update(){this.a+=this.sp;if(Math.abs(this.a)>.4)this.sp*=-1;}
-    draw(){
-      const ex=this.ox+Math.sin(this.a)*H*2,ey=H*2,sp=H*.5;
-      const g=ctx.createLinearGradient(this.ox,0,ex,ey);
-      g.addColorStop(0,`rgba(34,197,94,${this.al})`);g.addColorStop(1,'transparent');
-      ctx.save();ctx.beginPath();ctx.moveTo(this.ox,0);ctx.lineTo(ex-sp,ey);ctx.lineTo(ex+sp,ey);
-      ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.restore();
-    }
-  }
+document.querySelectorAll('[data-t]').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('[data-t]').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active'); xiType=this.dataset.t; loadXI();
+  });
+});
 
-  let sparks=[];
-  function spawnSparks(x,y,sp){
-    for(let i=0;i<Math.floor(sp*1.8);i++) sparks.push({x,y,vx:(Math.random()-.5)*sp*.7,vy:-(Math.random()*sp*.45+.8),life:1,decay:Math.random()*.05+.025,r:Math.random()*2+.4});
-  }
+const LAYOUTS={GK:[[170,472]],DEF:[[62,388],[128,378],[212,378],[278,388]],MID:[[58,278],[124,260],[216,260],[282,278]],FWD:[[118,152],[222,152]]};
 
-  class Ball {
-    constructor(){this.init();}
-    init(){
-      this.r=Math.random()*20+12; this.x=Math.random()*W; this.y=-this.r-Math.random()*200;
-      this.vx=(Math.random()-.5)*5; this.vy=Math.random()*2+1;
-      this.rot=0; this.rs=this.vx*.06;
-      this.al=Math.random()*.15+.06; this.trail=[]; this.sy=1; this.sx=1; this.bounces=0;
-    }
-    update(){
-      this.vy+=.18; this.vx*=.9985; this.vy*=.9985;
-      const dx=this.x-mouse.x,dy=this.y-mouse.y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<120&&d>1){this.vx+=dx/d*.3;this.vy+=dy/d*.3;}
-      this.x+=this.vx; this.y+=this.vy; this.rot+=this.rs;
-      this.trail.push({x:this.x,y:this.y}); if(this.trail.length>16) this.trail.shift();
-      this.sy+=(1-this.sy)*.14; this.sx+=(1-this.sx)*.14;
-      if(this.y+this.r*this.sy>H){
-        this.y=H-this.r; const sp=Math.abs(this.vy); this.vy*=-.6; this.vx*=.72; this.rs=this.vx*.06;
-        this.sy=.5; this.sx=1.4; this.bounces++;
-        if(sp>4) spawnSparks(this.x,H,sp);
-        if(sp<.6&&this.bounces>3) this.init();
-      }
-      if(this.x-this.r<0){this.x=this.r;this.vx*=-.7;this.rs=this.vx*.06;}
-      if(this.x+this.r>W){this.x=W-this.r;this.vx*=-.7;this.rs=this.vx*.06;}
-      if(this.y<-300) this.init();
-    }
-    draw(){
-      this.trail.forEach((p,i)=>{
-        const t=i/this.trail.length;
-        ctx.beginPath();ctx.arc(p.x,p.y,this.r*t*.45,0,Math.PI*2);
-        ctx.fillStyle=`rgba(34,197,94,${this.al*t*.4})`;ctx.fill();
-      });
-      ctx.save();ctx.translate(this.x,this.y);ctx.rotate(this.rot);ctx.scale(this.sx,this.sy);ctx.globalAlpha=this.al;
-      ctx.beginPath();ctx.arc(0,0,this.r+3,0,Math.PI*2);ctx.fillStyle='rgba(34,197,94,.05)';ctx.fill();
-      ctx.beginPath();ctx.arc(0,0,this.r,0,Math.PI*2);ctx.strokeStyle='rgba(74,222,128,.75)';ctx.lineWidth=1.5;ctx.stroke();
-      ctx.fillStyle='rgba(34,197,94,.22)';
-      ctx.beginPath();ctx.arc(0,0,this.r*.18,0,Math.PI*2);ctx.fill();
-      for(let i=0;i<5;i++){
-        const a=(i/5)*Math.PI*2-Math.PI/2,px=Math.cos(a)*this.r*.44,py=Math.sin(a)*this.r*.44;
-        ctx.beginPath();ctx.arc(px,py,this.r*.16,0,Math.PI*2);ctx.fill();
-      }
-      ctx.restore();
-    }
-  }
+initFilters(—, —, —, loadXI);
 
-  const spots=[W*.12,W*.33,W*.67,W*.88].map(x=>new Spotlight(x));
-  const balls=Array.from({length:5},(_,i)=>{ const b=new Ball(); b.y=-50-i*110; b.vy=1.2+i*.4; return b; });
+async function loadXI() {
+  const url=`/api/formation-xi?type=${xiType}`;
+  xiData = await apiFetch(url);
+  renderPitch(xiData);
+  renderSummary(xiData);
+}
 
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    // Grid
-    ctx.strokeStyle='rgba(34,197,94,.04)'; ctx.lineWidth=1;
-    for(let x=0;x<W;x+=100){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-    for(let y=0;y<H;y+=100){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-    spots.forEach(s=>{s.update();s.draw();});
-    balls.forEach(b=>{b.update();b.draw();});
-    sparks=sparks.filter(s=>s.life>0);
-    sparks.forEach(s=>{s.x+=s.vx;s.y+=s.vy;s.vy+=.12;s.life-=s.decay;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(74,222,128,${s.life*.8})`;ctx.fill();});
-    requestAnimationFrame(frame);
-  }
-  frame();
-})();
+function renderPitch(xi) {
+  const g=document.getElementById('pitchPlayers');
+  g.innerHTML='';
+  xi.forEach((p, idx)=>{
+    const coords=(LAYOUTS[p.abbr]||[])[p.slot||0];
+    if(!coords)return;
+    const [cx,cy]=coords;
+    const col=pc(p.position);
+    const ini=p.player.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const isOvp=xiType==='overpaid';
+    const ringCol=isOvp?'var(--red)':col;
 
-/* Load hero stats */
-(async function() {
-  try {
-    const stats = await fetch('/api/stats').then(r=>r.json());
-    countUp(document.getElementById('h-records'), stats.total||6702);
-    countUp(document.getElementById('h-players'), stats.unique_players||3253);
-  } catch(e) { console.error(e); }
-})();
+    const node=document.createElementNS('http://www.w3.org/2000/svg','g');
+    node.setAttribute('class','p-g');
+    node.setAttribute('transform',`translate(${cx},${cy})`);
 
+    // Pulse ring
+    const pulse=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    pulse.setAttribute('r','23');pulse.setAttribute('fill','none');
+    pulse.setAttribute('stroke',ringCol);pulse.setAttribute('stroke-width','1');pulse.setAttribute('opacity','.3');
+    node.appendChild(pulse);
+
+    // Clip
+    const clipId=`c-${cx}-${cy}`;
+    const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+    const clip=document.createElementNS('http://www.w3.org/2000/svg','clipPath');
+    clip.setAttribute('id',clipId);
+    const cc=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    cc.setAttribute('r','16');cc.setAttribute('cx','0');cc.setAttribute('cy','0');
+    clip.appendChild(cc);defs.appendChild(clip);node.appendChild(defs);
+
+    const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    bg.setAttribute('r','17');bg.setAttribute('fill',col+'33');
+    bg.setAttribute('stroke',ringCol);bg.setAttribute('stroke-width','2');bg.setAttribute('class','p-circ');
+    node.appendChild(bg);
+
+    if(p.photo_url){
+      const img=document.createElementNS('http://www.w3.org/2000/svg','image');
+      img.setAttribute('href',p.photo_url);img.setAttribute('x','-16');img.setAttribute('y','-16');
+      img.setAttribute('width','32');img.setAttribute('height','32');
+      img.setAttribute('clip-path',`url(#${clipId})`);img.setAttribute('preserveAspectRatio','xMidYMin slice');
+      img.addEventListener('error',()=>{img.remove();addInitialsText(node,ini);});
+      node.appendChild(img);
+    } else { addInitialsText(node,ini); }
+
+    const nm=document.createElementNS('http://www.w3.org/2000/svg','text');
+    nm.setAttribute('text-anchor','middle');nm.setAttribute('y','30');
+    nm.setAttribute('fill','rgba(255,255,255,.9)');nm.setAttribute('font-size','5.8');nm.setAttribute('font-family','Space Grotesk,sans-serif');
+    nm.textContent=p.player.split(' ').slice(-1)[0];node.appendChild(nm);
+
+    const et=document.createElementNS('http://www.w3.org/2000/svg','text');
+    et.setAttribute('text-anchor','middle');et.setAttribute('y','41');
+    et.setAttribute('fill',isOvp?'#f87171':'#4ade80');et.setAttribute('font-size','5.5');et.setAttribute('font-family','JetBrains Mono,monospace');
+    et.textContent=fmtEff(p.efficiency);node.appendChild(et);
+
+    node.addEventListener('click',()=>showXIInfo(p,col,ringCol));
+    node.style.animationDelay = `${idx * 0.08}s`;
+    g.appendChild(node);
+  });
+}
+
+function addInitialsText(node,ini){
+  const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','middle');
+  t.setAttribute('fill','#94a3b8');t.setAttribute('font-size','7');t.setAttribute('font-family','JetBrains Mono,monospace');
+  t.textContent=ini;node.appendChild(t);
+}
+
+function showXIInfo(p,col,ringCol){
+  const badge=lbadge(p.league);
+  const ini=p.player.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('xiInfoPanel').innerHTML=`
+    <div class="xi-photo-row">
+      <div style="position:relative;width:48px;height:48px;flex-shrink:0">
+        <div style="position:absolute;inset:0;border-radius:50%;background:${col}22;border:2px solid ${ringCol};display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1rem;font-weight:800;color:${col}">${ini}</div>
+        <img src="${p.photo_url||''}" onerror="this.style.display='none'" style="position:relative;z-index:1;width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid ${ringCol}">
+      </div>
+      <div><h3>${p.player}</h3><span class="badge ${badge}">${p.league}</span></div>
+    </div>
+    <div class="xi-grid">
+      <div class="xi-item"><label>Club</label><span>${p.team}</span></div>
+      <div class="xi-item"><label>Position</label><span style="color:${col}">${p.position}</span></div>
+      <div class="xi-item"><label>Annual Wage</label><span class="amber mono">${fmtWage(p.wage)}</span></div>
+      <div class="xi-item"><label>Efficiency</label><span class="mono" style="color:${ringCol}">${fmtEff(p.efficiency)}</span></div>
+      <div class="xi-item"><label>${xiType==='underpaid'?'Undervalued':'Overvalued'} by</label><span style="color:${ringCol}">${Math.abs(p.eff_pct||0).toFixed(1)}%</span></div>
+    </div>`;
+}
+
+function renderSummary(xi){
+  const totalEff=xi.reduce((a,p)=>a+(p.efficiency||0),0);
+  const totalWage=xi.reduce((a,p)=>a+(p.wage||0),0);
+  document.getElementById('xi-total-eff').textContent=fmtEff(totalEff);
+  document.getElementById('xi-total-wage').textContent=fmtWage(totalWage);
+  const leagues=[...new Set(xi.map(p=>p.league))];
+  document.getElementById('xi-leagues').textContent=leagues.length;
+
+  // Composition
+  const comp=document.getElementById('xiComposition');
+  comp.style.display='block';
+  const list=document.getElementById('xiPlayerList');
+  list.innerHTML=xi.map(p=>{
+    const col=xiType==='overpaid'?'var(--red)':'var(--green)';
+    return `<div style="display:flex;align-items:center;gap:.7rem;padding:.4rem 0;border-bottom:1px solid var(--border)">
+      <div style="width:28px;height:28px;border-radius:50%;background:${pc(p.position)}33;border:1px solid ${pc(p.position)};flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-family:JetBrains Mono,monospace;color:#94a3b8">${pe(p.position)}</div>
+      <div style="flex:1;min-width:0"><div style="font-size:.85rem;font-weight:600;font-family:Space Grotesk,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.player}</div>
+      <div style="font-size:.7rem;color:var(--t4)">${p.team}</div></div>
+      <span class="mono" style="color:${col};font-size:.85rem">${fmtEff(p.efficiency)}</span>
+    </div>`;
+  }).join('');
+
+  // League distribution
+  const leagueCount={};
+  xi.forEach(p=>{leagueCount[p.league]=(leagueCount[p.league]||0)+1;});
+  const dist=document.getElementById('xiLeagueDist');
+  dist.innerHTML='<div style="margin-top:1rem;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.5rem">League Representation</div>'+
+    Object.entries(leagueCount).map(([l,n])=>`<div style="display:flex;align-items:center;gap:.6rem;margin:.25rem 0">
+      <div style="width:8px;height:8px;border-radius:50%;background:${lc(l)};flex-shrink:0"></div>
+      <span class="badge ${lbadge(l)}">${lshort(l)}</span>
+      <span style="font-size:.8rem;color:var(--t3)">${l}</span>
+      <span class="mono" style="font-size:.78rem;color:var(--t4);margin-left:auto">${n} player${n>1?'s':''}</span>
+    </div>`).join('');
+  const predicted=xi.reduce((a,p)=>a+Math.exp(Math.log(p.wage||1)+(xiType==='underpaid'?Math.abs(p.efficiency):0)),0);
+  document.getElementById('xi-savings').textContent=fmtWage(predicted);
+}
+
+loadXI();
 </script>
 
 </body>

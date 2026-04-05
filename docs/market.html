@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home · Football Salary Intelligence</title>
+<title>Market · Football Salary Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -625,233 +625,26 @@ footer strong { color:var(--t2) }
 
 
 <style>
-/* ═══ HERO ═══ */
-#hero {
-  min-height: 100vh; display:flex; align-items:center; justify-content:center;
-  text-align:center; padding:6rem 2rem 4rem; position:relative; overflow:hidden;
+/* ═══ HEATMAP GRID ═══ */
+.hm-table { width:100%; border-collapse:separate; border-spacing:4px }
+.hm-cell {
+  padding:.7rem .5rem; border-radius:8px; text-align:center;
+  font-family:var(--font-mono); font-size:.82rem; font-weight:600;
+  transition:transform .2s, box-shadow .2s;
+  cursor:default;
 }
-.hero-glow {
-  position:absolute; top:-30%; left:50%; transform:translateX(-50%);
-  width:1200px; height:900px;
-  background:radial-gradient(ellipse 70% 55% at 50% 0%,
-    rgba(34,197,94,.22) 0%, rgba(74,222,128,.1) 40%, transparent 70%);
-  pointer-events:none; animation:aurPulse 8s ease-in-out infinite;
-}
-.hero-glow-2 {
-  position:absolute; bottom:-20%; right:-10%;
-  width:700px; height:700px;
-  background:radial-gradient(ellipse at 70% 70%, rgba(74,222,128,.09) 0%, transparent 60%);
-  pointer-events:none; animation:aurPulse 10s ease-in-out infinite reverse;
-}
-/* Third aurora orb — left side */
-.hero-glow-3 {
-  position:absolute; top:20%; left:-15%;
-  width:500px; height:500px;
-  background:radial-gradient(ellipse at 30% 50%, rgba(16,185,129,.07) 0%, transparent 65%);
-  pointer-events:none; animation:aurPulse 12s ease-in-out infinite 2s;
-}
-@keyframes aurPulse {
-  0%,100% { opacity:.8; transform:translateX(-50%) scale(1) }
-  50%      { opacity:1; transform:translateX(-50%) scale(1.08) }
-}
-.hero-glow-2 { animation: none }
-.hero-glow-2 { animation:aurPulse2 10s ease-in-out infinite }
-@keyframes aurPulse2 {
-  0%,100% { opacity:.7; transform:scale(1) }
-  50%      { opacity:1; transform:scale(1.1) }
-}
-.hero-eyebrow {
-  display:inline-flex; align-items:center; gap:.55rem;
-  font-size:.68rem; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
-  color:var(--accent2); border:1px solid rgba(34,197,94,.3); padding:.4rem 1.2rem;
-  border-radius:9999px; margin-bottom:2.2rem;
-  background:rgba(34,197,94,.08);
-  box-shadow:0 2px 16px rgba(34,197,94,.15);
-  animation:fadeUp 1s cubic-bezier(0.16,1,0.3,1) both;
-}
-.hero-eyebrow-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--accent);
-  box-shadow:0 0 8px rgba(34,197,94,.8);
-  animation:dotPulse 2s ease-in-out infinite;
-}
-@keyframes dotPulse {
-  0%,100% { box-shadow:0 0 6px rgba(34,197,94,.6); opacity:1 }
-  50%      { box-shadow:0 0 14px rgba(74,222,128,.95); opacity:.8 }
-}
-.hero-title {
-  font-family:var(--font-head); font-size:clamp(3rem,7vw,6.5rem);
-  font-weight:800; line-height:.90; letter-spacing:-3px;
-  margin-bottom:1.8rem; animation:fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both .12s;
-}
-.hero-title .accent {
-  background:linear-gradient(125deg, #22c55e 0%, #4ade80 40%, #86efac 70%, #34d399 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  filter:drop-shadow(0 2px 20px rgba(34,197,94,.4));
-}
-.hero-title .dim { color:var(--t3) }
-.hero-sub {
-  font-size:1.05rem; color:var(--t3); max-width:520px; margin:0 auto 3.5rem;
-  line-height:1.75; animation:fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both .28s;
-}
-/* When word-split is active, the container itself doesn't need to fade — only the words do */
-.hero-sub[data-split-words] { animation:none; opacity:1; }
-.hero-kpi-row {
-  display:flex; justify-content:center; gap:3.5rem; flex-wrap:wrap;
-  animation:fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both .44s; margin-bottom:3rem;
-}
-.hero-kpi { position:relative }
-.hero-kpi .num {
-  font-family:var(--font-mono); font-size:3rem; font-weight:500;
-  line-height:1; display:block; letter-spacing:-.05em;
-}
-.hero-kpi .lbl {
-  font-size:.66rem; font-weight:700; letter-spacing:2px;
-  text-transform:uppercase; color:var(--t4); margin-top:.4rem; display:block;
-}
-/* Separator between KPIs */
-.hero-kpi-row .hero-kpi + .hero-kpi::before {
-  content:''; position:absolute; left:-1.75rem; top:50%; transform:translateY(-50%);
-  height:40px; width:1px;
-  background:linear-gradient(to bottom, transparent, var(--border2), transparent);
-}
-.hero-kpi { position:relative }
-.hero-cta { display:flex; gap:.9rem; justify-content:center; flex-wrap:wrap; animation:fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both .58s }
-.btn-primary {
-  font-family:var(--font-head); font-size:.88rem; font-weight:700;
-  padding:.76rem 1.8rem; border-radius:9px;
-  background:linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #4ade80 100%);
-  color:#071009; border:1px solid rgba(74,222,128,.5);
-  transition:all .3s var(--ease-spring); letter-spacing:-.01em;
-  box-shadow:0 0 24px rgba(34,197,94,.45), 0 0 48px rgba(34,197,94,.2), inset 0 1px 0 rgba(255,255,255,.2);
-  position:relative; overflow:hidden;
-}
-.btn-primary::before {
-  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
-  transition:left .5s var(--ease);
-}
-.btn-primary:hover::before { left:100% }
-.btn-primary:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 0 32px rgba(34,197,94,.6), 0 0 64px rgba(34,197,94,.25), inset 0 1px 0 rgba(255,255,255,.25) }
-.btn-ghost {
-  font-family:var(--font-head); font-size:.88rem; font-weight:600;
-  padding:.76rem 1.8rem; border-radius:9px;
-  background:rgba(15,34,19,.8); color:var(--t3); border:1px solid rgba(74,222,128,.18);
-  transition:all .28s var(--ease); letter-spacing:-.01em;
-  box-shadow: var(--shadow-sm);
-}
-.btn-ghost:hover { background:rgba(34,197,94,.1); color:var(--t1); border-color:rgba(74,222,128,.35); transform:translateY(-1px) }
-.hero-scroll-indicator {
-  position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
-  display:flex; flex-direction:column; align-items:center; gap:.5rem;
-  font-size:.65rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--t4);
-  animation:bob 3s ease infinite;
-}
-.hero-scroll-indicator::after {
-  content:''; width:1px; height:30px; background:linear-gradient(to bottom,var(--accent2),transparent);
-}
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(40px) scale(0.94); filter:blur(6px) }
-  to   { opacity:1; transform:none; filter:none }
-}
-@keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-7px)} }
+.hm-cell:hover { transform:scale(1.06); z-index:2; position:relative; box-shadow:0 4px 20px rgba(0,0,0,.5) }
+.hm-header { font-family:var(--font-head); font-size:.65rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--t4); padding:.4rem .5rem; text-align:center }
+.hm-row-label { font-family:var(--font-head); font-size:.78rem; font-weight:600; color:var(--t3); padding:.4rem .8rem .4rem 0; white-space:nowrap; text-align:right }
 
-/* Physics balls override (home-only) */
-#bgCanvas { opacity:1 }
-
-/* Hero KPI — vivid glows on dark pitch */
-.hero-kpi .num.green  { color:var(--green);  text-shadow:0 0 24px rgba(74,222,128,.5) }
-.hero-kpi .num.amber  { color:var(--amber);  text-shadow:0 0 24px rgba(251,191,36,.4) }
-.hero-kpi .num.red    { color:var(--red);    text-shadow:0 0 24px rgba(248,113,113,.4) }
-
-/* ═══ FINDINGS ═══ */
-#findings { padding:5rem 2rem }
-.findings-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:1.1rem }
-.finding-card {
-  background:var(--card);
-  border:1px solid var(--border); border-radius:var(--radius);
-  padding:1.6rem; position:relative; overflow:hidden;
-  box-shadow: var(--shadow-sm);
-  transition:border-color .35s var(--ease), transform .35s var(--ease-spring), box-shadow .35s var(--ease);
+/* ═══ LEAGUE INSIGHT PILLS ═══ */
+.insight-row { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1rem }
+.insight-pill {
+  display:inline-flex; align-items:center; gap:.45rem;
+  padding:.35rem .9rem; border-radius:9999px; font-size:.75rem; font-weight:600;
+  border:1px solid var(--border); background:var(--card2); color:var(--t3);
 }
-.finding-card:hover {
-  border-color:rgba(74,222,128,.2);
-  transform:translateY(-4px);
-  box-shadow:var(--shadow-md), 0 0 30px rgba(34,197,94,.05);
-}
-/* Gradient top border using pseudo-element */
-.finding-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg, transparent, var(--card-top, var(--accent)), transparent);
-  filter:blur(.5px);
-}
-.finding-card::after {
-  content:''; position:absolute; top:0; left:0; width:100%; height:100%;
-  background:linear-gradient(135deg, rgba(255,255,255,.022) 0%, transparent 45%);
-  pointer-events:none;
-}
-.finding-num {
-  font-family:var(--font-mono); font-size:2.5rem; font-weight:500;
-  line-height:1; margin-bottom:.55rem; letter-spacing:-.04em;
-}
-.finding-label { font-family:var(--font-head); font-size:.68rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--t4); margin-bottom:.75rem }
-.finding-desc { font-size:.86rem; color:var(--t3); line-height:1.65 }
-.finding-detail { margin-top:.85rem; font-size:.75rem; color:var(--t4); font-style:italic; border-top:1px solid var(--border); padding-top:.65rem }
-/* Von Restorff Effect — most significant result stands out visually */
-.finding-card.finding-hero {
-  border-color:rgba(248,113,113,.2);
-  background:linear-gradient(145deg, rgba(248,113,113,.06) 0%, var(--card) 45%);
-  box-shadow:var(--shadow-md), -2px 0 28px rgba(248,113,113,.1);
-}
-.finding-card.finding-hero::before {
-  background:linear-gradient(90deg, transparent, #ef4444 50%, transparent);
-  height:2px; filter:blur(.5px);
-}
-.finding-card.finding-hero:hover {
-  border-color:rgba(248,113,113,.4);
-  box-shadow:var(--shadow-lg), -2px 0 40px rgba(248,113,113,.18);
-}
-
-/* ═══ LEAGUES PREVIEW ═══ */
-#league-preview { padding:4rem 2rem 5rem }
-.league-row {
-  display:flex; align-items:center; justify-content:space-between; gap:1rem;
-  padding:1rem 1.4rem; border-radius:var(--radius-sm);
-  transition:background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease-spring);
-  border:1px solid transparent; cursor:pointer; flex-wrap:wrap;
-}
-.league-row:hover {
-  background:rgba(34,197,94,.06);
-  border-color:rgba(74,222,128,.2);
-  transform:translateX(4px);
-}
-.league-name { font-family:var(--font-head); font-size:.95rem; font-weight:600; display:flex; align-items:center; gap:.7rem }
-.league-dot-big { width:9px; height:9px; border-radius:50%; flex-shrink:0 }
-.league-stats { display:flex; gap:2rem; flex-wrap:wrap }
-.league-stat-item { text-align:right }
-.league-stat-item .val { font-family:var(--font-mono); font-size:.88rem }
-.league-stat-item .lbl { font-size:.65rem; color:var(--t4); text-transform:uppercase; letter-spacing:.6px }
-
-/* ═══ QUOTE ═══ */
-.thesis-quote {
-  max-width:720px; margin:4rem auto; text-align:center; padding:3rem 2.5rem; position:relative;
-  border:1px solid var(--border); border-radius:var(--radius); background:var(--card);
-  backdrop-filter:blur(8px);
-}
-.thesis-quote::before {
-  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
-  background:linear-gradient(90deg, transparent, rgba(34,197,94,.3), transparent);
-}
-.thesis-quote blockquote {
-  font-size:1.05rem; color:var(--t2); line-height:1.9; font-style:italic; margin-bottom:1rem;
-  position:relative;
-}
-.thesis-quote blockquote::before {
-  content:'"';
-  position:absolute; top:-1.5rem; left:50%; transform:translateX(-50%);
-  font-size:5rem; color:rgba(34,197,94,.12); font-family:Georgia,serif; line-height:1;
-}
-.thesis-quote cite { font-size:.78rem; color:var(--t4) }
+.insight-pill .dot { width:7px; height:7px; border-radius:50%; flex-shrink:0 }
 </style>
 
 </head>
@@ -871,8 +664,8 @@ footer strong { color:var(--t2) }
     <span class="nav-badge">BBA THESIS</span>
   </a>
   <div class="nav-links">
-    <a href="index.html"              class="nav-link active">Overview</a>
-    <a href="market.html"        class="nav-link ">League Data</a>
+    <a href="index.html"              class="nav-link ">Overview</a>
+    <a href="market.html"        class="nav-link active">League Data</a>
     <a href="players.html"       class="nav-link ">Player Rankings</a>
     <a href="squads.html"        class="nav-link ">Squad Analysis</a>
     <a href="xi.html"            class="nav-link ">Best XI</a>
@@ -883,137 +676,91 @@ footer strong { color:var(--t2) }
 </nav>
 
 
-<div class="page" data-page="home">
-
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow-2"></div>
-  <div class="hero-glow-3"></div>
-  <div>
-    <div class="hero-eyebrow">
-      <span class="hero-eyebrow-dot"></span> IE University · BBA Thesis 2025
-    </div>
-    <h1 class="hero-title">
-      <span class="dim">WHO IS</span><br>
-      <span class="accent">OVERPAID</span><br>
-      <span class="dim">IN FOOTBALL?</span>
-    </h1>
-    <p class="hero-sub" data-split-words data-split-delay="600">
-      OLS wage-efficiency models across the Big Five European leagues reveal which clubs are spending wisely — and which are leaving millions on the pitch.
-    </p>
-    <div class="hero-kpi-row">
-      <div class="hero-kpi"><span class="num green" id="h-records">—</span><span class="lbl">Player-Seasons</span></div>
-      <div class="hero-kpi"><span class="num" style="color:var(--accent2)" id="h-players">—</span><span class="lbl">Unique Players</span></div>
-      <div class="hero-kpi"><span class="num amber" id="h-leagues">5</span><span class="lbl">Leagues</span></div>
-      <div class="hero-kpi"><span class="num" style="color:var(--t2)" id="h-seasons">3</span><span class="lbl">Seasons</span></div>
-    </div>
-    <div class="hero-cta">
-      <a href="squads.html" class="btn-primary" data-magnetic>Explore Squad Analysis</a>
-      <a href="players.html" class="btn-ghost" data-magnetic>Player Rankings</a>
-      <a href="xi.html" class="btn-ghost" data-magnetic>Best XI</a>
-    </div>
-  </div>
-  <div class="hero-scroll-indicator">Scroll</div>
-</section>
-
-<!-- THREE HEADLINE RESULTS -->
-<section id="findings" style="padding:4rem 2rem 0">
+<div class="page">
+<div class="page-hdr">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">Three Results Worth Knowing</div>
-      <h2 class="section-title">What the thesis found</h2>
+    <div class="section-eyebrow">League Data</div>
+    <h1>Wage Efficiency by Competition</h1>
+    <p style="color:var(--t3);font-size:.95rem;max-width:640px;margin-top:.4rem">How each of the Big Five leagues prices players relative to the position model. Ranked by mean efficiency, broken down by position, and tracked across three seasons.</p>
+  </div>
+</div>
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Season</span>
+    <button class="season-btn" data-s="—">—</button>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Leagues</span>
+    <button class="league-pill" data-l="—">—</button>
+  </div>
+</div>
+<div class="container" style="padding-top:2rem;padding-bottom:4rem">
+
+  <!-- KPI tiles -->
+  <div class="stat-grid reveal reveal-stagger mb-4">
+    <div class="stat-tile blue-tile"><div class="num blue" id="mk-n">—</div><div class="lbl">Player-Seasons</div></div>
+    <div class="stat-tile green-tile"><div class="num green" id="mk-un">—</div><div class="lbl">% Underpaid</div></div>
+    <div class="stat-tile purple-tile"><div class="num" style="color:var(--purple)" id="mk-fair">—</div><div class="lbl">% Fairly Priced</div></div>
+    <div class="stat-tile red-tile"><div class="num red" id="mk-ov">—</div><div class="lbl">% Overpaid</div></div>
+    <div class="stat-tile amber-tile"><div class="num amber" id="mk-eff">—</div><div class="lbl">Mean Efficiency</div></div>
+  </div>
+
+  <!-- ── Section 1: League Rankings ── -->
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">League Comparison</div>
+    <h2 class="section-title">Efficiency Rankings</h2>
+    <p class="section-desc">Leagues ranked by mean efficiency score. Negative = more underpaid players (club-friendly). Positive = more overpaid players. The spread (σ) indicates how uniform wages are within each league.</p>
+  </div>
+  <div class="grid-2 reveal mb-4">
+    <div class="card card-pad">
+      <div class="card-header">Mean Efficiency Score — Ranked</div>
+      <div style="height:300px"><canvas id="ch-bar-h"></canvas></div>
     </div>
-    <div class="findings-grid reveal reveal-stagger" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-      <div class="finding-card finding-hero" style="--card-top:#ef4444">
-        <div class="finding-num red">0.88</div>
-        <div class="finding-label">PSR Persistence — Ligue 1</div>
-        <div class="finding-desc">PSR enforcement froze wages in Ligue 1. Mispricing persistence jumped from 0.33 to <strong>0.88</strong> — contracts locked into inefficiency regardless of performance. The most significant result: t=17.3, p&lt;1×10⁻⁶⁴.</div>
-        <div class="finding-detail"><a href="hypotheses.html" style="color:inherit">→ See full hypothesis test</a></div>
-      </div>
-      <div class="finding-card" style="--card-top:#22c55e">
-        <div class="finding-num green">63–71%</div>
-        <div class="finding-label">Wage Variance Explained</div>
-        <div class="finding-desc">Position-specific OLS models explain <strong>63–71% of log-wage variance</strong> using only publicly available stats. Age has a concave effect: wages peak around 29, then fall — consistent with declining productivity.</div>
-        <div class="finding-detail"><a href="models.html" style="color:inherit">→ Explore the model</a></div>
-      </div>
-      <div class="finding-card" style="--card-top:#f59e0b">
-        <div class="finding-num amber">~20%</div>
-        <div class="finding-label">Players Overpaid Each Season</div>
-        <div class="finding-desc">Roughly 1 in 5 players receives wages above what the model predicts. The gap is not random — it reflects brand value, negotiation power, and information asymmetry between clubs and agents.</div>
-        <div class="finding-detail"><a href="players.html" style="color:inherit">→ See player rankings</a></div>
-      </div>
+    <div class="card card-pad">
+      <div class="card-header">Wage Classification Breakdown per League</div>
+      <div style="height:300px"><canvas id="ch-tribar"></canvas></div>
     </div>
   </div>
-</section>
 
-<!-- EXPLORE THE DASHBOARD -->
-<section style="padding:4rem 2rem 2rem">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">Explore the Dashboard</div>
-      <h2 class="section-title">What you can do here</h2>
+  <!-- ── Section 2: Wage Context ── -->
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">Wage Context</div>
+    <h2 class="section-title">Do Higher Wages Mean Better Efficiency?</h2>
+    <p class="section-desc">Each bubble = one league. X-axis = mean efficiency score, Y-axis = median annual wage. Bubble size = number of player-seasons. Reveals whether spending more correlates with smarter allocation.</p>
+  </div>
+  <div class="grid-2 reveal mb-4">
+    <div class="card card-pad">
+      <div class="card-header">Wage vs Efficiency Bubble Chart</div>
+      <div style="height:300px"><canvas id="ch-bubble"></canvas></div>
     </div>
-    <div class="findings-grid reveal reveal-stagger" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem">
-      <a href="market.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#7dd3fc;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">📊</div>
-          <div class="finding-label" style="color:#7dd3fc">League Data</div>
-          <div class="finding-desc">Efficiency distributions, PSR era trends, and league-by-league comparisons across all 5 competitions and 3 seasons.</div>
-        </div>
-      </a>
-      <a href="players.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#4ade80;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">👤</div>
-          <div class="finding-label" style="color:#4ade80">Player Rankings</div>
-          <div class="finding-desc">Browse the most underpaid and overpaid players by position. Filter by league, season, and efficiency category.</div>
-        </div>
-      </a>
-      <a href="squads.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#93c5fd;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">🏟</div>
-          <div class="finding-label" style="color:#93c5fd">Squad Analysis</div>
-          <div class="finding-desc">Club-by-club efficiency rankings. Drill into any squad to see which contracts align with the model and which don't.</div>
-        </div>
-      </a>
-      <a href="xi.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#a855f7;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">⚽</div>
-          <div class="finding-label" style="color:#a855f7">Best XI</div>
-          <div class="finding-desc">The most statistically undervalued 4-4-2 XI assembled from the dataset. Toggle to see the most overpaid XI.</div>
-        </div>
-      </a>
-      <a href="applications.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#f43f5e;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">🎯</div>
-          <div class="finding-label" style="color:#f43f5e">Applications</div>
-          <div class="finding-desc">Live tools: squad optimizer, transfer screening, cross-league wage reference, and PSR monitoring — all running on real data.</div>
-        </div>
-      </a>
-      <a href="models.html" style="text-decoration:none">
-        <div class="finding-card" style="--card-top:#fbbf24;cursor:pointer">
-          <div style="font-size:1.4rem;margin-bottom:.6rem">📐</div>
-          <div class="finding-label" style="color:#fbbf24">The Model</div>
-          <div class="finding-desc">OLS coefficient forest plots by position. See what performance variables the model weights and how strongly.</div>
-        </div>
-      </a>
+    <div class="card card-pad">
+      <div class="card-header">Efficiency Score Distribution</div>
+      <div style="height:300px"><canvas id="ch-hist"></canvas></div>
     </div>
   </div>
-</section>
 
-<!-- QUOTE -->
-<section style="padding:2rem 2rem 5rem">
-  <div class="container">
-    <div class="thesis-quote reveal">
-      <blockquote>
-        "Wage-setting in professional football is not irrational — it is systematically biased by institutional rigidities, information asymmetry, and policy distortions such as PSR enforcement."
-      </blockquote>
-      <cite>— Pablo Stoclet, Football Salary Intelligence, IE University 2025</cite>
-    </div>
+  <!-- ── Section 3: Position × League Heatmap ── -->
+  <div class="section-header reveal mt-4">
+    <div class="section-eyebrow">Position Analysis</div>
+    <h2 class="section-title">Position × League Efficiency Heatmap</h2>
+    <p class="section-desc">Mean efficiency score for each position in each league. Green = wages below model prediction (underpaid); red = wages above (overpaid). Which leagues overpay which positions?</p>
   </div>
-</section>
+  <div class="card card-pad reveal mb-4">
+    <div id="heatmapGrid"><div class="loading-state"><div class="spinner"></div></div></div>
+    <div class="insight-row" id="heatInsights"></div>
+  </div>
 
+  <!-- ── Section 4: Trend Over Time ── -->
+  <div class="section-header reveal mt-6">
+    <div class="section-eyebrow">Temporal Analysis</div>
+    <h2 class="section-title">Mean Efficiency Across Three Seasons</h2>
+    <p class="section-desc">Track how each league's wage efficiency evolves. Ligue 1 shows a distinctive compression post-PSR enforcement (2023–24), while Premier League wages grow increasingly misaligned.</p>
+  </div>
+  <div class="card card-pad reveal">
+    <div style="height:380px"><canvas id="ch-trend"></canvas></div>
+  </div>
 
+</div>
 </div>
 
 
@@ -1311,103 +1058,404 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
 
 
 <script>
-/* Physics bouncing balls — home only */
-(function() {
-  const canvas = document.getElementById('bgCanvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, mouse={x:-9e9,y:-9e9};
-  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-  resize(); window.addEventListener('resize',resize);
-  document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+let barC=null,triC=null,bubC=null,histC=null,trendC=null;
 
-  class Spotlight {
-    constructor(x){this.ox=x;this.a=(Math.random()-.5)*.3;this.sp=(Math.random()-.5)*.0012;this.al=Math.random()*.04+.015;}
-    update(){this.a+=this.sp;if(Math.abs(this.a)>.4)this.sp*=-1;}
-    draw(){
-      const ex=this.ox+Math.sin(this.a)*H*2,ey=H*2,sp=H*.5;
-      const g=ctx.createLinearGradient(this.ox,0,ex,ey);
-      g.addColorStop(0,`rgba(34,197,94,${this.al})`);g.addColorStop(1,'transparent');
-      ctx.save();ctx.beginPath();ctx.moveTo(this.ox,0);ctx.lineTo(ex-sp,ey);ctx.lineTo(ex+sp,ey);
-      ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.restore();
-    }
-  }
+initFilters(—, —, —, loadAll);
 
-  let sparks=[];
-  function spawnSparks(x,y,sp){
-    for(let i=0;i<Math.floor(sp*1.8);i++) sparks.push({x,y,vx:(Math.random()-.5)*sp*.7,vy:-(Math.random()*sp*.45+.8),life:1,decay:Math.random()*.05+.025,r:Math.random()*2+.4});
-  }
+async function loadAll() {
+  const [stats, lgs, heat, era] = await Promise.all([
+    apiFetch('/api/stats'), apiFetch('/api/league-stats'),
+    apiFetch('/api/position-league'), fetch('/api/psr-era').then(r=>r.json()),
+  ]);
+  // KPI tiles
+  document.getElementById('mk-n').textContent    = (stats.total||0).toLocaleString();
+  document.getElementById('mk-un').textContent   = (stats.pct_underpaid||0).toFixed(1)+'%';
+  document.getElementById('mk-fair').textContent = (stats.pct_fairly_paid||0).toFixed(1)+'%';
+  document.getElementById('mk-ov').textContent   = (stats.pct_overpaid||0).toFixed(1)+'%';
+  document.getElementById('mk-eff').textContent  = (stats.mean_eff>=0?'+':'')+Number(stats.mean_eff||0).toFixed(4);
 
-  class Ball {
-    constructor(){this.init();}
-    init(){
-      this.r=Math.random()*20+12; this.x=Math.random()*W; this.y=-this.r-Math.random()*200;
-      this.vx=(Math.random()-.5)*5; this.vy=Math.random()*2+1;
-      this.rot=0; this.rs=this.vx*.06;
-      this.al=Math.random()*.15+.06; this.trail=[]; this.sy=1; this.sx=1; this.bounces=0;
-    }
-    update(){
-      this.vy+=.18; this.vx*=.9985; this.vy*=.9985;
-      const dx=this.x-mouse.x,dy=this.y-mouse.y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<120&&d>1){this.vx+=dx/d*.3;this.vy+=dy/d*.3;}
-      this.x+=this.vx; this.y+=this.vy; this.rot+=this.rs;
-      this.trail.push({x:this.x,y:this.y}); if(this.trail.length>16) this.trail.shift();
-      this.sy+=(1-this.sy)*.14; this.sx+=(1-this.sx)*.14;
-      if(this.y+this.r*this.sy>H){
-        this.y=H-this.r; const sp=Math.abs(this.vy); this.vy*=-.6; this.vx*=.72; this.rs=this.vx*.06;
-        this.sy=.5; this.sx=1.4; this.bounces++;
-        if(sp>4) spawnSparks(this.x,H,sp);
-        if(sp<.6&&this.bounces>3) this.init();
+  renderBarH(lgs);
+  renderTriBar(lgs);
+  renderBubble(lgs);
+  renderHist();
+  renderHeatmap(heat, lgs);
+  renderTrend(era);
+}
+
+/* ── Base chart options ── */
+function baseOpts(extra={}) {
+  return Object.assign({
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{ labels:{ color:'#64748b', padding:16, font:{size:11} } },
+      tooltip:{
+        backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+        titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
       }
-      if(this.x-this.r<0){this.x=this.r;this.vx*=-.7;this.rs=this.vx*.06;}
-      if(this.x+this.r>W){this.x=W-this.r;this.vx*=-.7;this.rs=this.vx*.06;}
-      if(this.y<-300) this.init();
+    },
+    scales:{
+      x:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'} },
+      y:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'} }
     }
-    draw(){
-      this.trail.forEach((p,i)=>{
-        const t=i/this.trail.length;
-        ctx.beginPath();ctx.arc(p.x,p.y,this.r*t*.45,0,Math.PI*2);
-        ctx.fillStyle=`rgba(34,197,94,${this.al*t*.4})`;ctx.fill();
+  }, extra);
+}
+
+/* ── 1. Horizontal ranked efficiency bar ── */
+function renderBarH(lgs) {
+  if(barC) barC.destroy();
+  const sorted = [...lgs].sort((a,b) => a.mean - b.mean); // most underpaid first
+  const ctx = document.getElementById('ch-bar-h');
+  barC = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: sorted.map(l=>l.Comp),
+      datasets:[{
+        label:'Mean Efficiency',
+        data: sorted.map(l=>Number(l.mean||0)),
+        backgroundColor: sorted.map(l=>lc(l.Comp)+'44'),
+        borderColor: sorted.map(l=>lc(l.Comp)),
+        borderWidth: 2, borderRadius:8, borderSkipped:false,
+      }]
+    },
+    options: {
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+          callbacks:{
+            label: ctx => {
+              const l = sorted[ctx.dataIndex];
+              const pct_fair = (100 - (l.pct_ov||0) - (l.pct_un||0)).toFixed(1);
+              return [
+                ` Mean: ${Number(ctx.raw).toFixed(4)}`,
+                ` σ: ${Number(l.std||0).toFixed(3)}`,
+                ` N: ${Number(l.n||0).toLocaleString()}`,
+                ` Underpaid: ${Number(l.pct_un||0).toFixed(1)}%`,
+                ` Overpaid: ${Number(l.pct_ov||0).toFixed(1)}%`,
+              ];
+            }
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{
+            color: ctx => ctx.tick.value === 0 ? 'rgba(255,255,255,.25)' : 'rgba(255,255,255,.05)',
+            lineWidth: ctx => ctx.tick.value === 0 ? 2 : 1,
+          },
+          ticks:{color:'#64748b'},
+          title:{display:true, text:'Mean Efficiency Score (0 = fairly priced)', color:'#64748b', font:{size:10}},
+        },
+        y:{ grid:{display:false}, ticks:{color:'#94a3b8', font:{size:11, weight:'600'}} }
+      }
+    }
+  });
+}
+
+/* ── 2. 3-category stacked horizontal bar (under/fair/over) ── */
+function renderTriBar(lgs) {
+  if(triC) triC.destroy();
+  const sorted = [...lgs].sort((a,b) => a.mean - b.mean);
+  triC = new Chart(document.getElementById('ch-tribar'), {
+    type:'bar',
+    data:{
+      labels: sorted.map(l=>l.Comp),
+      datasets:[
+        {
+          label:'% Underpaid',
+          data: sorted.map(l=>Number(l.pct_un||0).toFixed(1)),
+          backgroundColor:'rgba(34,197,94,.55)', borderRadius:4, borderSkipped:false,
+        },
+        {
+          label:'% Fairly Priced',
+          data: sorted.map(l=>Math.max(0, 100 - Number(l.pct_ov||0) - Number(l.pct_un||0)).toFixed(1)),
+          backgroundColor:'rgba(99,102,241,.45)', borderRadius:4, borderSkipped:false,
+        },
+        {
+          label:'% Overpaid',
+          data: sorted.map(l=>Number(l.pct_ov||0).toFixed(1)),
+          backgroundColor:'rgba(239,68,68,.55)', borderRadius:4, borderSkipped:false,
+        },
+      ]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ labels:{ color:'#64748b', padding:16, font:{size:11} } },
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+          callbacks:{label: ctx => ` ${ctx.dataset.label}: ${Number(ctx.raw).toFixed(1)}%`}
+        }
+      },
+      scales:{
+        x:{
+          stacked:true, grid:{color:'rgba(255,255,255,.04)'},
+          ticks:{color:'#64748b', callback:v=>v+'%'},
+          max:100,
+        },
+        y:{ stacked:true, grid:{display:false}, ticks:{color:'#94a3b8', font:{size:11, weight:'600'}} }
+      }
+    }
+  });
+}
+
+/* ── 3. Bubble: median wage vs mean efficiency ── */
+const bubbleLabelPlugin = {
+  id: 'bubbleLabels',
+  afterDatasetsDraw(chart) {
+    const {ctx, data} = chart;
+    data.datasets.forEach((ds, i) => {
+      const meta = chart.getDatasetMeta(i);
+      if (!meta.visible) return;
+      meta.data.forEach((el, j) => {
+        const r = el.options?.radius ?? 14;
+        const label = ds.label || '';
+        const fontSize = Math.max(9, Math.min(11, r * 0.38));
+        ctx.save();
+        ctx.font = `700 ${fontSize}px 'Onest', 'Inter', sans-serif`;
+        ctx.fillStyle = ds.borderColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        // Draw league name just below the bubble, with a small gap
+        ctx.fillText(label, el.x, el.y + r + 4);
+        ctx.restore();
       });
-      ctx.save();ctx.translate(this.x,this.y);ctx.rotate(this.rot);ctx.scale(this.sx,this.sy);ctx.globalAlpha=this.al;
-      ctx.beginPath();ctx.arc(0,0,this.r+3,0,Math.PI*2);ctx.fillStyle='rgba(34,197,94,.05)';ctx.fill();
-      ctx.beginPath();ctx.arc(0,0,this.r,0,Math.PI*2);ctx.strokeStyle='rgba(74,222,128,.75)';ctx.lineWidth=1.5;ctx.stroke();
-      ctx.fillStyle='rgba(34,197,94,.22)';
-      ctx.beginPath();ctx.arc(0,0,this.r*.18,0,Math.PI*2);ctx.fill();
-      for(let i=0;i<5;i++){
-        const a=(i/5)*Math.PI*2-Math.PI/2,px=Math.cos(a)*this.r*.44,py=Math.sin(a)*this.r*.44;
-        ctx.beginPath();ctx.arc(px,py,this.r*.16,0,Math.PI*2);ctx.fill();
+    });
+  }
+};
+
+function renderBubble(lgs) {
+  if(bubC) bubC.destroy();
+  bubC = new Chart(document.getElementById('ch-bubble'), {
+    type:'bubble',
+    data:{
+      datasets: lgs.map(l=>({
+        label: l.Comp,
+        data:[{
+          x: Number(l.mean||0),
+          y: Number(l.median_wage||0) / 1e6,
+          r: Math.max(10, Math.min(32, Math.sqrt(Number(l.n||1)) * 1.4)),
+        }],
+        backgroundColor: lc(l.Comp)+'33',
+        borderColor: lc(l.Comp),
+        borderWidth: 2.5,
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{ bottom:22 } }, // room for labels below bottom bubbles
+      plugins:{
+        legend:{ display:false }, // labels are drawn directly on chart — no need for legend
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+          callbacks:{
+            title: ctx => ctx[0].dataset.label,
+            label: ctx => [
+              ` Mean efficiency: ${Number(ctx.parsed.x).toFixed(4)}`,
+              ` Median wage: €${Number(ctx.parsed.y).toFixed(2)}M/yr`,
+              ` Players: ${lgs.find(l=>l.Comp===ctx.dataset.label)?.n?.toLocaleString()||'—'}`,
+            ]
+          }
+        }
+      },
+      scales:{
+        x:{
+          title:{display:true, text:'Mean Efficiency Score', color:'#64748b', font:{size:10}},
+          grid:{color:'rgba(255,255,255,.05)'}, ticks:{color:'#64748b'},
+        },
+        y:{
+          title:{display:true, text:'Median Annual Wage (€M)', color:'#64748b', font:{size:10}},
+          grid:{color:'rgba(255,255,255,.05)'}, ticks:{color:'#64748b', callback:v=>'€'+v+'M'},
+        }
       }
-      ctx.restore();
+    },
+    plugins:[bubbleLabelPlugin],
+  });
+}
+
+/* ── 4. Histogram ── */
+async function renderHist() {
+  if(histC) histC.destroy();
+  const hist = await apiFetch('/api/efficiency-histogram');
+  const labels = hist.map(h=>Number(h.bin).toFixed(2));
+  const data   = hist.map(h=>h.count);
+  const colors = hist.map(h=>
+    h.mid < -0.18 ? 'rgba(34,197,94,.65)' :
+    h.mid >  0.18 ? 'rgba(239,68,68,.6)'  : 'rgba(99,102,241,.5)');
+
+  histC = new Chart(document.getElementById('ch-hist'), {
+    type:'bar',
+    data:{ labels, datasets:[{
+      label:'Players', data, backgroundColor:colors,
+      borderRadius:3, borderSkipped:false, borderWidth:0,
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:12, cornerRadius:10,
+          callbacks:{
+            title: ctx => {
+              const h = hist[ctx[0].dataIndex];
+              const cat = h.mid < -0.18 ? 'Underpaid' : h.mid > 0.18 ? 'Overpaid' : 'Fairly Priced';
+              return `${cat} · bin ${Number(h.bin).toFixed(2)}`;
+            },
+            label: ctx => ` ${ctx.raw} players`
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{display:false}, ticks:{color:'#64748b', maxTicksLimit:9},
+          title:{display:true, text:'Efficiency score (0 = fairly priced)', color:'#64748b', font:{size:10}},
+        },
+        y:{
+          grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'},
+          title:{display:true, text:'# Players', color:'#64748b', font:{size:10}},
+        }
+      }
+    }
+  });
+}
+
+/* ── 5. CSS Heatmap ── */
+function renderHeatmap(heat, lgs) {
+  const container = document.getElementById('heatmapGrid');
+  const positions = ['Goalkeepers','Defenders','Midfielders','Forwards'];
+  const leagues   = lgs.map(l=>l.Comp);
+
+  // Build lookup
+  const lookup = {};
+  heat.forEach(h=>{ lookup[`${h.league}|${h.position}`] = Number(h.mean||0); });
+
+  // Find min/max for color scale
+  const vals = Object.values(lookup);
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+
+  function cellColor(v) {
+    if(v === undefined) return { bg:'var(--card2)', color:'var(--t4)', border:'var(--border)' };
+    // negative = underpaid = green; positive = overpaid = red
+    if(v < -0.05) {
+      const a = Math.min(0.75, 0.12 + Math.abs(v) * 2);
+      return { bg:`rgba(34,197,94,${a})`, color:'#4ade80', border:`rgba(34,197,94,${a*0.7})` };
+    } else if(v > 0.05) {
+      const a = Math.min(0.75, 0.12 + v * 2);
+      return { bg:`rgba(239,68,68,${a})`, color:'#fca5a5', border:`rgba(239,68,68,${a*0.7})` };
+    } else {
+      return { bg:'rgba(99,102,241,.15)', color:'#a5b4fc', border:'rgba(99,102,241,.3)' };
     }
   }
 
-  const spots=[W*.12,W*.33,W*.67,W*.88].map(x=>new Spotlight(x));
-  const balls=Array.from({length:5},(_,i)=>{ const b=new Ball(); b.y=-50-i*110; b.vy=1.2+i*.4; return b; });
+  const EMOJI = { Goalkeepers:'🧤', Defenders:'🛡', Midfielders:'⚙', Forwards:'⚡' };
 
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    // Grid
-    ctx.strokeStyle='rgba(34,197,94,.04)'; ctx.lineWidth=1;
-    for(let x=0;x<W;x+=100){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-    for(let y=0;y<H;y+=100){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-    spots.forEach(s=>{s.update();s.draw();});
-    balls.forEach(b=>{b.update();b.draw();});
-    sparks=sparks.filter(s=>s.life>0);
-    sparks.forEach(s=>{s.x+=s.vx;s.y+=s.vy;s.vy+=.12;s.life-=s.decay;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(74,222,128,${s.life*.8})`;ctx.fill();});
-    requestAnimationFrame(frame);
-  }
-  frame();
-})();
+  let html = `<table class="hm-table"><thead><tr>
+    <th class="hm-header" style="width:110px;text-align:right">Position</th>`;
+  leagues.forEach(lg=>{
+    const sc = lshort(lg);
+    const c  = lc(lg);
+    html += `<th class="hm-header" style="color:${c}">${sc}</th>`;
+  });
+  html += `<th class="hm-header">Best</th></tr></thead><tbody>`;
 
-/* Load hero stats */
-(async function() {
-  try {
-    const stats = await fetch('/api/stats').then(r=>r.json());
-    countUp(document.getElementById('h-records'), stats.total||6702);
-    countUp(document.getElementById('h-players'), stats.unique_players||3253);
-  } catch(e) { console.error(e); }
-})();
+  positions.forEach(pos=>{
+    html += `<tr><td class="hm-row-label">${EMOJI[pos]||''} ${pos}</td>`;
+    let rowBest = { v:Infinity, lg:'' };
+    leagues.forEach(lg=>{
+      const v = lookup[`${lg}|${pos}`];
+      if(v!==undefined && v < rowBest.v) rowBest = { v, lg };
+      const {bg,color,border} = cellColor(v);
+      const label = v!==undefined ? (v>0?'+':'')+v.toFixed(3) : '—';
+      html += `<td class="hm-cell" style="background:${bg};color:${color};border:1px solid ${border}" title="${pos} in ${lg}: ${label}">${label}</td>`;
+    });
+    // Best league for this position
+    const bc = rowBest.lg ? lc(rowBest.lg) : 'var(--t4)';
+    html += `<td class="hm-cell" style="background:rgba(0,0,0,.2);color:${bc};border:1px solid ${bc}44;font-size:.7rem">${rowBest.lg ? lshort(rowBest.lg) : '—'}</td>`;
+    html += `</tr>`;
+  });
+  html += `</tbody></table>`;
+  container.innerHTML = html;
 
+  // Insight pills
+  const insights = [];
+  leagues.forEach(lg=>{
+    const rows = positions.map(p=>lookup[`${lg}|${p}`]).filter(v=>v!==undefined);
+    if(!rows.length) return;
+    const avg = rows.reduce((a,b)=>a+b,0)/rows.length;
+    insights.push({ lg, avg, c:lc(lg) });
+  });
+  insights.sort((a,b)=>a.avg-b.avg);
+  const insightHtml = insights.map(i=>`
+    <div class="insight-pill">
+      <span class="dot" style="background:${i.c}"></span>
+      <span>${i.lg}: avg ${(i.avg>0?'+':'')+i.avg.toFixed(3)}</span>
+    </div>`).join('');
+  document.getElementById('heatInsights').innerHTML = insightHtml;
+}
+
+/* ── 6. Trend with gradient fills ── */
+function renderTrend(era) {
+  if(trendC) trendC.destroy();
+  const seasons    = [...new Set(era.map(d=>d.Season))].sort();
+  const leagueList = [...new Set(era.map(d=>d.Comp))];
+  const ctx2d      = document.getElementById('ch-trend');
+
+  trendC = new Chart(ctx2d, {
+    type:'line',
+    data:{
+      labels: seasons,
+      datasets: leagueList.map(league=>{
+        const isL1    = league==='Ligue 1';
+        const color   = lc(league);
+        return {
+          label:    league,
+          data:     seasons.map(s=>{ const r=era.find(d=>d.Comp===league&&d.Season===s); return r?r.mean_efficiency:null; }),
+          borderColor:   color,
+          backgroundColor: color+'18',
+          borderWidth: isL1 ? 3.5 : 2,
+          pointRadius:  isL1 ? 7   : 4,
+          pointHoverRadius: isL1 ? 10 : 6,
+          pointBackgroundColor: color,
+          pointBorderColor: 'rgba(0,0,0,.5)',
+          pointBorderWidth: 1.5,
+          tension: .35, fill: isL1, // area fill only for Ligue 1
+        };
+      })
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ labels:{ color:'#64748b', padding:18, font:{size:11} } },
+        tooltip:{
+          backgroundColor:'#0c1424', borderColor:'rgba(99,102,241,.35)', borderWidth:1,
+          titleColor:'#f1f5f9', bodyColor:'#94a3b8', padding:13, cornerRadius:10,
+          callbacks:{
+            label: ctx => {
+              const v = ctx.raw;
+              return v != null ? ` ${ctx.dataset.label}: ${(v>=0?'+':'')+v.toFixed(4)}` : ` ${ctx.dataset.label}: —`;
+            }
+          }
+        }
+      },
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'} },
+        y:{
+          grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b'},
+          title:{display:true, text:'Mean Efficiency Score', color:'#64748b', font:{size:10}},
+        }
+      }
+    }
+  });
+}
+
+loadAll();
 </script>
 
 </body>
