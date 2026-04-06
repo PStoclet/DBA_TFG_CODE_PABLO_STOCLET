@@ -16,10 +16,10 @@
 ═══════════════════════════════════════════ */
 :root {
   /* Backgrounds — floodlit stadium pitch at night */
-  --bg:       #060810;
-  --surface:  #0c1018;
-  --card:     #0d1520;
-  --card2:    #12202c;
+  --bg:       #071009;
+  --surface:  #0c1a0e;
+  --card:     #0f2213;
+  --card2:    #152a19;
   --border:   rgba(74,222,128,.09);
   --border2:  rgba(74,222,128,.18);
   --glass:    rgba(15,34,19,.88);
@@ -130,6 +130,7 @@ input, select { font-family:inherit; font-size:inherit }
 }
 
 /* ═══ CANVAS ═══ */
+#bgCanvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:.45 }
 
 /* ═══ NAV ═══ */
 nav {
@@ -242,7 +243,7 @@ nav::after {
   transition:all .3s var(--ease-spring); cursor:pointer; letter-spacing:.1px;
   position:relative; overflow:hidden;
 }
-.btn-ghost:hover  { background:rgba(74,222,128,.1); color:var(--t1); border-color:rgba(74,222,128,.3) }
+.btn-ghost:hover  { background:rgba(74,222,128,.1); color:var(--t1); border-color:rgba(74,222,128,.3); transform:translateY(-1px) }
 .btn-primary:active { transform:translateY(0) scale(0.97) !important }
 .btn-ghost:active   { transform:translateY(0) scale(0.97) !important }
 
@@ -620,141 +621,6 @@ footer::before {
 }
 footer p { font-size:.8rem; color:var(--t4); line-height:1.7 }
 footer strong { color:var(--t2) }
-
-/* ── STADIUM PARALLAX ─────────────────────────────────────── */
-#stadium-parallax {
-  position:fixed; top:0; left:0; width:100%; height:100vh;
-  z-index:0; overflow:hidden; pointer-events:none;
-}
-.stad-layer {
-  position:absolute; left:0; right:0;
-  will-change:transform;
-}
-.stad-overlay {
-  position:absolute; inset:0;
-  background:linear-gradient(to bottom,
-    rgba(6,8,16,0.1) 0%, rgba(6,8,16,0.4) 35%,
-    rgba(6,8,16,0.82) 75%, rgba(6,8,16,1) 100%);
-}
-/* Sky with stars */
-.stad-sky {
-  top:0; height:100%;
-  background:radial-gradient(ellipse 130% 65% at 50% -10%,
-    #1e3050 0%, #0f1e36 35%, #060810 70%);
-}
-.stad-sky::before {
-  content:'';
-  position:absolute; inset:0;
-  background-image:
-    radial-gradient(1.5px 1.5px at 8% 12%,  rgba(255,255,255,.75) 0%, transparent 100%),
-    radial-gradient(1px   1px   at 18% 6%,   rgba(255,255,255,.55) 0%, transparent 100%),
-    radial-gradient(2px   2px   at 26% 18%,  rgba(255,255,255,.40) 0%, transparent 100%),
-    radial-gradient(1px   1px   at 39% 4%,   rgba(255,255,255,.80) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 53% 9%,   rgba(255,255,255,.50) 0%, transparent 100%),
-    radial-gradient(1px   1px   at 65% 15%,  rgba(255,255,255,.65) 0%, transparent 100%),
-    radial-gradient(2px   2px   at 74% 5%,   rgba(255,255,255,.45) 0%, transparent 100%),
-    radial-gradient(1px   1px   at 85% 11%,  rgba(255,255,255,.70) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 93% 20%,  rgba(255,255,255,.55) 0%, transparent 100%),
-    radial-gradient(1px   1px   at 12% 30%,  rgba(255,255,255,.30) 0%, transparent 100%),
-    radial-gradient(1px   1px   at 44% 25%,  rgba(255,255,255,.35) 0%, transparent 100%),
-    radial-gradient(1px   1px   at 78% 28%,  rgba(255,255,255,.40) 0%, transparent 100%),
-    radial-gradient(2px   2px   at 32% 8%,   rgba(255,255,255,.25) 0%, transparent 100%),
-    radial-gradient(1px   1px   at 60% 22%,  rgba(255,255,255,.30) 0%, transparent 100%);
-}
-/* Stadium roof / outer arch */
-.stad-roof {
-  bottom:30%; height:50%;
-  background:
-    linear-gradient(173deg, transparent 44%, #1a2840 44.5%, #111d2e 47%, #0a1520 49%, transparent 50%)
-    left/52% 100% no-repeat,
-    linear-gradient(187deg, transparent 44%, #1a2840 44.5%, #111d2e 47%, #0a1520 49%, transparent 50%)
-    right/52% 100% no-repeat;
-}
-/* Upper stands */
-.stad-upper-stands {
-  bottom:20%; height:38%;
-  background:
-    linear-gradient(171deg,
-      transparent 36%, #0d1c30 36.5%, #152436 52%,
-      #0a1826 53%, #192e42 68%, #0c2038 69%, transparent 70%)
-    left/54% 100% no-repeat,
-    linear-gradient(189deg,
-      transparent 36%, #0d1c30 36.5%, #152436 52%,
-      #0a1826 53%, #192e42 68%, #0c2038 69%, transparent 70%)
-    right/54% 100% no-repeat;
-}
-/* Crowd texture */
-.stad-upper-stands::before {
-  content:'';
-  position:absolute; inset:0;
-  background:
-    repeating-linear-gradient(87deg,
-      rgba(220,80,80,.035)  0px, rgba(220,80,80,.035)  3px,
-      rgba(80,140,255,.025) 3px, rgba(80,140,255,.025) 6px,
-      rgba(255,255,255,.015) 6px, rgba(255,255,255,.015) 9px,
-      rgba(80,200,80,.02)  9px, rgba(80,200,80,.02) 12px,
-      rgba(255,200,0,.015) 12px, rgba(255,200,0,.015) 15px,
-      transparent 15px, transparent 20px
-    );
-}
-/* Floodlight masts */
-.stad-floodlights { bottom:42%; height:55%; }
-.stad-floodlights::before,
-.stad-floodlights::after {
-  content:'';
-  position:absolute; bottom:0;
-  width:4px;
-  background:linear-gradient(to top, #c8d8f0 0%, #8aaad0 50%, rgba(140,180,220,0) 100%);
-  filter:drop-shadow(0 0 8px rgba(180,210,255,.6));
-}
-.stad-floodlights::before { left:9%; height:55%; }
-.stad-floodlights::after  { right:9%; height:55%; }
-/* Floodlight head + cone */
-.stad-floodlights > .fl-l,
-.stad-floodlights > .fl-r { position:absolute; top:0; width:100%; height:100%; }
-
-/* Beam cones from floodlights */
-#stadium-parallax::before,
-#stadium-parallax::after {
-  content:''; position:absolute; top:0; pointer-events:none;
-}
-#stadium-parallax::before {
-  left:8%; width:340px; height:80%;
-  background:linear-gradient(168deg,
-    rgba(200,230,255,.09) 0%, rgba(200,230,255,.03) 45%, transparent 68%);
-  clip-path:polygon(5% 0%, 18% 0%, 100% 100%, 0% 100%);
-}
-#stadium-parallax::after {
-  right:8%; width:340px; height:80%;
-  background:linear-gradient(192deg,
-    rgba(200,230,255,.09) 0%, rgba(200,230,255,.03) 45%, transparent 68%);
-  clip-path:polygon(82% 0%, 95% 0%, 100% 100%, 0% 100%);
-}
-/* Lower stands */
-.stad-lower-stands {
-  bottom:12%; height:24%;
-  background:
-    linear-gradient(173deg,
-      transparent 28%, #0a1822 28.5%, #122030 52%,
-      #0e1a28 53%, transparent 54%)
-    left/56% 100% no-repeat,
-    linear-gradient(187deg,
-      transparent 28%, #0a1822 28.5%, #122030 52%,
-      #0e1a28 53%, transparent 54%)
-    right/56% 100% no-repeat;
-}
-/* Pitch */
-.stad-pitch-edge {
-  bottom:0; height:18%;
-  background:linear-gradient(to top,
-    #0a1e0a 0%, #081408 50%,
-    rgba(8,18,8,.4) 80%, transparent 100%);
-}
-/* Make sure content sits above parallax */
-#hero, .page, nav, .scroll-progress { position:relative; z-index:2; }
-nav { z-index:100; }
-.scroll-progress { z-index:101; }
-
 </style>
 
 
@@ -866,7 +732,7 @@ nav { z-index:100; }
   transition:left .5s var(--ease);
 }
 .btn-primary:hover::before { left:100% }
-.btn-primary:hover { box-shadow:0 0 32px rgba(34,197,94,.6), 0 0 64px rgba(34,197,94,.25), inset 0 1px 0 rgba(255,255,255,.25) }
+.btn-primary:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 0 32px rgba(34,197,94,.6), 0 0 64px rgba(34,197,94,.25), inset 0 1px 0 rgba(255,255,255,.25) }
 .btn-ghost {
   font-family:var(--font-head); font-size:.88rem; font-weight:600;
   padding:.76rem 1.8rem; border-radius:9px;
@@ -874,7 +740,7 @@ nav { z-index:100; }
   transition:all .28s var(--ease); letter-spacing:-.01em;
   box-shadow: var(--shadow-sm);
 }
-.btn-ghost:hover { background:rgba(34,197,94,.1); color:var(--t1); border-color:rgba(74,222,128,.35) }
+.btn-ghost:hover { background:rgba(34,197,94,.1); color:var(--t1); border-color:rgba(74,222,128,.35); transform:translateY(-1px) }
 .hero-scroll-indicator {
   position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
   display:flex; flex-direction:column; align-items:center; gap:.5rem;
@@ -891,6 +757,7 @@ nav { z-index:100; }
 @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-7px)} }
 
 /* Physics balls override (home-only) */
+#bgCanvas { opacity:1 }
 
 /* Hero KPI — vivid glows on dark pitch */
 .hero-kpi .num.green  { color:var(--green);  text-shadow:0 0 24px rgba(74,222,128,.5) }
@@ -987,10 +854,12 @@ nav { z-index:100; }
 .thesis-quote cite { font-size:.78rem; color:var(--t4) }
 </style>
 
+<script src="data/api-shim.js"></script>
 </head>
 <body>
 
 <!-- CANVAS -->
+<canvas id="bgCanvas"></canvas>
 
 <!-- SCROLL PROGRESS -->
 <div class="scroll-progress" id="scrollProgress"></div>
@@ -1004,13 +873,13 @@ nav { z-index:100; }
   </a>
   <div class="nav-links">
     <a href="index.html"              class="nav-link active">Overview</a>
-    <a href="market.html"        class="nav-link active">League Data</a>
-    <a href="players.html"       class="nav-link active">Player Rankings</a>
-    <a href="squads.html"        class="nav-link active">Squad Analysis</a>
-    <a href="xi.html"            class="nav-link active">Best XI</a>
-    <a href="applications.html"  class="nav-link active">Applications</a>
-    <a href="models.html"        class="nav-link active">The Model</a>
-    <a href="hypotheses.html"    class="nav-link active">Research</a>
+    <a href="market.html"        class="nav-link ">League Data</a>
+    <a href="players.html"       class="nav-link ">Player Rankings</a>
+    <a href="squads.html"        class="nav-link ">Squad Analysis</a>
+    <a href="xi.html"            class="nav-link ">Best XI</a>
+    <a href="applications.html"  class="nav-link ">Applications</a>
+    <a href="models.html"        class="nav-link ">The Model</a>
+    <a href="hypotheses.html"    class="nav-link ">Research</a>
   </div>
 </nav>
 
@@ -1018,18 +887,10 @@ nav { z-index:100; }
 <div class="page" data-page="home">
 
 <!-- HERO -->
-<!-- STADIUM PARALLAX BACKGROUND -->
-<div id="stadium-parallax" aria-hidden="true">
-  <div class="stad-layer stad-sky"></div>
-  <div class="stad-layer stad-roof"></div>
-  <div class="stad-layer stad-upper-stands"></div>
-  <div class="stad-layer stad-floodlights"></div>
-  <div class="stad-layer stad-lower-stands"></div>
-  <div class="stad-layer stad-pitch-edge"></div>
-  <div class="stad-overlay"></div>
-</div>
-
 <section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-glow-3"></div>
   <div>
     <div class="hero-eyebrow">
       <span class="hero-eyebrow-dot"></span> IE University · BBA Thesis 2025
@@ -1049,11 +910,12 @@ nav { z-index:100; }
       <div class="hero-kpi"><span class="num" style="color:var(--t2)" id="h-seasons">3</span><span class="lbl">Seasons</span></div>
     </div>
     <div class="hero-cta">
-      <a href="squads.html" class="btn-primary">Explore Squad Analysis</a>
-      <a href="players.html" class="btn-ghost">Player Rankings</a>
-      <a href="xi.html" class="btn-ghost">Best XI</a>
+      <a href="squads.html" class="btn-primary" data-magnetic>Explore Squad Analysis</a>
+      <a href="players.html" class="btn-ghost" data-magnetic>Player Rankings</a>
+      <a href="xi.html" class="btn-ghost" data-magnetic>Best XI</a>
     </div>
   </div>
+  <div class="hero-scroll-indicator">Scroll</div>
 </section>
 
 <!-- THREE HEADLINE RESULTS -->
@@ -1169,6 +1031,7 @@ nav { z-index:100; }
 
 /* ── Subtle background: grid + slow-drifting particles ── */
 (function() {
+  const canvas = document.getElementById('bgCanvas');
   const ctx = canvas.getContext('2d');
   let W, H;
   const isHome = document.body.dataset.page === 'home';
@@ -1446,45 +1309,107 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
 })();
 
 </script>
+
+
 <script>
+/* Physics bouncing balls — home only */
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, mouse={x:-9e9,y:-9e9};
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  resize(); window.addEventListener('resize',resize);
+  document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
 
-/* ── STADIUM PARALLAX ─────────────────────────────────────── */
-(function () {
-  const layers = [
-    { sel: '.stad-sky',           speed: 0.06 },
-    { sel: '.stad-roof',          speed: 0.14 },
-    { sel: '.stad-upper-stands',  speed: 0.20 },
-    { sel: '.stad-floodlights',   speed: 0.17 },
-    { sel: '.stad-lower-stands',  speed: 0.28 },
-    { sel: '.stad-pitch-edge',    speed: 0.38 },
-  ];
-  const els = layers.map(l => ({
-    el: document.querySelector(l.sel), speed: l.speed
-  }));
-  const stadium = document.getElementById('stadium-parallax');
-
-  let raf = false;
-  function updateParallax() {
-    const scrollY = window.scrollY;
-    const vh = window.innerHeight;
-    const fade = Math.max(0, 1 - (scrollY / vh) * 1.1);
-    if (stadium) stadium.style.opacity = fade;
-    els.forEach(({ el, speed }) => {
-      if (el) el.style.transform = `translateY(${scrollY * speed}px)`;
-    });
-    raf = false;
+  class Spotlight {
+    constructor(x){this.ox=x;this.a=(Math.random()-.5)*.3;this.sp=(Math.random()-.5)*.0012;this.al=Math.random()*.04+.015;}
+    update(){this.a+=this.sp;if(Math.abs(this.a)>.4)this.sp*=-1;}
+    draw(){
+      const ex=this.ox+Math.sin(this.a)*H*2,ey=H*2,sp=H*.5;
+      const g=ctx.createLinearGradient(this.ox,0,ex,ey);
+      g.addColorStop(0,`rgba(34,197,94,${this.al})`);g.addColorStop(1,'transparent');
+      ctx.save();ctx.beginPath();ctx.moveTo(this.ox,0);ctx.lineTo(ex-sp,ey);ctx.lineTo(ex+sp,ey);
+      ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.restore();
+    }
   }
-  window.addEventListener('scroll', () => {
-    if (!raf) { requestAnimationFrame(updateParallax); raf = true; }
-  }, { passive: true });
-  updateParallax();
+
+  let sparks=[];
+  function spawnSparks(x,y,sp){
+    for(let i=0;i<Math.floor(sp*1.8);i++) sparks.push({x,y,vx:(Math.random()-.5)*sp*.7,vy:-(Math.random()*sp*.45+.8),life:1,decay:Math.random()*.05+.025,r:Math.random()*2+.4});
+  }
+
+  class Ball {
+    constructor(){this.init();}
+    init(){
+      this.r=Math.random()*20+12; this.x=Math.random()*W; this.y=-this.r-Math.random()*200;
+      this.vx=(Math.random()-.5)*5; this.vy=Math.random()*2+1;
+      this.rot=0; this.rs=this.vx*.06;
+      this.al=Math.random()*.15+.06; this.trail=[]; this.sy=1; this.sx=1; this.bounces=0;
+    }
+    update(){
+      this.vy+=.18; this.vx*=.9985; this.vy*=.9985;
+      const dx=this.x-mouse.x,dy=this.y-mouse.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120&&d>1){this.vx+=dx/d*.3;this.vy+=dy/d*.3;}
+      this.x+=this.vx; this.y+=this.vy; this.rot+=this.rs;
+      this.trail.push({x:this.x,y:this.y}); if(this.trail.length>16) this.trail.shift();
+      this.sy+=(1-this.sy)*.14; this.sx+=(1-this.sx)*.14;
+      if(this.y+this.r*this.sy>H){
+        this.y=H-this.r; const sp=Math.abs(this.vy); this.vy*=-.6; this.vx*=.72; this.rs=this.vx*.06;
+        this.sy=.5; this.sx=1.4; this.bounces++;
+        if(sp>4) spawnSparks(this.x,H,sp);
+        if(sp<.6&&this.bounces>3) this.init();
+      }
+      if(this.x-this.r<0){this.x=this.r;this.vx*=-.7;this.rs=this.vx*.06;}
+      if(this.x+this.r>W){this.x=W-this.r;this.vx*=-.7;this.rs=this.vx*.06;}
+      if(this.y<-300) this.init();
+    }
+    draw(){
+      this.trail.forEach((p,i)=>{
+        const t=i/this.trail.length;
+        ctx.beginPath();ctx.arc(p.x,p.y,this.r*t*.45,0,Math.PI*2);
+        ctx.fillStyle=`rgba(34,197,94,${this.al*t*.4})`;ctx.fill();
+      });
+      ctx.save();ctx.translate(this.x,this.y);ctx.rotate(this.rot);ctx.scale(this.sx,this.sy);ctx.globalAlpha=this.al;
+      ctx.beginPath();ctx.arc(0,0,this.r+3,0,Math.PI*2);ctx.fillStyle='rgba(34,197,94,.05)';ctx.fill();
+      ctx.beginPath();ctx.arc(0,0,this.r,0,Math.PI*2);ctx.strokeStyle='rgba(74,222,128,.75)';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.fillStyle='rgba(34,197,94,.22)';
+      ctx.beginPath();ctx.arc(0,0,this.r*.18,0,Math.PI*2);ctx.fill();
+      for(let i=0;i<5;i++){
+        const a=(i/5)*Math.PI*2-Math.PI/2,px=Math.cos(a)*this.r*.44,py=Math.sin(a)*this.r*.44;
+        ctx.beginPath();ctx.arc(px,py,this.r*.16,0,Math.PI*2);ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  const spots=[W*.12,W*.33,W*.67,W*.88].map(x=>new Spotlight(x));
+  const balls=Array.from({length:5},(_,i)=>{ const b=new Ball(); b.y=-50-i*110; b.vy=1.2+i*.4; return b; });
+
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    // Grid
+    ctx.strokeStyle='rgba(34,197,94,.04)'; ctx.lineWidth=1;
+    for(let x=0;x<W;x+=100){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=100){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    spots.forEach(s=>{s.update();s.draw();});
+    balls.forEach(b=>{b.update();b.draw();});
+    sparks=sparks.filter(s=>s.life>0);
+    sparks.forEach(s=>{s.x+=s.vx;s.y+=s.vy;s.vy+=.12;s.life-=s.decay;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(74,222,128,${s.life*.8})`;ctx.fill();});
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* Load hero stats */
+(async function() {
+  try {
+    const stats = await fetch('/api/stats').then(r=>r.json());
+    countUp(document.getElementById('h-records'), stats.total||6702);
+    countUp(document.getElementById('h-players'), stats.unique_players||3253);
+  } catch(e) { console.error(e); }
 })();
 
 </script>
-
-
-
-
 
 </body>
 </html>
