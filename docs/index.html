@@ -243,7 +243,7 @@ nav::after {
   transition:all .3s var(--ease-spring); cursor:pointer; letter-spacing:.1px;
   position:relative; overflow:hidden;
 }
-.btn-ghost:hover  { background:rgba(74,222,128,.1); color:var(--t1); border-color:rgba(74,222,128,.3); transform:translateY(-1px) }
+.btn-ghost:hover  { background:rgba(74,222,128,.1); color:var(--t1); border-color:rgba(74,222,128,.3) }
 .btn-primary:active { transform:translateY(0) scale(0.97) !important }
 .btn-ghost:active   { transform:translateY(0) scale(0.97) !important }
 
@@ -732,7 +732,7 @@ footer strong { color:var(--t2) }
   transition:left .5s var(--ease);
 }
 .btn-primary:hover::before { left:100% }
-.btn-primary:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 0 32px rgba(34,197,94,.6), 0 0 64px rgba(34,197,94,.25), inset 0 1px 0 rgba(255,255,255,.25) }
+.btn-primary:hover { box-shadow:0 0 32px rgba(34,197,94,.6), 0 0 64px rgba(34,197,94,.25), inset 0 1px 0 rgba(255,255,255,.25) }
 .btn-ghost {
   font-family:var(--font-head); font-size:.88rem; font-weight:600;
   padding:.76rem 1.8rem; border-radius:9px;
@@ -740,7 +740,7 @@ footer strong { color:var(--t2) }
   transition:all .28s var(--ease); letter-spacing:-.01em;
   box-shadow: var(--shadow-sm);
 }
-.btn-ghost:hover { background:rgba(34,197,94,.1); color:var(--t1); border-color:rgba(74,222,128,.35); transform:translateY(-1px) }
+.btn-ghost:hover { background:rgba(34,197,94,.1); color:var(--t1); border-color:rgba(74,222,128,.35) }
 .hero-scroll-indicator {
   position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
   display:flex; flex-direction:column; align-items:center; gap:.5rem;
@@ -910,12 +910,11 @@ footer strong { color:var(--t2) }
       <div class="hero-kpi"><span class="num" style="color:var(--t2)" id="h-seasons">3</span><span class="lbl">Seasons</span></div>
     </div>
     <div class="hero-cta">
-      <a href="squads.html" class="btn-primary" data-magnetic>Explore Squad Analysis</a>
-      <a href="players.html" class="btn-ghost" data-magnetic>Player Rankings</a>
-      <a href="xi.html" class="btn-ghost" data-magnetic>Best XI</a>
+      <a href="squads.html" class="btn-primary">Explore Squad Analysis</a>
+      <a href="players.html" class="btn-ghost">Player Rankings</a>
+      <a href="xi.html" class="btn-ghost">Best XI</a>
     </div>
   </div>
-  <div class="hero-scroll-indicator">Scroll</div>
 </section>
 
 <!-- THREE HEADLINE RESULTS -->
@@ -1403,9 +1402,13 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
 /* Load hero stats */
 (async function() {
   try {
-    const stats = await fetch('/api/stats').then(r=>r.json());
-    countUp(document.getElementById('h-records'), stats.total||6702);
-    countUp(document.getElementById('h-players'), stats.unique_players||3253);
+    // Fetch all-time totals by calling stats without season filter
+    const stats = await fetch('/api/stats?season=all').then(r=>r.json());
+    // Fallback to known totals if API returns latest-season-only data
+    const totalRecords = (stats.total && stats.total > 3000) ? stats.total : 6702;
+    const totalPlayers = (stats.unique_players && stats.unique_players > 2000) ? stats.unique_players : 3253;
+    countUp(document.getElementById('h-records'), totalRecords);
+    countUp(document.getElementById('h-players'), totalPlayers);
   } catch(e) { console.error(e); }
 })();
 

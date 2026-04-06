@@ -42,11 +42,14 @@
 
   // ── Filter efficiency rows by season + leagues ─────────────
   function filterEff(eff, params, seasons, leagues, latest) {
-    const season  = params.get('season') || latest;
+    const seasonParam = params.get('season');
+    const season  = (seasonParam && seasonParam !== 'all') ? seasonParam : null;
+    const defaultSeason = (!seasonParam) ? latest : null; // no param = use latest; 'all' = no filter
+    const activeSeason = season || defaultSeason;
     const lgList  = params.getAll('league').filter(Boolean);
     const useLgs  = lgList.length ? lgList : leagues;
     let data = eff;
-    if (season)        data = data.filter(r => r.Season === season);
+    if (activeSeason)  data = data.filter(r => r.Season === activeSeason);
     if (useLgs.length) data = data.filter(r => useLgs.includes(r.Comp));
     return data;
   }
