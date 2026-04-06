@@ -684,11 +684,11 @@ svg.pitch{width:100%;height:auto;border-radius:14px;box-shadow:0 24px 80px rgba(
 <div class="filter-bar">
   <div class="filter-group">
     <span class="filter-label">Season</span>
-    <button class="season-btn" data-s="—">—</button>
+    
   </div>
   <div class="filter-group">
     <span class="filter-label">Leagues</span>
-    <button class="league-pill" data-l="—">—</button>
+    
   </div>
   <div class="filter-group">
     <span class="filter-label">View</span>
@@ -1072,7 +1072,32 @@ document.querySelectorAll('[data-t]').forEach(btn=>{
 
 const LAYOUTS={GK:[[170,472]],DEF:[[62,388],[128,378],[212,378],[278,388]],MID:[[58,278],[124,260],[216,260],[282,278]],FWD:[[118,152],[222,152]]};
 
-initFilters(—, —, —, loadXI);
+fetch('/api/meta').then(r=>r.json()).then(meta=>{
+  // Populate season buttons
+  const sb = document.querySelector('.filter-bar .filter-group:first-child');
+  if(sb) {
+    sb.querySelectorAll('.season-btn[data-s]').forEach(b=>b.remove());
+    const label = sb.querySelector('.filter-label');
+    meta.seasons.forEach(s=>{
+      const b=document.createElement('button');
+      b.className='season-btn'; b.dataset.s=s; b.textContent=s;
+      sb.appendChild(b);
+    });
+  }
+  // Populate league pills
+  const lb = document.querySelector('.filter-bar .filter-group:nth-child(2)');
+  if(lb) {
+    lb.querySelectorAll('.league-pill[data-l]').forEach(p=>p.remove());
+    const label2 = lb.querySelector('.filter-label');
+    meta.leagues.forEach(l=>{
+      const p=document.createElement('button');
+      p.className='league-pill'; p.dataset.l=l; p.textContent=l;
+      lb.appendChild(p);
+    });
+  }
+  initFilters(meta.seasons, meta.leagues, meta.latest, loadXI);
+  loadXI();
+});
 
 async function loadXI() {
   const url=`/api/formation-xi?type=${xiType}`;
@@ -1206,7 +1231,6 @@ function renderSummary(xi){
   document.getElementById('xi-savings').textContent=fmtWage(predicted);
 }
 
-loadXI();
 </script>
 
 </body>

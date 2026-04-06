@@ -688,11 +688,11 @@ footer strong { color:var(--t2) }
 <div class="filter-bar">
   <div class="filter-group">
     <span class="filter-label">Season</span>
-    <button class="season-btn" data-s="—">—</button>
+    
   </div>
   <div class="filter-group">
     <span class="filter-label">Leagues</span>
-    <button class="league-pill" data-l="—">—</button>
+    
   </div>
 </div>
 <div class="container" style="padding-top:2rem;padding-bottom:4rem">
@@ -1061,7 +1061,32 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
 <script>
 let barC=null,triC=null,bubC=null,histC=null,trendC=null;
 
-initFilters(—, —, —, loadAll);
+fetch('/api/meta').then(r=>r.json()).then(meta=>{
+  // Populate season buttons
+  const sb = document.querySelector('.filter-bar .filter-group:first-child');
+  if(sb) {
+    sb.querySelectorAll('.season-btn[data-s]').forEach(b=>b.remove());
+    const label = sb.querySelector('.filter-label');
+    meta.seasons.forEach(s=>{
+      const b=document.createElement('button');
+      b.className='season-btn'; b.dataset.s=s; b.textContent=s;
+      sb.appendChild(b);
+    });
+  }
+  // Populate league pills
+  const lb = document.querySelector('.filter-bar .filter-group:nth-child(2)');
+  if(lb) {
+    lb.querySelectorAll('.league-pill[data-l]').forEach(p=>p.remove());
+    const label2 = lb.querySelector('.filter-label');
+    meta.leagues.forEach(l=>{
+      const p=document.createElement('button');
+      p.className='league-pill'; p.dataset.l=l; p.textContent=l;
+      lb.appendChild(p);
+    });
+  }
+  initFilters(meta.seasons, meta.leagues, meta.latest, loadAll);
+  loadAll();
+});
 
 async function loadAll() {
   const [stats, lgs, heat, era] = await Promise.all([
@@ -1456,7 +1481,6 @@ function renderTrend(era) {
   });
 }
 
-loadAll();
 </script>
 
 </body>
