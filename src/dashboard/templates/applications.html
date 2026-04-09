@@ -235,7 +235,7 @@
     <button class="app-tab" data-tab="optimizer" style="--at-col:#f43f5e">🎯 Squad Optimizer</button>
     <button class="app-tab" data-tab="benchmarking" style="--at-col:#3b82f6">📊 Squad Benchmarking</button>
     <button class="app-tab" data-tab="wagemap" style="--at-col:#a855f7">💶 Wage Reference</button>
-    <button class="app-tab" data-tab="psr" style="--at-col:#f59e0b">⚖️ PSR Monitoring</button>
+    <button class="app-tab" data-tab="psr" style="--at-col:#f59e0b">⚖️ FSR Monitoring</button>
   </div>
 
   <!-- Panel 1: Transfer Screening -->
@@ -344,9 +344,9 @@
     <div class="app-panel-inner">
       <div class="app-panel-head">
         <div class="app-panel-info">
-          <div class="eyebrow">PSR Monitoring</div>
+          <div class="eyebrow">FSR Monitoring</div>
           <h3>Season-by-Season Efficiency Drift</h3>
-          <p>PSR enforcement froze wages in Ligue 1 from 2023 onwards. Track how mean efficiency and mispricing rates evolved across all three seasons covered by the thesis data.</p>
+          <p>FSR enforcement froze wages in Ligue 1 from 2023 onwards. Track how mean efficiency and mispricing rates evolved across all three seasons covered by the thesis data.</p>
         </div>
         <div class="app-panel-controls" id="psr-league-btns">
           <button class="app-ctrl-btn active" data-v="Ligue 1">Ligue 1</button>
@@ -786,7 +786,7 @@ async function loadPSR(league) {
 
   const isLigue1 = league === 'Ligue 1';
   const drift = data.length > 1 ? (data[data.length-1].mean - data[0].mean).toFixed(3) : null;
-  const driftNote = isLigue1 ? 'PSR enforcement in 2023 froze wages, causing efficiency persistence to jump from 0.33 → <strong style="color:#f87171">0.88</strong> (Chow F=7.69 for midfielders). Players became locked into misaligned contracts.' :
+  const driftNote = isLigue1 ? 'FSR enforcement in 2023 froze wages, causing efficiency persistence to jump from 0.33 → <strong style="color:#f87171">0.88</strong> (Chow F=7.69 for midfielders). Players became locked into misaligned contracts.' :
     'No significant structural break detected. Efficiency scores remain relatively stable across seasons, consistent with normal market adjustment mechanisms.';
 
   wrap.innerHTML = `

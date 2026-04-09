@@ -349,4 +349,34 @@
     return _origFetch(url, opts);
   };
 
+  // ── Patch <img src="/api/team-logo?..."> in the DOM ───────
+  // fetch() interception can't catch img src attribute loads,
+  // so we use a MutationObserver to swap them for local paths.
+  function _patchLogoImg(img) {
+    const src = img.getAttribute('src') || '';
+    if (!src.startsWith('/api/team-logo')) return;
+    const params = new URLSearchParams(src.split('?')[1] || '');
+    const team = decodeURIComponent(params.get('team') || '');
+    const id = _TM_IDS[team];
+    if (id) img.src = `images/logos/tm_${id}.png`;
+  }
+
+  function _patchSubtree(root) {
+    const imgs = root.tagName === 'IMG' ? [root] : root.querySelectorAll('img[src^="/api/team-logo"]');
+    imgs.forEach(_patchLogoImg);
+  }
+
+  // Patch on DOMContentLoaded (for any static imgs)
+  document.addEventListener('DOMContentLoaded', () => _patchSubtree(document.body));
+
+  // Patch dynamically inserted nodes
+  new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      m.addedNodes.forEach(node => {
+        if (node.nodeType !== 1) return;
+        _patchSubtree(node);
+      });
+    });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+
 })();

@@ -37,7 +37,7 @@
   <div class="container">
     <div class="section-eyebrow">Research</div>
     <h1>Hypotheses &amp; Statistical Results</h1>
-    <p style="color:var(--t3);font-size:.95rem;max-width:680px;margin-top:.4rem">Three core hypotheses tested with standard econometric methods, plus extended analyses on PSR policy effects (Chow structural break test) and wage-setting persistence. Each result links back to the OLS model on the previous page.</p>
+    <p style="color:var(--t3);font-size:.95rem;max-width:680px;margin-top:.4rem">Three core hypotheses tested with standard econometric methods, plus extended analyses on FSR policy effects (Chow structural break test) and wage-setting persistence. Each result links back to the OLS model on the previous page.</p>
   </div>
 </div>
 <div class="container" style="padding-top:2.5rem;padding-bottom:4rem">
@@ -50,8 +50,8 @@
   <div class="divider"></div>
   <div class="section-header reveal mt-4">
     <div class="section-eyebrow">Extended Analysis · H4</div>
-    <h2 class="section-title">PSR Persistence Effect</h2>
-    <p class="section-desc">Profitability & Sustainability Regulations (PSR) in France impose wage ceilings that <em>freeze</em> salaries. When wages can't adjust, market mispricing becomes persistent.</p>
+    <h2 class="section-title">FSR Persistence Effect</h2>
+    <p class="section-desc">Financial Sustainability Regulations (FSR) impose wage ceilings that <em>freeze</em> salaries. When wages can't adjust, market mispricing becomes persistent.</p>
   </div>
   <div class="reveal">
     <div class="psr-flow">
@@ -69,7 +69,7 @@
     </div>
     <div class="grid-2">
       <div class="card card-pad">
-        <div class="card-header">PSR Era Efficiency — Ligue 1</div>
+        <div class="card-header">FSR Era Efficiency — Ligue 1</div>
         <div class="chart-wrap"><canvas id="ch-psr-line"></canvas></div>
       </div>
       <div class="card card-pad">
@@ -82,9 +82,9 @@
   <!-- Chow Tests -->
   <div class="divider"></div>
   <div class="section-header reveal mt-4">
-    <div class="section-eyebrow">Extended Analysis · H5</div>
+    <div class="section-eyebrow">Extended Analysis · Chow Test</div>
     <h2 class="section-title">Chow Structural Break Tests</h2>
-    <p class="section-desc">Tests whether the OLS wage-setting regression coefficients changed significantly before vs. after PSR enforcement (2022–23 → 2023–24 cutoff). Only Ligue 1 shows significant breaks.</p>
+    <p class="section-desc">Tests whether the OLS wage-setting regression coefficients changed significantly before vs. after FSR enforcement (2022–23 → 2023–24 cutoff). Only Ligue 1 shows significant breaks.</p>
   </div>
   <div class="chow-grid reveal" id="chowGrid"></div>
 
@@ -105,8 +105,8 @@
      desc:'<strong>Theory:</strong> As players age, their productivity peaks then declines. If clubs accurately price this, wages should rise to peak age then fall — a concave relationship. We test this by including a quadratic age term (Age²) in all position models.<br><br><strong>Test:</strong> Is the coefficient on Age² significantly negative?',
      metric:'Quadratic age coefficient (β₂)',interpret:'Confirmed in all 4 positions. Age² is negative and significant — wages peak around 28–33 years depending on position, then decline. The effect is strongest for Defenders (β₂ = −0.009) and weakest for Goalkeepers.'},
     {key:'H2',title:'League Heterogeneity',subtitle:'Do leagues follow different salary-setting norms?',
-     desc:'<strong>Theory:</strong> Institutional differences between leagues (salary caps, PSR rules, broadcast revenue sharing, transfer market depth) should lead to heterogeneous efficiency variance. A Levene\'s test compares efficiency score variance across leagues.<br><br><strong>Test:</strong> Is the between-league variance in efficiency scores significantly different (Levene\'s F test)?',
-     metric:"Levene's W statistic (homogeneity of variances)",interpret:'Confirmed in all positions. Efficiency variance differs significantly across leagues (p<0.0001 for all). The Premier League shows wider efficiency distributions; Ligue 1 shows compressed variance post-PSR — consistent with frozen wages reducing natural adjustment.'},
+     desc:'<strong>Theory:</strong> Institutional differences between leagues (salary caps, FSR rules, broadcast revenue sharing, transfer market depth) should lead to heterogeneous efficiency variance. A Levene\'s test compares efficiency score variance across leagues.<br><br><strong>Test:</strong> Is the between-league variance in efficiency scores significantly different (Levene\'s F test)?',
+     metric:"Levene's W statistic (homogeneity of variances)",interpret:'Confirmed in all positions. Efficiency variance differs significantly across leagues (p<0.0001 for all). The Premier League shows wider efficiency distributions; Ligue 1 shows compressed variance post-FSR — consistent with frozen wages reducing natural adjustment.'},
     {key:'H3',title:'Intra-Club Wage Clustering',subtitle:'Do clubs set wages uniformly, or does individual performance dominate?',
      desc:'<strong>Theory:</strong> If clubs compress wages internally (e.g. pay scales, solidarity norms), players within the same club should show similar efficiency scores. This is measured by the <strong>Intraclass Correlation Coefficient (ICC)</strong> from a mixed-effects model.<br><br><strong>Test:</strong> Is ICC > 0.1, indicating meaningful club-level clustering?',
      metric:'ICC (Intraclass Correlation Coefficient)',interpret:'Not confirmed as a major driver. ICC is close to zero across all positions (< 0.01%), meaning club membership explains almost none of the wage variation after controlling for individual performance. Individual statistics — not club identity — drive salary levels.'},

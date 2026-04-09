@@ -35,7 +35,7 @@ Inside `data/results/`:
 
 - `01_model_coefficients/` — econometric results for each position-specific model.
 - `02_efficiency_scores/` — individual scores and longitudinal analysis.
-- `03_hypothesis_tests/` — H1/H2/H3 tests, PSR, Chow test, defensive context.
+- `03_hypothesis_tests/` — H1/H2/H3 tests, FSR, Chow test, defensive context.
 - `04_robustness/` — methodological robustness (bootstrap, OOS temporal validation, collinearity, threshold stability).
 - `05_scouting_hiring/` — operational outputs (signings, positional health, transfer intelligence).
 - `06_descriptive_stats/` — descriptive statistics and efficiency drivers.
@@ -152,7 +152,7 @@ ICC by position (clustered by club):
 - High ICC → more variance explained by the club component.
 - Low ICC → weaker club-level clustering.
 
-### PSR (`psr_persistence_test.csv`) — key result
+### FSR Persistence (`psr_persistence_test.csv`) — key result
 
 Real example:
 
@@ -348,5 +348,5 @@ Recommended use:
 
 - "Salary inefficiency is defined as a conditional deviation from the expected wage, not as a normative judgment about the absolute salary level."
 - "Temporal robustness results show that out-of-sample predictive capacity is heterogeneous across positions."
-- "PSR evidence suggests that contractual rigidity increases the persistence of salary mismatches."
+- "FSR evidence suggests that contractual rigidity increases the persistence of salary mismatches."
 - "Underpaid/overpaid rankings are reported with bootstrap uncertainty to avoid deterministic interpretations."
