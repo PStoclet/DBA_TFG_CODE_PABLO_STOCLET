@@ -1,0 +1,21 @@
+Player,Team,Season,position_group,efficiency_score,injury_days_overlap,entity,rank
+Paul Wanner,Heidenheim,2024-2025,Midfielders,2.923035075600012,15.0,Paul Wanner | Heidenheim | 2024-2025,1
+Stefan Bajcetic,Las Palmas,2024-2025,Defenders,2.8153858158562795,6.0,Stefan Bajcetic | Las Palmas | 2024-2025,2
+Stefan Bajcetic,Las Palmas,2024-2025,Midfielders,2.631021044437867,6.0,Stefan Bajcetic | Las Palmas | 2024-2025,3
+Bryan Zaragoza,Osasuna,2024-2025,Midfielders,2.520913807251993,86.0,Bryan Zaragoza | Osasuna | 2024-2025,4
+Samuel Umtiti,Lecce,2022-2023,Defenders,2.4480990047485527,9.0,Samuel Umtiti | Lecce | 2022-2023,5
+Matthias Ginter,Freiburg,2023-2024,Defenders,2.3491327447595847,124.0,Matthias Ginter | Freiburg | 2023-2024,6
+Kylian Mbappé,Paris Saint-Germain,2022-2023,Forwards,2.2698337236558217,11.0,Kylian Mbappé | Paris Saint-Germain | 2022-2023,7
+Nico Williams,Athletic Club,2023-2024,Midfielders,2.217566719714366,55.0,Nico Williams | Athletic Club | 2023-2024,8
+Youssouf Koné,Ajaccio,2022-2023,Defenders,2.135215810509578,80.0,Youssouf Koné | Ajaccio | 2022-2023,9
+Nico Williams,Athletic Club,2024-2025,Midfielders,2.055795603017714,58.0,Nico Williams | Athletic Club | 2024-2025,10
+Lionel Messi,Paris Saint-Germain,2022-2023,Forwards,1.9691095147886728,18.0,Lionel Messi | Paris Saint-Germain | 2022-2023,11
+Eden Hazard,Real Madrid,2022-2023,Forwards,1.955222566305299,22.0,Eden Hazard | Real Madrid | 2022-2023,12
+Ansu Fati,Barcelona,2022-2023,Forwards,1.9327307987178308,7.0,Ansu Fati | Barcelona | 2022-2023,13
+Fernando,Almería,2023-2024,Goalkeepers,1.918005395657513,96.0,Fernando | Almería | 2023-2024,14
+Marash Kumbulla,Sassuolo,2023-2024,Defenders,1.9084787617843748,34.0,Marash Kumbulla | Sassuolo | 2023-2024,15
+Thibaut Courtois,Real Madrid,2023-2024,Goalkeepers,1.8336805924805863,258.0,Thibaut Courtois | Real Madrid | 2023-2024,16
+Luca Netz,Gladbach,2022-2023,Midfielders,1.827831546938404,6.0,Luca Netz | Gladbach | 2022-2023,17
+Ângelo,Strasbourg,2023-2024,Midfielders,1.812424823963665,121.0,Ângelo | Strasbourg | 2023-2024,18
+Manuel Neuer,Bayern Munich,2022-2023,Goalkeepers,1.8012076037008562,281.0,Manuel Neuer | Bayern Munich | 2022-2023,19
+Gianluigi Donnarumma,Paris Saint-Germain,2024-2025,Goalkeepers,1.774355718053675,16.0,Gianluigi Donnarumma | Paris Saint-Germain | 2024-2025,20

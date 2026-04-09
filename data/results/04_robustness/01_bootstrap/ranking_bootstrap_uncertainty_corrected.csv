@@ -1,0 +1,123 @@
+side,entity_id,Player,Season,Team,mean_rank,p10_rank,p90_rank,appear_rate
+Underpaid,Pablo Torre | 2024-2025 | Barcelona,Pablo Torre,2024-2025,Barcelona,1.0,1.0,1.0,0.63
+Underpaid,Christopher Antwi-Adjei | 2022-2023 | Bochum,Christopher Antwi-Adjei,2022-2023,Bochum,1.6217391304347826,1.0,2.0,0.575
+Underpaid,Takuma Asano | 2022-2023 | Bochum,Takuma Asano,2022-2023,Bochum,2.2222222222222223,1.0,3.0,0.6075
+Underpaid,Warmed Omari | 2022-2023 | Rennes,Warmed Omari,2022-2023,Rennes,2.8141263940520447,2.0,4.0,0.6725
+Underpaid,Gorka Guruzeta | 2023-2024 | Athletic Club,Gorka Guruzeta,2023-2024,Athletic Club,3.50381679389313,2.0,5.0,0.655
+Underpaid,Mounaim El Idrissy | 2022-2023 | Ajaccio,Mounaim El Idrissy,2022-2023,Ajaccio,4.067729083665339,3.0,5.0,0.6275
+Underpaid,Matìas Soulé | 2022-2023 | Juventus,Matìas Soulé,2022-2023,Juventus,4.838056680161944,3.0,6.0,0.6175
+Underpaid,Eliot Matazo | 2022-2023 | Monaco,Eliot Matazo,2022-2023,Monaco,5.372549019607843,4.0,7.0,0.6375
+Underpaid,Gio Reyna | 2022-2023 | Dortmund,Gio Reyna,2022-2023,Dortmund,6.019011406844107,4.0,8.0,0.6575
+Underpaid,Gorka Guruzeta | 2022-2023 | Athletic Club,Gorka Guruzeta,2022-2023,Athletic Club,6.617760617760617,5.0,8.0,0.6475
+Underpaid,Moritz Nicolas | 2023-2024 | Gladbach,Moritz Nicolas,2023-2024,Gladbach,7.303501945525292,5.0,9.0,0.6425
+Underpaid,Alfon | 2024-2025 | Celta Vigo,Alfon,2024-2025,Celta Vigo,8.10236220472441,6.0,10.0,0.635
+Underpaid,Alejandro Balde | 2022-2023 | Barcelona,Alejandro Balde,2022-2023,Barcelona,9.312757201646091,7.0,12.0,0.6075
+Underpaid,Yasser Larouci | 2022-2023 | Troyes,Yasser Larouci,2022-2023,Troyes,9.873076923076924,7.0,13.0,1.3
+Underpaid,Felix Nmecha | 2022-2023 | Wolfsburg,Felix Nmecha,2022-2023,Wolfsburg,9.892857142857142,7.0,12.0,0.63
+Underpaid,Badredine Bouanani | 2022-2023 | Nice,Badredine Bouanani,2022-2023,Nice,11.188755020080322,8.0,14.0,0.6225
+Underpaid,Matis Carvalho | 2022-2023 | Montpellier,Matis Carvalho,2022-2023,Montpellier,11.69465648854962,8.0,14.0,0.655
+Underpaid,Seydouba Cissé | 2024-2025 | Leganés,Seydouba Cissé,2024-2025,Leganés,12.434108527131784,9.0,15.0,0.645
+Underpaid,Antonios Papadopoulos | 2023-2024 | Dortmund,Antonios Papadopoulos,2023-2024,Dortmund,13.06530612244898,10.0,16.0,0.6125
+Underpaid,Janis Blaswich | 2022-2023 | RB Leipzig,Janis Blaswich,2022-2023,RB Leipzig,13.603174603174605,11.0,16.0,0.63
+Underpaid,Maghnes Akliouche | 2023-2024 | Monaco,Maghnes Akliouche,2023-2024,Monaco,14.316602316602316,11.0,17.0,0.6475
+Underpaid,David Costa | 2022-2023 | Lens,David Costa,2022-2023,Lens,15.151750972762644,12.0,18.0,0.6425
+Underpaid,Hugo Magnetti | 2022-2023 | Brest,Hugo Magnetti,2022-2023,Brest,15.630350194552529,12.0,19.0,0.6425
+Underpaid,Pepín | 2022-2023 | Monza,Pepín,2022-2023,Monza,16.3046875,13.0,20.0,0.64
+Underpaid,Marco Carnesecchi | 2024-2025 | Atalanta,Marco Carnesecchi,2024-2025,Atalanta,16.68951612903226,13.0,20.0,0.62
+Underpaid,Kirian Rodríguez | 2023-2024 | Las Palmas,Kirian Rodríguez,2023-2024,Las Palmas,17.41090909090909,14.0,21.0,0.6875
+Underpaid,Ismaël Boura | 2022-2023 | Lens,Ismaël Boura,2022-2023,Lens,18.164658634538156,15.0,21.0,0.6225
+Underpaid,Anthony Elanga | 2022-2023 | Manchester Utd,Anthony Elanga,2022-2023,Manchester Utd,18.782608695652176,15.0,22.0,0.6325
+Underpaid,Andy Irving | 2024-2025 | West Ham United,Andy Irving,2024-2025,West Ham United,19.513833992094863,16.0,23.0,0.6325
+Underpaid,Emil Ceide | 2023-2024 | Sassuolo,Emil Ceide,2023-2024,Sassuolo,20.11297071129707,16.0,24.0,0.5975
+Underpaid,Omar Marmoush | 2022-2023 | Wolfsburg,Omar Marmoush,2022-2023,Wolfsburg,20.522900763358777,17.0,24.0,0.655
+Underpaid,Lesley Ugochukwu | 2022-2023 | Rennes,Lesley Ugochukwu,2022-2023,Rennes,21.417355371900825,18.0,25.0,0.605
+Underpaid,Mathias Olesen | 2022-2023 | Köln,Mathias Olesen,2022-2023,Köln,21.941634241245136,18.0,25.0,0.6425
+Underpaid,Michael Zetterer | 2023-2024 | Werder Bremen,Michael Zetterer,2023-2024,Werder Bremen,22.61111111111111,19.0,26.0,0.675
+Underpaid,Pau Victor | 2024-2025 | Barcelona,Pau Victor,2024-2025,Barcelona,23.16078431372549,19.4,27.0,0.6375
+Underpaid,Bevic Moussiti-Oko | 2022-2023 | Ajaccio,Bevic Moussiti-Oko,2022-2023,Ajaccio,23.58050847457627,20.0,27.0,0.59
+Underpaid,Nordine Kandil | 2022-2023 | Strasbourg,Nordine Kandil,2022-2023,Strasbourg,24.33606557377049,20.0,28.0,0.61
+Underpaid,Samuel Sáiz | 2022-2023 | Girona,Samuel Sáiz,2022-2023,Girona,24.50877192982456,21.0,28.0,0.57
+Underpaid,Þórir Jóhann Helgason | 2022-2023 | Lecce,Þórir Jóhann Helgason,2022-2023,Lecce,25.27710843373494,22.0,28.200000000000017,0.6225
+Underpaid,Pablo Durán | 2024-2025 | Celta Vigo,Pablo Durán,2024-2025,Celta Vigo,25.75242718446602,22.0,29.0,0.515
+Underpaid,Mohamed Amoura | 2024-2025 | Wolfsburg,Mohamed Amoura,2024-2025,Wolfsburg,25.97142857142857,23.0,30.0,0.525
+Underpaid,Toby Collyer | 2024-2025 | Manchester Utd,Toby Collyer,2024-2025,Manchester Utd,26.47826086956522,24.0,29.40000000000001,0.5175
+Underpaid,Aitor Paredes | 2023-2024 | Athletic Club,Aitor Paredes,2023-2024,Athletic Club,26.86868686868687,24.0,30.0,0.495
+Underpaid,Marc Casado | 2024-2025 | Barcelona,Marc Casado,2024-2025,Barcelona,27.28191489361702,24.0,30.0,0.47
+Underpaid,Þórir Jóhann Helgason | 2024-2025 | Lecce,Þórir Jóhann Helgason,2024-2025,Lecce,27.502958579881657,24.8,30.0,0.4225
+Underpaid,Iglesias | 2024-2025 | Getafe,Iglesias,2024-2025,Getafe,27.855172413793102,25.0,30.0,0.3625
+Underpaid,Niccolò Pisilli | 2024-2025 | Roma,Niccolò Pisilli,2024-2025,Roma,27.88888888888889,24.8,30.0,0.0225
+Underpaid,Hans Nicolussi Caviglia | 2023-2024 | Juventus,Hans Nicolussi Caviglia,2023-2024,Juventus,28.0,26.0,30.0,0.3325
+Underpaid,Ouparine Djoco | 2022-2023 | Clermont Foot,Ouparine Djoco,2022-2023,Clermont Foot,28.0,28.0,28.0,0.0025
+Underpaid,Matteo Ruggeri | 2022-2023 | Atalanta,Matteo Ruggeri,2022-2023,Atalanta,28.32051282051282,26.0,30.0,0.39
+Underpaid,Lilian Egloff | 2022-2023 | Stuttgart,Lilian Egloff,2022-2023,Stuttgart,28.4,27.4,29.0,0.0125
+Underpaid,Sael Kumbedi | 2022-2023 | Lyon,Sael Kumbedi,2022-2023,Lyon,28.40909090909091,26.0,30.0,0.22
+Underpaid,Wout Weghorst | 2022-2023 | Manchester Utd,Wout Weghorst,2022-2023,Manchester Utd,28.5,27.3,29.7,0.005
+Underpaid,Elye Wahi | 2022-2023 | Montpellier,Elye Wahi,2022-2023,Montpellier,28.6,25.9,30.0,0.025
+Underpaid,Fermin López | 2023-2024 | Barcelona,Fermin López,2023-2024,Barcelona,28.70731707317073,28.0,30.0,0.1025
+Underpaid,César Tárrega | 2024-2025 | Valencia,César Tárrega,2024-2025,Valencia,28.796296296296298,27.0,30.0,0.135
+Underpaid,Ibrahim Mbaye | 2024-2025 | Paris Saint-Germain,Ibrahim Mbaye,2024-2025,Paris Saint-Germain,28.904761904761905,26.0,30.0,0.0525
+Underpaid,Abdelhamid Sabiri | 2022-2023 | Sampdoria,Abdelhamid Sabiri,2022-2023,Sampdoria,28.95833333333333,27.0,30.0,0.06
+Underpaid,Valentin Gendrey | 2023-2024 | Lecce,Valentin Gendrey,2023-2024,Lecce,29.0,27.2,30.0,0.0125
+Underpaid,Eliot Matazo | 2023-2024 | Monaco,Eliot Matazo,2023-2024,Monaco,29.0,28.2,29.8,0.0075
+Underpaid,Rémy Descamps | 2023-2024 | Nantes,Rémy Descamps,2023-2024,Nantes,29.0,29.0,29.0,0.0025
+Underpaid,Rodrigo Muniz | 2024-2025 | Fulham,Rodrigo Muniz,2024-2025,Fulham,29.454545454545453,28.0,30.0,0.0275
+Underpaid,Rodrigo Muniz | 2023-2024 | Fulham,Rodrigo Muniz,2023-2024,Fulham,30.0,30.0,30.0,0.0025
+Overpaid,Paul Wanner | 2024-2025 | Heidenheim,Paul Wanner,2024-2025,Heidenheim,1.6127659574468085,1.0,2.0,0.5875
+Overpaid,Stefan Bajcetic | 2024-2025 | Las Palmas,Stefan Bajcetic,2024-2025,Las Palmas,2.7480916030534357,2.0,4.0,1.31
+Overpaid,David López | 2024-2025 | Mallorca,David López,2024-2025,Mallorca,3.577405857740586,2.0,5.0,0.5975
+Overpaid,Bryan Zaragoza | 2024-2025 | Osasuna,Bryan Zaragoza,2024-2025,Osasuna,4.184738955823293,2.0,6.0,0.6225
+Overpaid,Samuel Umtiti | 2022-2023 | Lecce,Samuel Umtiti,2022-2023,Lecce,4.7362204724409445,3.0,7.0,0.635
+Overpaid,Matthias Ginter | 2023-2024 | Freiburg,Matthias Ginter,2023-2024,Freiburg,5.46613545816733,4.0,7.0,0.6275
+Overpaid,Kylian Mbappé | 2022-2023 | Paris Saint-Germain,Kylian Mbappé,2022-2023,Paris Saint-Germain,6.04014598540146,4.0,8.0,0.685
+Overpaid,Nico Williams | 2023-2024 | Athletic Club,Nico Williams,2023-2024,Athletic Club,6.726235741444867,5.0,9.0,0.6575
+Overpaid,Luka Romero | 2024-2025 | Alavés,Luka Romero,2024-2025,Alavés,8.763779527559056,6.0,11.0,0.635
+Overpaid,Kylian Mbappé | 2023-2024 | Paris Saint-Germain,Kylian Mbappé,2023-2024,Paris Saint-Germain,9.209302325581396,6.700000000000003,12.0,0.645
+Overpaid,Ki-Jana Hoever | 2024-2025 | Auxerre,Ki-Jana Hoever,2024-2025,Auxerre,9.385375494071146,6.0,13.0,1.265
+Overpaid,Youssouf Koné | 2022-2023 | Ajaccio,Youssouf Koné,2022-2023,Ajaccio,9.98814229249012,7.0,13.0,0.6325
+Overpaid,Matthias Ginter | 2024-2025 | Freiburg,Matthias Ginter,2024-2025,Freiburg,10.53875968992248,8.0,13.0,0.645
+Overpaid,Nico Williams | 2024-2025 | Athletic Club,Nico Williams,2024-2025,Athletic Club,11.58091286307054,9.0,15.0,0.6025
+Overpaid,Gianluigi Donnarumma | 2023-2024 | Paris Saint-Germain,Gianluigi Donnarumma,2023-2024,Paris Saint-Germain,12.340248962655602,9.0,15.0,0.6025
+Overpaid,Lionel Messi | 2022-2023 | Paris Saint-Germain,Lionel Messi,2022-2023,Paris Saint-Germain,12.957364341085272,10.0,16.0,0.645
+Overpaid,Raúl de Tomás | 2022-2023 | Rayo Vallecano,Raúl de Tomás,2022-2023,Rayo Vallecano,13.667924528301889,11.0,17.0,0.6625
+Overpaid,Eden Hazard | 2022-2023 | Real Madrid,Eden Hazard,2022-2023,Real Madrid,14.285140562248996,11.0,17.0,0.6225
+Overpaid,Gianluigi Donnarumma | 2022-2023 | Paris Saint-Germain,Gianluigi Donnarumma,2022-2023,Paris Saint-Germain,15.032128514056224,12.0,18.0,0.6225
+Overpaid,Ansu Fati | 2022-2023 | Barcelona,Ansu Fati,2022-2023,Barcelona,15.725190839694656,12.1,19.0,0.655
+Overpaid,Fernando | 2023-2024 | Almería,Fernando,2023-2024,Almería,16.362595419847327,13.0,20.0,0.655
+Overpaid,Marash Kumbulla | 2023-2024 | Sassuolo,Marash Kumbulla,2023-2024,Sassuolo,16.904,13.0,20.0,0.625
+Overpaid,Joshua King | 2024-2025 | Fulham,Joshua King,2024-2025,Fulham,17.53281853281853,14.0,21.0,0.6475
+Overpaid,Denis Suárez | 2022-2023 | Espanyol,Denis Suárez,2022-2023,Espanyol,18.123076923076923,14.0,22.0,0.65
+Overpaid,James Rodríguez | 2024-2025 | Rayo Vallecano,James Rodríguez,2024-2025,Rayo Vallecano,18.68979591836735,15.0,23.0,0.6125
+Overpaid,Thibaut Courtois | 2023-2024 | Real Madrid,Thibaut Courtois,2023-2024,Real Madrid,20.004166666666663,16.0,23.099999999999994,0.6
+Overpaid,Ângelo | 2023-2024 | Strasbourg,Ângelo,2023-2024,Strasbourg,20.681818181818183,17.0,24.0,0.605
+Overpaid,Manuel Neuer | 2022-2023 | Bayern Munich,Manuel Neuer,2022-2023,Bayern Munich,21.476744186046517,18.0,25.0,0.645
+Overpaid,Federico Fernández | 2022-2023 | Elche,Federico Fernández,2022-2023,Elche,21.876,18.0,26.0,0.625
+Overpaid,Arthur Melo | 2024-2025 | Girona,Arthur Melo,2024-2025,Girona,22.49590163934426,18.0,26.0,0.61
+Overpaid,Luca Netz | 2022-2023 | Gladbach,Luca Netz,2022-2023,Gladbach,22.52556237218814,16.800000000000004,29.0,1.2225
+Overpaid,Gianluigi Donnarumma | 2024-2025 | Paris Saint-Germain,Gianluigi Donnarumma,2024-2025,Paris Saint-Germain,23.15671641791045,19.0,27.0,0.67
+Overpaid,Iñigo Martínez | 2022-2023 | Athletic Club,Iñigo Martínez,2022-2023,Athletic Club,23.607142857142858,19.0,28.0,0.63
+Overpaid,Jan Oblak | 2022-2023 | Atlético Madrid,Jan Oblak,2022-2023,Atlético Madrid,24.35496183206107,20.0,28.0,0.655
+Overpaid,Nicolás González | 2022-2023 | Valencia,Nicolás González,2022-2023,Valencia,24.942084942084943,21.0,29.0,0.6475
+Overpaid,Éderson | 2022-2023 | Atalanta,Éderson,2022-2023,Atalanta,25.15652173913044,21.0,29.0,0.575
+Overpaid,Marash Kumbulla | 2024-2025 | Espanyol,Marash Kumbulla,2024-2025,Espanyol,25.5990990990991,22.0,29.0,0.555
+Overpaid,Attila Szalai | 2023-2024 | Freiburg,Attila Szalai,2023-2024,Freiburg,26.11111111111111,22.0,29.0,0.54
+Overpaid,Wahbi Khazri | 2024-2025 | Montpellier,Wahbi Khazri,2024-2025,Montpellier,26.893401015228427,24.0,30.0,0.4925
+Overpaid,Jadon Sancho | 2022-2023 | Manchester Utd,Jadon Sancho,2022-2023,Manchester Utd,27.0251572327044,23.8,30.0,0.3975
+Overpaid,Viktor Kovalenko | 2022-2023 | Spezia,Viktor Kovalenko,2022-2023,Spezia,27.438271604938272,24.1,30.0,0.405
+Overpaid,Arthur Theate | 2023-2024 | Rennes,Arthur Theate,2023-2024,Rennes,27.625,25.0,30.0,0.32
+Overpaid,Benjamin Mendy | 2023-2024 | Lorient,Benjamin Mendy,2023-2024,Lorient,27.88888888888889,25.0,30.0,0.1125
+Overpaid,Gastón Álvarez | 2022-2023 | Getafe,Gastón Álvarez,2022-2023,Getafe,28.046296296296298,25.0,30.0,0.27
+Overpaid,Alejo Véliz | 2024-2025 | Espanyol,Alejo Véliz,2024-2025,Espanyol,28.157894736842103,26.0,30.0,0.095
+Overpaid,Keylor Navas | 2023-2024 | Paris Saint-Germain,Keylor Navas,2023-2024,Paris Saint-Germain,28.2,25.0,30.0,0.2375
+Overpaid,Malang Sarr | 2022-2023 | Monaco,Malang Sarr,2022-2023,Monaco,28.24590163934426,26.0,30.0,0.1525
+Overpaid,Habib Diarra | 2022-2023 | Strasbourg,Habib Diarra,2022-2023,Strasbourg,28.246575342465757,25.0,30.0,0.1825
+Overpaid,Manu Sánchez | 2022-2023 | Osasuna,Manu Sánchez,2022-2023,Osasuna,28.454545454545453,27.0,30.0,0.055
+Overpaid,Arthur Theate | 2022-2023 | Rennes,Arthur Theate,2022-2023,Rennes,28.485714285714284,26.0,30.0,0.0875
+Overpaid,Dean Henderson | 2022-2023 | Nottingham Forest,Dean Henderson,2022-2023,Nottingham Forest,28.5,28.0,29.0,0.01
+Overpaid,Soumaïla Coulibaly | 2024-2025 | Brest,Soumaïla Coulibaly,2024-2025,Brest,28.6,27.0,30.0,0.0625
+Overpaid,Fábio Silva | 2023-2024 | Wolves,Fábio Silva,2023-2024,Wolves,28.6,27.0,30.0,0.0125
+Overpaid,Niklas Süle | 2022-2023 | Dortmund,Niklas Süle,2022-2023,Dortmund,28.818181818181817,27.0,30.0,0.0275
+Overpaid,Sergiño Dest | 2022-2023 | Milan,Sergiño Dest,2022-2023,Milan,28.954545454545453,27.1,30.0,0.055
+Overpaid,Kieran Tierney | 2023-2024 | Real Sociedad,Kieran Tierney,2023-2024,Real Sociedad,29.0,28.0,30.0,0.03
+Overpaid,Maximilian Philipp | 2023-2024 | Freiburg,Maximilian Philipp,2023-2024,Freiburg,29.666666666666668,29.2,30.0,0.0075
+Overpaid,Fábio Silva | 2024-2025 | Las Palmas,Fábio Silva,2024-2025,Las Palmas,29.75,29.3,30.0,0.01
+Overpaid,Frenkie de Jong | 2023-2024 | Barcelona,Frenkie de Jong,2023-2024,Barcelona,30.0,30.0,30.0,0.005

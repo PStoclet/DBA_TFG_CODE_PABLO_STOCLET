@@ -1,0 +1,2 @@
+injury_beta_per_30_days,rows_combined,rows_with_injury_overlap,share_with_injury_overlap,match_rate_strict,match_rate_with_fallback,match_rate_strict_base_aliases,match_rate_strict_final_aliases,strict_rate_lift
+0.05578576085841259,6702,3743,0.5584900029841838,0.51954640405849,0.5584900029841838,0.4709042076991943,0.51954640405849,0.048642196359295675

@@ -1,0 +1,26 @@
+entity,rank_base,rank_adj,rank_shift_adj_minus_base,Player,Team,Season,position_group,injury_days_overlap,efficiency_score,efficiency_score_injury_adjusted
+Gianluigi Donnarumma | Paris Saint-Germain | 2024-2025,20.0,16.0,-4.0,Gianluigi Donnarumma,Paris Saint-Germain,2024-2025,Goalkeepers,16.0,1.774355718053675,1.7446033122625217
+Luca Netz | Gladbach | 2022-2023,17.0,15.0,-2.0,Luca Netz,Gladbach,2022-2023,Defenders,6.0,1.7279391356618028,1.7167819834901203
+Éderson | Atalanta | 2022-2023,21.0,19.0,-2.0,Éderson,Atalanta,2022-2023,Midfielders,13.0,1.7288807464309528,1.7047069167256406
+Kylian Mbappé | Paris Saint-Germain | 2022-2023,7.0,6.0,-1.0,Kylian Mbappé,Paris Saint-Germain,2022-2023,Forwards,11.0,2.2698337236558217,2.2493789446744037
+Marash Kumbulla | Sassuolo | 2023-2024,15.0,14.0,-1.0,Marash Kumbulla,Sassuolo,2023-2024,Defenders,34.0,1.9084787617843748,1.845254899478174
+Arthur Theate | Rennes | 2023-2024,21.0,20.0,-1.0,Arthur Theate,Rennes,2023-2024,Defenders,35.0,1.6722915810521377,1.6072081933839897
+Samuel Umtiti | Lecce | 2022-2023,5.0,4.0,-1.0,Samuel Umtiti,Lecce,2022-2023,Defenders,9.0,2.4480990047485527,2.431363276491029
+Ansu Fati | Barcelona | 2022-2023,13.0,12.0,-1.0,Ansu Fati,Barcelona,2022-2023,Forwards,7.0,1.9327307987178308,1.9197141211842013
+Stefan Bajcetic | Las Palmas | 2024-2025,3.0,2.0,-1.0,Stefan Bajcetic,Las Palmas,2024-2025,Defenders,6.0,2.8153858158562795,2.804228663684597
+Paul Wanner | Heidenheim | 2024-2025,1.0,1.0,0.0,Paul Wanner,Heidenheim,2024-2025,Midfielders,15.0,2.923035075600012,2.8951421951708056
+Stefan Bajcetic | Las Palmas | 2024-2025,3.0,3.0,0.0,Stefan Bajcetic,Las Palmas,2024-2025,Defenders,6.0,2.8153858158562795,2.804228663684597
+Youssouf Koné | Ajaccio | 2022-2023,9.0,9.0,0.0,Youssouf Koné,Ajaccio,2022-2023,Defenders,80.0,2.135215810509578,1.9864537815538112
+Stefan Bajcetic | Las Palmas | 2024-2025,2.0,2.0,0.0,Stefan Bajcetic,Las Palmas,2024-2025,Defenders,6.0,2.8153858158562795,2.804228663684597
+Nico Williams | Athletic Club | 2023-2024,8.0,8.0,0.0,Nico Williams,Athletic Club,2023-2024,Midfielders,55.0,2.217566719714366,2.1152928248072764
+Lionel Messi | Paris Saint-Germain | 2022-2023,11.0,11.0,0.0,Lionel Messi,Paris Saint-Germain,2022-2023,Forwards,18.0,1.9691095147886728,1.9356380582736252
+Nico Williams | Athletic Club | 2024-2025,10.0,10.0,0.0,Nico Williams,Athletic Club,2024-2025,Midfielders,58.0,2.055795603017714,1.9479431320247829
+Eden Hazard | Real Madrid | 2022-2023,12.0,13.0,1.0,Eden Hazard,Real Madrid,2022-2023,Forwards,22.0,1.955222566305299,1.914313008342463
+Bryan Zaragoza | Osasuna | 2024-2025,4.0,5.0,1.0,Bryan Zaragoza,Osasuna,2024-2025,Midfielders,86.0,2.520913807251993,2.3609946261245436
+Luca Netz | Gladbach | 2022-2023,17.0,18.0,1.0,Luca Netz,Gladbach,2022-2023,Defenders,6.0,1.7279391356618028,1.7167819834901203
+Matthias Ginter | Freiburg | 2023-2024,6.0,7.0,1.0,Matthias Ginter,Freiburg,2023-2024,Defenders,124.0,2.3491327447595847,2.118551599878146
+Stefan Bajcetic | Las Palmas | 2024-2025,2.0,3.0,1.0,Stefan Bajcetic,Las Palmas,2024-2025,Defenders,6.0,2.8153858158562795,2.804228663684597
+Manuel Neuer | Bayern Munich | 2022-2023,19.0,21.0,2.0,Manuel Neuer,Bayern Munich,2022-2023,Goalkeepers,281.0,1.8012076037008562,1.278680976993725
+Fernando | Almería | 2023-2024,14.0,17.0,3.0,Fernando,Almería,2023-2024,Goalkeepers,96.0,1.918005395657513,1.7394909609105926
+Ângelo | Strasbourg | 2023-2024,18.0,21.0,3.0,Ângelo,Strasbourg,2023-2024,Midfielders,121.0,1.812424823963665,1.5874222551680677
+Thibaut Courtois | Real Madrid | 2023-2024,16.0,21.0,5.0,Thibaut Courtois,Real Madrid,2023-2024,Goalkeepers,258.0,1.8336805924805863,1.3539230490982381

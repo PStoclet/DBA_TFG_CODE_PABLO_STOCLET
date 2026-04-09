@@ -1,0 +1,5 @@
+position_group,n_obs,n_features,condition_number
+Defenders,2250,14,26172.94753936956
+Midfielders,2992,14,15868.6328196211
+Forwards,922,16,4.360424985960191e+19
+Goalkeepers,526,12,7563.602935442222

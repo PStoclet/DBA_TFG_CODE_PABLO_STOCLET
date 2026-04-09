@@ -1,0 +1,4 @@
+tier,top20_overpaid_jaccard_baseline_vs_adjusted,overpaid_changed_players,top20_underpaid_jaccard_baseline_vs_adjusted,underpaid_changed_players
+strict_only,0.6086956521739131,9,0.7272727272727273,6
+strict_plus_fallback,0.7619047619047619,5,0.7272727272727273,6
+all_rows,1.0,0,1.0,0

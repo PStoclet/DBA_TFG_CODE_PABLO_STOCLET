@@ -9,11 +9,20 @@
 (function () {
   'use strict';
 
+  // ── Resolve docs/ base URL from this script's own src ─────
+  // Works regardless of whether the HTML page is at docs/ root
+  // or a subfolder like docs/pages/.
+  const _BASE = (() => {
+    const s = document.currentScript;
+    if (s && s.src) return s.src.replace(/\/data\/api-shim\.js.*$/, '/');
+    return '';
+  })();
+
   // ── Team logo mapping (Transfermarkt IDs) ─────────────────
   const _TM_IDS = {'Arsenal':11, 'Aston Villa':405, 'Brighton':1237, 'Brentford':1246, 'Chelsea':631, 'Crystal Palace':873, 'Everton':29, 'Fulham':931, 'Liverpool':31, 'Manchester City':281, 'Manchester Utd':985, 'Manchester United':985, 'Newcastle Utd':762, 'Newcastle United':762, 'Tottenham':148, 'Tottenham Hotspur':148, 'West Ham':379, 'West Ham United':379, 'Wolves':543, 'Bournemouth':989, 'Nott\'ham Forest':703, 'Nottingham Forest':703, 'Luton Town':1068, 'Sheffield Utd':350, 'Sheffield United':350, 'Burnley':1132, 'Southampton':180, 'Leicester City':1003, 'Leeds United':399, 'Ipswich Town':677, 'Ipswich':677, 'Real Madrid':418, 'Barcelona':131, 'Atlético Madrid':13, 'Atletico Madrid':13, 'Athletic Club':621, 'Villarreal':383, 'Real Sociedad':681, 'Real Betis':150, 'Valencia':1049, 'Celta Vigo':940, 'Sevilla':368, 'Getafe':3709, 'Girona':12321, 'Osasuna':331, 'Rayo Vallecano':366, 'Mallorca':237, 'Almería':16795, 'Almeria':16795, 'Cádiz':5860, 'Cadiz':5860, 'Las Palmas':472, 'Deportivo Alavés':1108, 'Alavés':1108, 'Granada':2835, 'Valladolid':1039, 'Eibar':1444, 'Espanyol':714, 'Leganés':3003, 'Leganes':3003, 'Bayern Munich':27, 'Borussia Dortmund':16, 'Dortmund':16, 'RB Leipzig':23826, 'Bayer Leverkusen':15, 'Leverkusen':15, 'Eintracht Frankfurt':24, 'Frankfurt':24, 'Stuttgart':79, 'Union Berlin':89, 'Wolfsburg':82, 'Borussia M\'gladbach':18, 'Gladbach':18, 'Mönchengladbach':18, 'Freiburg':17, 'Hoffenheim':533, 'Mainz 05':39, 'Mainz':39, 'Werder Bremen':86, 'Augsburg':167, 'Köln':3, 'Koln':3, 'Darmstadt 98':105, 'VfL Bochum':80, 'Bochum':80, 'Heidenheim':2932, 'Schalke 04':33, 'Hertha BSC':44, 'Holstein Kiel':10696, 'St Pauli':35, 'St. Pauli':35, 'FC St. Pauli':35, 'Inter Milan':46, 'Inter':46, 'Juventus':506, 'AC Milan':5, 'Milan':5, 'Napoli':6195, 'Atalanta':800, 'Roma':12, 'Lazio':398, 'Fiorentina':430, 'Bologna':1040, 'Torino':416, 'Udinese':410, 'Genoa':252, 'Sassuolo':6574, 'Cagliari':1390, 'Lecce':1839, 'Empoli':749, 'Hellas Verona':276, 'Verona':276, 'Frosinone':2953, 'Monza':6592, 'Salernitana':380, 'Sampdoria':157, 'Spezia':3522, 'Venezia':907, 'Parma':97, 'Como':17586, 'Paris S-G':583, 'PSG':583, 'Paris Saint-Germain':583, 'Marseille':244, 'Monaco':162, 'Lyon':1041, 'Lens':826, 'Lille':1082, 'Nice':417, 'Rennes':273, 'Lorient':1075, 'Nantes':995, 'Montpellier':969, 'Strasbourg':667, 'Reims':1421, 'Brest':3911, 'Metz':347, 'Toulouse':415, 'Le Havre':738, 'Clermont Foot':17512, 'Auxerre':2488, 'Angers':1054, 'Saint-Étienne':618, 'Saint-Etienne':618};
   function _logoUrl(team) {
     const id = _TM_IDS[team];
-    return id ? `images/logos/tm_${id}.png` : '';
+    return id ? `${_BASE}images/logos/tm_${id}.png` : '';
   }
 
 
@@ -21,16 +30,17 @@
 
   // ── Pre-load all data in parallel ──────────────────────────
   const _loaded = Promise.all([
-    fetch('data/efficiency.json').then(r => r.json()),
-    fetch('data/coefficients.json').then(r => r.json()),
-    fetch('data/hypotheses.json').then(r => r.json()),
-    fetch('data/psr_era.json').then(r => r.json()),
-  ]).then(([eff, coef, hyp, psr]) => {
+    fetch(_BASE + 'data/efficiency.json').then(r => r.json()),
+    fetch(_BASE + 'data/coefficients.json').then(r => r.json()),
+    fetch(_BASE + 'data/hypotheses.json').then(r => r.json()),
+    fetch(_BASE + 'data/psr_era.json').then(r => r.json()),
+    fetch(_BASE + 'data/photos.json').then(r => r.json()).catch(() => ({})),
+  ]).then(([eff, coef, hyp, psr, photos]) => {
     // Pre-compute derived fields once
     const seasons = [...new Set(eff.map(r => r.Season).filter(Boolean))].sort();
     const leagues = [...new Set(eff.map(r => r.Comp).filter(Boolean))].sort();
     const latest  = seasons[seasons.length - 1] || null;
-    return { eff, coef, hyp, psr, seasons, leagues, latest };
+    return { eff, coef, hyp, psr, photos, seasons, leagues, latest };
   });
 
   // ── URL helpers ────────────────────────────────────────────
@@ -74,7 +84,7 @@
   }
 
   // ── Route handler ──────────────────────────────────────────
-  function handleApi(path, params, { eff, coef, hyp, psr, seasons, leagues, latest }) {
+  function handleApi(path, params, { eff, coef, hyp, psr, photos, seasons, leagues, latest }) {
 
     // /api/meta
     if (path === '/api/meta') {
@@ -171,7 +181,7 @@
         sorted = [...df].sort((a, b) => (b.efficiency_score || 0) - (a.efficiency_score || 0));
       else
         sorted = [...df].sort((a, b) => Math.abs(a.efficiency_score || 0) - Math.abs(b.efficiency_score || 0));
-      return sorted.slice(0, n).map(r => ({ ...r, photo_url: '' }));
+      return sorted.slice(0, n).map(r => ({ ...r, photo_url: photos[r.Player] || '' }));
     }
 
     // /api/scatter
@@ -236,7 +246,7 @@
         .map(r => ({
           ...r,
           efficiency_label: classify(r.efficiency_score),
-          photo_url: '',
+          photo_url: photos[r.Player] || '',
         }));
     }
 
@@ -276,7 +286,7 @@
             eff_pct:    +(r.efficiency_pct || 0).toFixed(1),
             wage:       Math.round(r.Annual_Wages_EUR || 0),
             slot:       i,
-            photo_url:  '',
+            photo_url:  photos[r.Player] || '',
           });
         });
       });
@@ -291,9 +301,10 @@
       return { logo_url: _logoUrl(team) };
     }
 
-    // /api/photo  — no photo mapping; return empty (pages show SVG avatar fallback)
+    // /api/photo  — look up Wikipedia thumbnail from photos.json
     if (path === '/api/photo') {
-      return { photo_url: '' };
+      const player = params.get('player') || '';
+      return { photo_url: photos[player] || '' };
     }
 
     // /api/coefficients

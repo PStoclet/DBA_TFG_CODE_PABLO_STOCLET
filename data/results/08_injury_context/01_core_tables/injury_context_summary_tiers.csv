@@ -1,0 +1,4 @@
+tier,rows,rows_with_injury_overlap,share_with_injury_overlap,top20_overpaid_jaccard_baseline_vs_adjusted,top20_underpaid_jaccard_baseline_vs_adjusted,overpaid_changed_players,underpaid_changed_players
+strict_only,3482,3482,1.0,0.6086956521739131,0.7272727272727273,9,6
+strict_plus_fallback,3743,3743,1.0,0.7619047619047619,0.7272727272727273,5,6
+all_rows,6702,3743,0.5584900029841838,1.0,1.0,0,0

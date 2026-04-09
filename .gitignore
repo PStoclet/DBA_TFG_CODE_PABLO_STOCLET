@@ -1,13 +1,11 @@
 # Claude Code local settings
 .claude/
 
-# Data files (large, not for version control)
-data/raw/**/*.xlsx
-data/raw/**/*.csv
-data/processed/**/*.xlsx
-data/processed/**/*.csv
-data/results/**/*.csv
-data/results/**/*.html
+# Interactive visualizations — large self-contained HTML files (~70 MB)
+data/results/09_interactive_visualizations/
+
+# Docs binaries committed separately when ready
+# (thesis.pdf is 832 KB and IS committed)
 
 # Dashboard caches
 src/dashboard/photo_cache/
@@ -28,9 +26,8 @@ venv/
 # Temp / Office lock files
 ~$*
 
-# Docs binaries
-docs/*.docx
-docs/*.pdf
+# Exclude Word working drafts (binary, not for version control)
+*.docx
 
 # Zip artifacts
 *.zip
