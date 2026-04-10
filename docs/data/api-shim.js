@@ -24,6 +24,12 @@
     const id = _TM_IDS[team];
     return id ? `${_BASE}images/logos/tm_${id}.png` : '';
   }
+  function _photoUrl(val) {
+    if (!val) return '';
+    // Local relative path → prepend _BASE so it resolves correctly from any subfolder
+    if (!val.startsWith('http')) return _BASE + val;
+    return val;
+  }
 
 
   const EFF_THRESHOLD = 0.18;
@@ -181,7 +187,7 @@
         sorted = [...df].sort((a, b) => (b.efficiency_score || 0) - (a.efficiency_score || 0));
       else
         sorted = [...df].sort((a, b) => Math.abs(a.efficiency_score || 0) - Math.abs(b.efficiency_score || 0));
-      return sorted.slice(0, n).map(r => ({ ...r, photo_url: photos[r.Player] || '' }));
+      return sorted.slice(0, n).map(r => ({ ...r, photo_url: _photoUrl(photos[r.Player]) }));
     }
 
     // /api/scatter
@@ -246,7 +252,7 @@
         .map(r => ({
           ...r,
           efficiency_label: classify(r.efficiency_score),
-          photo_url: photos[r.Player] || '',
+          photo_url: _photoUrl(photos[r.Player]),
         }));
     }
 
@@ -304,7 +310,7 @@
     // /api/photo  — look up Wikipedia thumbnail from photos.json
     if (path === '/api/photo') {
       const player = params.get('player') || '';
-      return { photo_url: photos[player] || '' };
+      return { photo_url: _photoUrl(photos[player]) };
     }
 
     // /api/coefficients
