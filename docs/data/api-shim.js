@@ -26,9 +26,10 @@
   }
   function _photoUrl(val) {
     if (!val) return '';
-    // Local relative path → prepend _BASE so it resolves correctly from any subfolder
-    if (!val.startsWith('http')) return _BASE + val;
-    return val;
+    // Paths starting with "../" are relative to docs/pages/ — use as-is
+    if (val.startsWith('../') || val.startsWith('http')) return val;
+    // Bare relative path — prepend _BASE
+    return _BASE + val;
   }
 
 
