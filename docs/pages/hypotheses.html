@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hypotheses · Football Salary Intelligence</title>
+<title>Research Hypotheses · Football Salary Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -699,16 +699,22 @@ footer strong { color:var(--t2) }
 
   <!-- Core Hypotheses -->
   <div class="section-header reveal"><div class="section-eyebrow">Core Hypotheses</div><h2 class="section-title">H1 · H2 · H3 · H4</h2></div>
+  <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.5rem" class="reveal">
+    <a href="#h1" style="font-family:var(--font-mono);font-size:.8rem;padding:.35rem .8rem;border:1px solid var(--border2);border-radius:6px;color:var(--t3);text-decoration:none;transition:all .2s" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent2)'" onmouseout="this.style.color='var(--t3)';this.style.borderColor='var(--border2)'">H1 — Non-linear Wages</a>
+    <a href="#h2" style="font-family:var(--font-mono);font-size:.8rem;padding:.35rem .8rem;border:1px solid var(--border2);border-radius:6px;color:var(--t3);text-decoration:none;transition:all .2s" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent2)'" onmouseout="this.style.color='var(--t3)';this.style.borderColor='var(--border2)'">H2 — League Heterogeneity</a>
+    <a href="#h3" style="font-family:var(--font-mono);font-size:.8rem;padding:.35rem .8rem;border:1px solid var(--border2);border-radius:6px;color:var(--t3);text-decoration:none;transition:all .2s" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent2)'" onmouseout="this.style.color='var(--t3)';this.style.borderColor='var(--border2)'">H3 — Club Clustering</a>
+    <a href="#h4" style="font-family:var(--font-mono);font-size:.8rem;padding:.35rem .8rem;border:1px solid var(--border2);border-radius:6px;color:var(--t3);text-decoration:none;transition:all .2s" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent2)'" onmouseout="this.style.color='var(--t3)';this.style.borderColor='var(--border2)'">H4 — Wage Rigidity</a>
+  </div>
   <div style="display:flex;flex-direction:column;gap:1.2rem;margin-bottom:3.5rem" id="hypCards"></div>
 
   <!-- PSR / H4 -->
   <div class="divider"></div>
-  <div class="hyp-card reveal">
+  <div class="hyp-card reveal" id="h4">
     <div class="hyp-header">
       <div class="hyp-number">H4</div>
       <div>
-        <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:.2rem">FSR Wage-Setting Persistence</div>
-        <div style="font-size:.85rem;color:var(--t3)">Do FSR wage freezes lock in mispricing and amplify efficiency persistence across seasons?</div>
+        <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:.2rem">Wage Rigidity and Efficiency Persistence</div>
+        <div style="font-size:.85rem;color:var(--t3)">Do frozen wages lock in mispricing and amplify efficiency persistence across seasons?</div>
         <div class="result-tag confirmed" style="margin-top:.7rem">✓ Confirmed — frozen wages amplify persistence by +55pp (β=0.554, t=17.32, p&lt;10⁻⁶⁴)</div>
       </div>
     </div>
@@ -755,7 +761,7 @@ footer strong { color:var(--t2) }
 
 <footer>
   <p><strong>Football Salary Intelligence</strong> · BBA Thesis · IE University · 2025</p>
-  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · 5 Leagues · 2022–2025</p>
+  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · StatsBomb · 5 Leagues · 2022–2025</p>
 </footer>
 
 <!-- ═══════════════════════════════════════════
@@ -1082,7 +1088,7 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
       result=nSig>0?'confirmed':'rejected';
       tag=nSig>0?{cls:'confirmed',icon:'✓',txt:`Confirmed — ${nSig}/${rows.length} positions`}:{cls:'rejected',icon:'✗',txt:'Not confirmed'};
     }
-    wrap.innerHTML+=`<div class="hyp-card reveal">
+    wrap.innerHTML+=`<div class="hyp-card reveal" id="${d.key.toLowerCase()}">
       <div class="hyp-header">
         <div class="hyp-number">${d.key}</div>
         <div>

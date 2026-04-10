@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home · Football Salary Intelligence</title>
+<title>Football Salary Intelligence · BBA Thesis · IE University</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -900,7 +900,7 @@ footer strong { color:var(--t2) }
       <span class="dim">IN FOOTBALL?</span>
     </h1>
     <p class="hero-sub" data-split-words data-split-delay="600">
-      OLS wage-efficiency models across the Big Five European leagues reveal which clubs are spending wisely — and which are leaving millions on the pitch.
+      Position-specific OLS wage-efficiency models across the Big Five European leagues reveal which clubs are spending wisely — and which are leaving millions on the pitch.
     </p>
     <div class="hero-kpi-row">
       <div class="hero-kpi"><span class="num green" id="h-records">—</span><span class="lbl">Player-Seasons</span></div>
@@ -927,14 +927,14 @@ footer strong { color:var(--t2) }
     <div class="findings-grid reveal reveal-stagger" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
       <div class="finding-card finding-hero" style="--card-top:#ef4444">
         <div class="finding-num red">0.88</div>
-        <div class="finding-label">FSR Persistence — Ligue 1</div>
-        <div class="finding-desc">FSR enforcement froze wages in Ligue 1. Mispricing persistence jumped from 0.33 to <strong>0.88</strong> — contracts locked into inefficiency regardless of performance. The most significant result: t=17.3, p&lt;1×10⁻⁶⁴.</div>
+        <div class="finding-label">Wage Rigidity — Frozen Contracts <span style="font-size:.7rem;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.4);color:var(--amber);border-radius:4px;padding:.1rem .4rem;margin-left:.4rem;vertical-align:middle">★ Key finding</span></div>
+        <div class="finding-desc">Frozen-wage players across all five leagues show persistence of <strong>0.88</strong> vs 0.33 for adjusting wages. The most precise result in the thesis: t=17.3, p&lt;10⁻⁶⁴.</div>
         <div class="finding-detail"><a href="hypotheses.html" style="color:inherit">→ See full hypothesis test</a></div>
       </div>
       <div class="finding-card" style="--card-top:#22c55e">
         <div class="finding-num green">63–71%</div>
         <div class="finding-label">Wage Variance Explained</div>
-        <div class="finding-desc">Position-specific OLS models explain <strong>63–71% of log-wage variance</strong> using only publicly available stats. Age has a concave effect: wages peak around 29, then fall — consistent with declining productivity.</div>
+        <div class="finding-desc">Position-specific OLS models explain <strong>63–71% of log-wage variance</strong> using only publicly available stats. Age has a concave effect: wages peak between 31–36 depending on position — Goalkeepers 4.5 years later than Defenders — then fall.</div>
         <div class="finding-detail"><a href="models.html" style="color:inherit">→ Explore the model</a></div>
       </div>
       <div class="finding-card" style="--card-top:#f59e0b">
@@ -1008,7 +1008,7 @@ footer strong { color:var(--t2) }
       <blockquote>
         "Wage-setting in professional football is not irrational — it is systematically biased by institutional rigidities, information asymmetry, and policy distortions such as FSR enforcement."
       </blockquote>
-      <cite>— Pablo Stoclet, Football Salary Intelligence, IE University 2025</cite>
+      <cite>— Salary Efficiency in European Football, IE University BBA Thesis 2025</cite>
     </div>
   </div>
 </section>
@@ -1019,7 +1019,7 @@ footer strong { color:var(--t2) }
 
 <footer>
   <p><strong>Football Salary Intelligence</strong> · BBA Thesis · IE University · 2025</p>
-  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · 5 Leagues · 2022–2025</p>
+  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · StatsBomb · 5 Leagues · 2022–2025</p>
 </footer>
 
 <!-- ═══════════════════════════════════════════
@@ -1404,7 +1404,11 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
     const stats = await fetch('/api/stats?season=all').then(r=>r.json());
     countUp(document.getElementById('h-records'), stats.total||6702);
     countUp(document.getElementById('h-players'), stats.unique_players||3253);
-  } catch(e) { console.error(e); }
+  } catch(e) {
+    console.error(e);
+    countUp(document.getElementById('h-records'), 6702);
+    countUp(document.getElementById('h-players'), 3253);
+  }
 })();
 
 </script>

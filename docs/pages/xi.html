@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Efficiency XI · Football Salary Intelligence</title>
+<title>Best Value XI · Football Salary Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -742,7 +742,7 @@ svg.pitch{width:100%;height:auto;border-radius:14px;box-shadow:0 24px 80px rgba(
     <!-- Info panel -->
     <div>
       <div class="xi-info-panel" id="xiInfoPanel">
-        <p style="color:var(--t4);font-size:.9rem">← Click a player on the pitch to see their details</p>
+        <p style="color:var(--t4);font-size:.9rem" id="xiClickHint"><span class="spinner" style="display:inline-block;width:12px;height:12px;border:2px solid var(--t4);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:.4rem"></span>Building XI…</p>
       </div>
 
       <!-- Team composition -->
@@ -769,7 +769,7 @@ svg.pitch{width:100%;height:auto;border-radius:14px;box-shadow:0 24px 80px rgba(
 
 <footer>
   <p><strong>Football Salary Intelligence</strong> · BBA Thesis · IE University · 2025</p>
-  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · 5 Leagues · 2022–2025</p>
+  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · StatsBomb · 5 Leagues · 2022–2025</p>
 </footer>
 
 <!-- ═══════════════════════════════════════════
@@ -1110,6 +1110,8 @@ async function loadXI() {
   xiData = await apiFetch(url);
   renderPitch(xiData);
   renderSummary(xiData);
+  const hint = document.getElementById('xiClickHint');
+  if (hint) hint.textContent = '← Click a player on the pitch to see their details';
 }
 
 function renderPitch(xi) {

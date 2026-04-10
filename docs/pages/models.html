@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Models · Football Salary Intelligence</title>
+<title>Wage-Efficiency Models · Football Salary Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -661,7 +661,7 @@ footer strong { color:var(--t2) }
   <div class="container">
     <div class="section-eyebrow">The Model</div>
     <h1>What Drives Player Wages?</h1>
-    <p style="color:var(--t3);font-size:.95rem;max-width:680px;margin-top:.4rem">Four position-specific OLS regressions with HC3 heteroskedasticity-robust standard errors. Dependent variable: log(annual wage). Each bar shows a coefficient — highlighted bars are significant at p&lt;0.05. This is the model that generates every efficiency score in the dashboard.</p>
+    <p style="color:var(--t3);font-size:.95rem;max-width:680px;margin-top:.4rem">Four position-specific OLS regressions with club-clustered standard errors. Dependent variable: log(annual wage). Each bar shows a coefficient — highlighted bars are significant at p&lt;0.05. This is the model that generates every efficiency score in the dashboard.</p>
   </div>
 </div>
 <div class="container" style="padding-top:2.5rem;padding-bottom:4rem">
@@ -699,7 +699,7 @@ footer strong { color:var(--t2) }
   <div class="grid-2 reveal">
     <div class="card card-pad">
       <div class="card-header">Age (concave effect)</div>
-      <p style="font-size:.9rem;color:var(--t2);margin-bottom:.8rem">The quadratic age specification captures <strong>concave productivity</strong>: wages rise through peak years (~28–30) then decline as physical performance deteriorates.</p>
+      <p style="font-size:.9rem;color:var(--t2);margin-bottom:.8rem">The quadratic age specification captures <strong>concave productivity</strong>: wages rise through peak years (31–36 across positions) then decline as physical performance deteriorates.</p>
       <p style="font-size:.83rem;color:var(--t4)">β(Age) ≈ +0.59 · β(Age²) ≈ −0.009 → peak at ~33 years for Defenders</p>
     </div>
     <div class="card card-pad">
@@ -725,7 +725,7 @@ footer strong { color:var(--t2) }
 
 <footer>
   <p><strong>Football Salary Intelligence</strong> · BBA Thesis · IE University · 2025</p>
-  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · 5 Leagues · 2022–2025</p>
+  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · StatsBomb · 5 Leagues · 2022–2025</p>
 </footer>
 
 <!-- ═══════════════════════════════════════════

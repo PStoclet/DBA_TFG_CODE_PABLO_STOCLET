@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Players · Football Salary Intelligence</title>
+<title>Player Wage Rankings · Football Salary Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -764,7 +764,7 @@ footer strong { color:var(--t2) }
   <div class="section-header reveal mt-4">
     <div class="section-eyebrow">Wage vs Efficiency</div>
     <h2 class="section-title">Salary vs Efficiency Score</h2>
-    <p class="section-desc">Each dot = one player-season. Green = underpaid (below model), Red = overpaid (above model), Blue = fairly priced (within ±20%). Hover for details.</p>
+    <p class="section-desc">Each dot = one player-season. Green = underpaid (below model), Red = overpaid (above model), Blue = fairly priced (within ±0.5σ of model prediction). Hover for details.</p>
   </div>
   <div class="card card-pad reveal">
     <div style="height:440px"><canvas id="scatterChart"></canvas></div>
@@ -776,7 +776,7 @@ footer strong { color:var(--t2) }
 
 <footer>
   <p><strong>Football Salary Intelligence</strong> · BBA Thesis · IE University · 2025</p>
-  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · 5 Leagues · 2022–2025</p>
+  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · StatsBomb · 5 Leagues · 2022–2025</p>
 </footer>
 
 <!-- ═══════════════════════════════════════════
@@ -1079,8 +1079,8 @@ const CAT_META = {
   },
   fairly_paid: {
     icon:'🔵', cls:'active-fair',
-    desc:'Players whose actual wage is <strong>within ±20% of the model prediction</strong>. This validates model accuracy — most players cluster here, confirming the OLS specification captures market pricing well.',
-    interpCls:'fair', interpTxt: pct => `±${pct}% of model`
+    desc:'Players whose efficiency score falls <strong>within ±0.5σ of the model prediction</strong>. This validates model accuracy — most players cluster here, confirming the OLS specification captures market pricing well.',
+    interpCls:'fair', interpTxt: pct => `within ±0.5σ`
   },
   overpaid: {
     icon:'🔴', cls:'active-over',
@@ -1131,11 +1131,16 @@ async function loadStats() {
 
 async function loadPlayers() {
   const grid = document.getElementById('playersGrid');
-  grid.innerHTML = '<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div></div>';
+  grid.innerHTML = '<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading players…</div>';
   const n   = playerPos==='all' ? 18 : 12;
   const url = `/api/top-players?n=${n}&type=${playerType}&position=${encodeURIComponent(playerPos)}`;
-  const players = await apiFetch(url);
-  renderPlayerCards(grid, players);
+  try {
+    const players = await apiFetch(url);
+    renderPlayerCards(grid, players);
+  } catch(e) {
+    console.error(e);
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p>Could not load player data. Please refresh the page.</p></div>';
+  }
 }
 
 function renderPlayerCards(grid, players) {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Applications · Football Salary Intelligence</title>
+<title>Practical Applications · Football Salary Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -997,7 +997,7 @@ footer strong { color:var(--t2) }
         <div class="app-panel-info">
           <div class="eyebrow">FSR Monitoring</div>
           <h3>Season-by-Season Efficiency Drift</h3>
-          <p>FSR enforcement froze wages in Ligue 1 from 2023 onwards. Track how mean efficiency and mispricing rates evolved across all three seasons covered by the thesis data.</p>
+          <p>FSR-coincident wage compression is detectable in Ligue 1 from 2023–24 onwards. Track how mean efficiency and mispricing rates evolved across all three seasons covered by the thesis data.</p>
         </div>
         <div class="app-panel-controls" id="psr-league-btns">
           <button class="app-ctrl-btn active" data-v="Ligue 1">Ligue 1</button>
@@ -1024,7 +1024,7 @@ footer strong { color:var(--t2) }
 
 <footer>
   <p><strong>Football Salary Intelligence</strong> · BBA Thesis · IE University · 2025</p>
-  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · 5 Leagues · 2022–2025</p>
+  <p><strong>Pablo Stoclet</strong> · Supervisor: Prof. Paula Abascal Gutierrez-Colomer · Data: FBRef · Capology · StatsBomb · 5 Leagues · 2022–2025</p>
 </footer>
 
 <!-- ═══════════════════════════════════════════
@@ -1729,7 +1729,7 @@ async function loadPSR(league) {
 
   const isLigue1 = league === 'Ligue 1';
   const drift = data.length > 1 ? (data[data.length-1].mean - data[0].mean).toFixed(3) : null;
-  const driftNote = isLigue1 ? 'FSR enforcement in 2023 froze wages, causing efficiency persistence to jump from 0.33 → <strong style="color:#f87171">0.88</strong> (Chow F=7.69 for midfielders). Players became locked into misaligned contracts.' :
+  const driftNote = isLigue1 ? 'FSR-coincident wage compression is detectable from 2023–24 onwards, causing efficiency persistence to jump from 0.33 → <strong style="color:#f87171">0.88</strong> (Chow F=7.69 for midfielders). Players became locked into misaligned contracts.' :
     'No significant structural break detected. Efficiency scores remain relatively stable across seasons, consistent with normal market adjustment mechanisms.';
 
   wrap.innerHTML = `
