@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore")
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parents[2]
-AR = ROOT / "Database" / "Analysis_Results"
+AR = ROOT / "data" / "results"
 FIG = AR / "07_figures"
 FIG.mkdir(parents=True, exist_ok=True)
 

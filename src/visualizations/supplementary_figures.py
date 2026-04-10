@@ -29,7 +29,7 @@ from pathlib import Path
 
 # ── PATHS ────────────────────────────────────────────────────────────
 ROOT      = Path(__file__).resolve().parent.parent.parent
-RESULTS   = ROOT / "Database" / "Analysis_Results"
+RESULTS   = ROOT / "data" / "results"
 COEF_DIR  = RESULTS / "01_model_coefficients"
 EFF_DIR   = RESULTS / "02_efficiency_scores"
 HYP_DIR   = RESULTS / "03_hypothesis_tests"

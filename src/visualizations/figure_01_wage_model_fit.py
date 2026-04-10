@@ -10,7 +10,7 @@ import numpy as np
 from matplotlib.transforms import blended_transform_factory
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT_DIR = ROOT / "Database" / "Analysis_Results" / "07_figures"
+OUT_DIR = ROOT / "data" / "results" / "07_figures"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 plt.rcParams.update(
