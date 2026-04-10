@@ -648,10 +648,18 @@ footer strong { color:var(--t2) }
 .psr-arrow{font-size:2.5rem;text-align:center;color:var(--amber)}
 
 /* Chow */
-.chow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
-.chow-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem}
-.chow-card.sig{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.04)}
-.chow-f{font-family:var(--font-mono);font-size:1.6rem;font-weight:500;color:var(--amber);margin-bottom:.2rem}
+.chow-leagues{display:flex;flex-direction:column;gap:1rem}
+.chow-league-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.chow-league-header{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem;border-bottom:1px solid var(--border);background:var(--card2)}
+.chow-league-name{font-family:var(--font-head);font-size:.95rem;font-weight:700}
+.chow-rows{display:flex;flex-direction:column}
+.chow-row{display:grid;grid-template-columns:1fr auto auto auto auto;align-items:center;gap:1rem;padding:.6rem 1.2rem;border-bottom:1px solid rgba(74,222,128,.05)}
+.chow-row:last-child{border-bottom:none}
+.chow-row.sig{background:rgba(239,68,68,.03)}
+.chow-pos{font-size:.88rem;color:var(--t2)}
+.chow-fstat{font-family:var(--font-mono);font-size:.88rem;color:var(--amber)}
+.chow-pval{font-family:var(--font-mono);font-size:.85rem}
+.chow-nobs{font-size:.8rem;color:var(--t4)}
 </style>
 
 <script src="../data/api-shim.js"></script>
@@ -698,35 +706,41 @@ footer strong { color:var(--t2) }
   <div class="section-header reveal"><div class="section-eyebrow">Core Hypotheses</div><h2 class="section-title">H1 · H2 · H3 · H4</h2></div>
   <div style="display:flex;flex-direction:column;gap:1.2rem;margin-bottom:3.5rem" id="hypCards"></div>
 
-  <!-- PSR -->
+  <!-- PSR / H4 -->
   <div class="divider"></div>
-  <div class="section-header reveal mt-4">
-    <div class="section-eyebrow">H4</div>
-    <h2 class="section-title">FSR Wage-Setting Persistence</h2>
-    <p class="section-desc">Financial Sustainability Regulations (FSR) impose wage ceilings that <em>freeze</em> salaries. When wages can't adjust, market mispricing becomes persistent.</p>
-  </div>
-  <div class="reveal">
-    <div class="psr-flow">
-      <div class="psr-box">
-        <div class="psr-val green" id="psr-n">0.33</div>
-        <div class="psr-lbl">Persistence<br>Normal Wages</div>
-        <div style="font-size:.78rem;color:var(--t4);margin-top:.4rem">Wages adjust → mispricing corrects itself season-to-season</div>
-      </div>
-      <div class="psr-arrow">→</div>
-      <div class="psr-box" style="border:1px solid rgba(239,68,68,.2);background:rgba(239,68,68,.04)">
-        <div class="psr-val red" id="psr-f">0.88</div>
-        <div class="psr-lbl">Persistence<br>Frozen Wages</div>
-        <div style="font-size:.78rem;color:var(--red);margin-top:.4rem" id="psr-note">Loading…</div>
+  <div class="hyp-card reveal">
+    <div class="hyp-header">
+      <div class="hyp-number">H4</div>
+      <div>
+        <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:.2rem">FSR Wage-Setting Persistence</div>
+        <div style="font-size:.85rem;color:var(--t3)">Do FSR wage freezes lock in mispricing and amplify efficiency persistence across seasons?</div>
+        <div class="result-tag confirmed" style="margin-top:.7rem">✓ Confirmed — frozen wages amplify persistence by +55pp (β=0.554, t=17.32, p&lt;10⁻⁶⁴)</div>
       </div>
     </div>
-    <div class="grid-2">
-      <div class="card card-pad">
-        <div class="card-header">FSR Era Efficiency — Ligue 1</div>
-        <div class="chart-wrap"><canvas id="ch-psr-line"></canvas></div>
+    <div class="hyp-body">
+      <p><strong>Theory:</strong> Financial Sustainability Regulations impose wage ceilings that <em>freeze</em> salaries. When wages can't adjust to reflect current performance, market mispricing becomes self-reinforcing — overpaid players stay overpaid, underpaid players stay underpaid.<br><br><strong>Test:</strong> Is the interaction term (lagged efficiency × frozen wage dummy) positive and significant in the AR(1) persistence model?</p>
+      <div class="psr-flow">
+        <div class="psr-box">
+          <div class="psr-val green" id="psr-n">0.33</div>
+          <div class="psr-lbl">Persistence<br>Normal Wages</div>
+          <div style="font-size:.78rem;color:var(--t4);margin-top:.4rem">Wages adjust → mispricing corrects itself season-to-season</div>
+        </div>
+        <div class="psr-arrow">→</div>
+        <div class="psr-box" style="border:1px solid rgba(239,68,68,.2);background:rgba(239,68,68,.04)">
+          <div class="psr-val red" id="psr-f">0.88</div>
+          <div class="psr-lbl">Persistence<br>Frozen Wages</div>
+          <div style="font-size:.78rem;color:var(--red);margin-top:.4rem" id="psr-note">Loading…</div>
+        </div>
       </div>
-      <div class="card card-pad">
-        <div class="card-header">% Overpaid vs Underpaid — Ligue 1</div>
-        <div class="chart-wrap"><canvas id="ch-psr-pct"></canvas></div>
+      <div class="grid-2">
+        <div class="card card-pad">
+          <div class="card-header">FSR Era Efficiency — Ligue 1</div>
+          <div class="chart-wrap"><canvas id="ch-psr-line"></canvas></div>
+        </div>
+        <div class="card card-pad">
+          <div class="card-header">% Overpaid vs Underpaid — Ligue 1</div>
+          <div class="chart-wrap"><canvas id="ch-psr-pct"></canvas></div>
+        </div>
       </div>
     </div>
   </div>
@@ -738,7 +752,7 @@ footer strong { color:var(--t2) }
     <h2 class="section-title">Chow Structural Break Tests</h2>
     <p class="section-desc">Tests whether the OLS wage-setting regression coefficients changed significantly before vs. after FSR enforcement (2022–23 → 2023–24 cutoff). Significant breaks are found in Ligue 1 and Serie A, but not in the Premier League, Bundesliga, or La Liga.</p>
   </div>
-  <div class="chow-grid reveal" id="chowGrid"></div>
+  <div id="chowGrid"></div>
 
 </div>
 </div>
@@ -1090,8 +1104,7 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
             <span class="k">${r.model}</span>
             <span class="v ${d.key==='H3'?(r.icc>=0.1?'green':'muted'):r.significant?'green':'muted'}">
               ${d.key==='H1'?`β²=${r.coef}`:d.key==='H2'?`W=${r.levene_W}`:``}
-              ${d.key==='H3'?`ICC=${r.icc>=0.01?r.icc.toFixed(3):'~0.000'} (${r.clubs} clubs)`:''}
-              · p=${d.key==='H3'?'—':r.pvalue<.001?'<0.001':Number(r.pvalue).toFixed(4)}
+              ${d.key==='H3'?`ICC=${r.icc>=0.01?r.icc.toFixed(3):'~0.000'} (${r.clubs} clubs)`:`· p=${r.pvalue<.001?'<0.001':Number(r.pvalue).toFixed(4)}`}
             </span>
           </div>`).join('')}
         </div>
@@ -1131,15 +1144,25 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
 
   /* ── Chow ── */
   const cg=document.getElementById('chowGrid');
-  (hyp.chow||[]).forEach(c=>{
-    cg.innerHTML+=`<div class="chow-card ${c.significant?'sig':''} reveal">
-      <div style="font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.4rem">${c.league}</div>
-      <div style="font-family:var(--font-head);font-size:.95rem;font-weight:600;margin-bottom:.6rem">${c.position}</div>
-      <div class="chow-f">${c.F}</div>
-      <div style="font-size:.7rem;color:var(--t4);margin-bottom:.6rem">F-statistic</div>
-      <div class="stat-block-row"><span class="k">p-value</span><span class="v ${c.significant?'red':'green'}">${c.pvalue<.0001?'<0.0001':Number(c.pvalue).toFixed(4)}</span></div>
-      <div class="stat-block-row"><span class="k">N obs.</span><span class="v">${c.n}</span></div>
-      <div class="result-tag ${c.significant?'confirmed':'nuanced'}" style="margin-top:.7rem;font-size:.78rem">${c.significant?'⚡ Structural Break':'– No break detected'}</div>
+  cg.className='chow-leagues';
+  const chowLeagues=[...new Set((hyp.chow||[]).map(c=>c.league))];
+  chowLeagues.forEach(league=>{
+    const rows=(hyp.chow||[]).filter(c=>c.league===league);
+    const anySig=rows.some(c=>c.significant);
+    cg.innerHTML+=`<div class="chow-league-block reveal">
+      <div class="chow-league-header">
+        <span class="chow-league-name">${league}</span>
+        <span class="result-tag ${anySig?'confirmed':'nuanced'}" style="font-size:.75rem;padding:.2rem .7rem">${anySig?'⚡ Structural break detected':'– No break detected'}</span>
+      </div>
+      <div class="chow-rows">
+        ${rows.map(c=>`<div class="chow-row ${c.significant?'sig':''}">
+          <span class="chow-pos">${c.position}</span>
+          <span class="chow-fstat">F = ${c.F}</span>
+          <span class="chow-pval ${c.significant?'red':'green'}">${c.pvalue<.0001?'p &lt; 0.0001':'p = '+Number(c.pvalue).toFixed(4)}</span>
+          <span class="chow-nobs">n = ${c.n}</span>
+          <span class="result-tag ${c.significant?'confirmed':'nuanced'}" style="font-size:.7rem;padding:.15rem .55rem">${c.significant?'⚡ Break':'–'}</span>
+        </div>`).join('')}
+      </div>
     </div>`;
   });
 
