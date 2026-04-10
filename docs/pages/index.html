@@ -1398,18 +1398,9 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
   frame();
 })();
 
-/* Load hero stats */
-(async function() {
-  try {
-    const stats = await fetch('/api/stats?season=all').then(r=>r.json());
-    countUp(document.getElementById('h-records'), stats.total||6702);
-    countUp(document.getElementById('h-players'), stats.unique_players||3253);
-  } catch(e) {
-    console.error(e);
-    countUp(document.getElementById('h-records'), 6702);
-    countUp(document.getElementById('h-players'), 3253);
-  }
-})();
+/* Load hero stats — static thesis values */
+countUp(document.getElementById('h-records'), 6702);
+countUp(document.getElementById('h-players'), 3253);
 
 </script>
 
