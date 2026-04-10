@@ -292,7 +292,7 @@
             eff_pct:    +(r.efficiency_pct || 0).toFixed(1),
             wage:       Math.round(r.Annual_Wages_EUR || 0),
             slot:       i,
-            photo_url:  photos[r.Player] || '',
+            photo_url:  _photoUrl(photos[r.Player]),
           });
         });
       });

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Best XI · Football Salary Intelligence</title>
+<title>Efficiency XI · Football Salary Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -665,7 +665,7 @@ svg.pitch{width:100%;height:auto;border-radius:14px;box-shadow:0 24px 80px rgba(
     <a href="market.html"        class="nav-link ">League Data</a>
     <a href="players.html"       class="nav-link ">Player Rankings</a>
     <a href="squads.html"        class="nav-link ">Squad Analysis</a>
-    <a href="xi.html"            class="nav-link active">Best XI</a>
+    <a href="xi.html"            class="nav-link active">Efficiency XI</a>
     <a href="applications.html"  class="nav-link ">Applications</a>
     <a href="models.html"        class="nav-link ">The Model</a>
     <a href="hypotheses.html"    class="nav-link ">Research</a>
@@ -676,9 +676,9 @@ svg.pitch{width:100%;height:auto;border-radius:14px;box-shadow:0 24px 80px rgba(
 <div class="page">
 <div class="page-hero">
   <div class="container">
-    <div class="section-eyebrow">Best XI</div>
-    <h1>The Bargain Dream Team</h1>
-    <p style="color:var(--t3);font-size:.95rem;max-width:640px;margin-top:.4rem">The most undervalued player at each position, assembled into a <strong style="color:var(--t2)">4-4-2 formation</strong>. Toggle to see the most overpaid XI. Click any player on the pitch for details.</p>
+    <div class="section-eyebrow" id="heroEyebrow">Underpaid XI</div>
+    <h1 id="heroTitle">The Bargain Dream Team</h1>
+    <p id="heroDesc" style="color:var(--t3);font-size:.95rem;max-width:640px;margin-top:.4rem">The most <strong style="color:var(--t2)">undervalued</strong> player at each position, assembled into a <strong style="color:var(--t2)">4-4-2 formation</strong>. Toggle to see the most overpaid XI. Click any player on the pitch for details.</p>
   </div>
 </div>
 <div class="filter-bar">
@@ -1100,6 +1100,12 @@ fetch('/api/meta').then(r=>r.json()).then(meta=>{
 });
 
 async function loadXI() {
+  const isOvp = xiType === 'overpaid';
+  document.getElementById('heroEyebrow').textContent = isOvp ? 'Overpaid XI' : 'Underpaid XI';
+  document.getElementById('heroTitle').textContent   = isOvp ? 'The Wage Trap XI' : 'The Bargain Dream Team';
+  document.getElementById('heroDesc').innerHTML = isOvp
+    ? `The most <strong style="color:var(--red)">overpaid</strong> player at each position — clubs paying far above what the OLS model predicts given individual stats. Assembled into a <strong style="color:var(--t2)">4-4-2 formation</strong>.`
+    : `The most <strong style="color:var(--t2)">undervalued</strong> player at each position, assembled into a <strong style="color:var(--t2)">4-4-2 formation</strong>. Toggle to see the most overpaid XI. Click any player on the pitch for details.`;
   const url=`/api/formation-xi?type=${xiType}`;
   xiData = await apiFetch(url);
   renderPitch(xiData);
@@ -1208,8 +1214,12 @@ function renderSummary(xi){
   const list=document.getElementById('xiPlayerList');
   list.innerHTML=xi.map(p=>{
     const col=xiType==='overpaid'?'var(--red)':'var(--green)';
+    const ini=p.player.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const photoHtml=p.photo_url
+      ? `<img src="${p.photo_url}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:top;z-index:1">`
+      : '';
     return `<div style="display:flex;align-items:center;gap:.7rem;padding:.4rem 0;border-bottom:1px solid var(--border)">
-      <div style="width:28px;height:28px;border-radius:50%;background:${pc(p.position)}33;border:1px solid ${pc(p.position)};flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-family:JetBrains Mono,monospace;color:#94a3b8">${pe(p.position)}</div>
+      <div style="position:relative;width:36px;height:36px;flex-shrink:0;border-radius:50%;background:${pc(p.position)}22;border:1.5px solid ${pc(p.position)};display:flex;align-items:center;justify-content:center;font-size:.6rem;font-family:JetBrains Mono,monospace;color:#94a3b8;overflow:hidden">${ini}${photoHtml}</div>
       <div style="flex:1;min-width:0"><div style="font-size:.85rem;font-weight:600;font-family:Space Grotesk,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.player}</div>
       <div style="font-size:.7rem;color:var(--t4)">${p.team}</div></div>
       <span class="mono" style="color:${col};font-size:.85rem">${fmtEff(p.efficiency)}</span>
