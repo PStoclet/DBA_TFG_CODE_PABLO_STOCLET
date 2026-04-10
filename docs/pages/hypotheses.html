@@ -648,18 +648,13 @@ footer strong { color:var(--t2) }
 .psr-arrow{font-size:2.5rem;text-align:center;color:var(--amber)}
 
 /* Chow */
-.chow-leagues{display:flex;flex-direction:column;gap:1rem}
-.chow-league-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
-.chow-league-header{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem;border-bottom:1px solid var(--border);background:var(--card2)}
-.chow-league-name{font-family:var(--font-head);font-size:.95rem;font-weight:700}
-.chow-rows{display:flex;flex-direction:column}
-.chow-row{display:grid;grid-template-columns:1fr auto auto auto auto;align-items:center;gap:1rem;padding:.6rem 1.2rem;border-bottom:1px solid rgba(74,222,128,.05)}
-.chow-row:last-child{border-bottom:none}
-.chow-row.sig{background:rgba(239,68,68,.03)}
-.chow-pos{font-size:.88rem;color:var(--t2)}
-.chow-fstat{font-family:var(--font-mono);font-size:.88rem;color:var(--amber)}
-.chow-pval{font-family:var(--font-mono);font-size:.85rem}
-.chow-nobs{font-size:.8rem;color:var(--t4)}
+.chow-wrapper{display:flex;flex-direction:column;gap:1.6rem}
+.chow-league-section{}
+.chow-league-title{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border2);margin-bottom:.85rem;font-family:var(--font-head);font-size:.82rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--t3)}
+.chow-pos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+.chow-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem}
+.chow-card.sig{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.04)}
+.chow-f{font-family:var(--font-mono);font-size:1.55rem;font-weight:500;color:var(--amber);margin-bottom:.15rem}
 </style>
 
 <script src="../data/api-shim.js"></script>
@@ -1144,23 +1139,24 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
 
   /* ── Chow ── */
   const cg=document.getElementById('chowGrid');
-  cg.className='chow-leagues';
+  cg.className='chow-wrapper';
   const chowLeagues=[...new Set((hyp.chow||[]).map(c=>c.league))];
   chowLeagues.forEach(league=>{
     const rows=(hyp.chow||[]).filter(c=>c.league===league);
     const anySig=rows.some(c=>c.significant);
-    cg.innerHTML+=`<div class="chow-league-block reveal">
-      <div class="chow-league-header">
-        <span class="chow-league-name">${league}</span>
-        <span class="result-tag ${anySig?'confirmed':'nuanced'}" style="font-size:.75rem;padding:.2rem .7rem">${anySig?'⚡ Structural break detected':'– No break detected'}</span>
+    cg.innerHTML+=`<div class="chow-league-section reveal">
+      <div class="chow-league-title">
+        <span>${league}</span>
+        <span class="result-tag ${anySig?'confirmed':'nuanced'}" style="font-size:.72rem;padding:.15rem .6rem">${anySig?'⚡ Break detected':'– No break detected'}</span>
       </div>
-      <div class="chow-rows">
-        ${rows.map(c=>`<div class="chow-row ${c.significant?'sig':''}">
-          <span class="chow-pos">${c.position}</span>
-          <span class="chow-fstat">F = ${c.F}</span>
-          <span class="chow-pval ${c.significant?'red':'green'}">${c.pvalue<.0001?'p &lt; 0.0001':'p = '+Number(c.pvalue).toFixed(4)}</span>
-          <span class="chow-nobs">n = ${c.n}</span>
-          <span class="result-tag ${c.significant?'confirmed':'nuanced'}" style="font-size:.7rem;padding:.15rem .55rem">${c.significant?'⚡ Break':'–'}</span>
+      <div class="chow-pos-grid">
+        ${rows.map(c=>`<div class="chow-card ${c.significant?'sig':''}">
+          <div style="font-family:var(--font-head);font-size:.9rem;font-weight:600;margin-bottom:.5rem">${c.position}</div>
+          <div class="chow-f">${c.F}</div>
+          <div style="font-size:.7rem;color:var(--t4);margin-bottom:.6rem">F-statistic</div>
+          <div class="stat-block-row"><span class="k">p-value</span><span class="v ${c.significant?'red':'green'}">${c.pvalue<.0001?'<0.0001':Number(c.pvalue).toFixed(4)}</span></div>
+          <div class="stat-block-row"><span class="k">N obs.</span><span class="v">${c.n}</span></div>
+          <div class="result-tag ${c.significant?'confirmed':'nuanced'}" style="margin-top:.7rem;font-size:.75rem">${c.significant?'⚡ Structural Break':'– No break detected'}</div>
         </div>`).join('')}
       </div>
     </div>`;
