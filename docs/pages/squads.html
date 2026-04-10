@@ -1350,7 +1350,7 @@ function renderSquadPlayers(players, posFilter) {
     const pct  = Math.abs(p.efficiency_pct||0).toFixed(0);
     return `<div class="squad-player-row">
       <img class="sp-photo" src="${p.photo_url||''}" alt="${p.Player}" loading="lazy"
-           onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+           referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
       <div class="sp-photo-fb" style="display:none;border:1.5px solid ${pCol}">${ini}</div>
       <div class="sp-info">
         <div class="sp-name">${p.Player||'—'}</div>

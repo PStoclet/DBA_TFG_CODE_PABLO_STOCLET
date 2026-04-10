@@ -1162,7 +1162,7 @@ function renderPlayerCards(grid, players) {
     card.style.setProperty('--pos-c', pHex);
     card.innerHTML = `
       <div class="pc-photo-area">
-        <img src="${p.photo_url||''}" alt="${p.Player}" loading="lazy" onerror="this.style.display='none'">
+        <img src="${p.photo_url||''}" alt="${p.Player}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="pc-photo-fallback">${ini}</div>
         <div class="pc-photo-overlay"></div>
         <div class="pc-pos-bar"></div>

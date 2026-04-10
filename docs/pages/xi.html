@@ -1181,7 +1181,7 @@ function showXIInfo(p,col,ringCol){
     <div class="xi-photo-row">
       <div style="position:relative;width:48px;height:48px;flex-shrink:0">
         <div style="position:absolute;inset:0;border-radius:50%;background:${col}22;border:2px solid ${ringCol};display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1rem;font-weight:800;color:${col}">${ini}</div>
-        <img src="${p.photo_url||''}" onerror="this.style.display='none'" style="position:relative;z-index:1;width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid ${ringCol}">
+        <img src="${p.photo_url||''}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="position:relative;z-index:1;width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid ${ringCol}">
       </div>
       <div><h3>${p.player}</h3><span class="badge ${badge}">${p.league}</span></div>
     </div>
