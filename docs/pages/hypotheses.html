@@ -736,7 +736,7 @@ footer strong { color:var(--t2) }
   <div class="section-header reveal mt-4">
     <div class="section-eyebrow">H4 · Structural Break Test</div>
     <h2 class="section-title">Chow Structural Break Tests</h2>
-    <p class="section-desc">Tests whether the OLS wage-setting regression coefficients changed significantly before vs. after FSR enforcement (2022–23 → 2023–24 cutoff). Only Ligue 1 shows significant breaks.</p>
+    <p class="section-desc">Tests whether the OLS wage-setting regression coefficients changed significantly before vs. after FSR enforcement (2022–23 → 2023–24 cutoff). Significant breaks are found in Ligue 1 and Serie A, but not in the Premier League, Bundesliga, or La Liga.</p>
   </div>
   <div class="chow-grid reveal" id="chowGrid"></div>
 
@@ -1047,22 +1047,32 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
   /* ── H1, H2, H3 ── */
   const defs=[
     {key:'H1',title:'Non-linear Wage Structure',subtitle:'Do wage returns follow a concave (inverted-U) productivity curve?',
-     desc:'<strong>Theory:</strong> As players age, their productivity peaks then declines. If clubs accurately price this, wages should rise to peak age then fall — a concave relationship. We test this by including a quadratic age term (Age²) in all position models.<br><br><strong>Test:</strong> Is the coefficient on Age² significantly negative?',
-     metric:'Quadratic age coefficient (β₂)',interpret:'Confirmed in all 4 positions. Age² is negative and significant — wages peak around 28–33 years depending on position, then decline. The effect is strongest for Defenders (β₂ = −0.009) and weakest for Goalkeepers.'},
+     desc:'<strong>Theory:</strong> As players age, their productivity peaks then declines. If clubs accurately price this, wages should rise to peak age then fall — a concave relationship. We also test whether superstar convexity (positive quadratic on NPGls_p90) exists for commercially visible positions (Forwards).<br><br><strong>Test:</strong> Is the quadratic NPGls_p90² term significant? Age² is confirmed negative across all 4 positions (p&lt;0.001).',
+     metric:'Quadratic NPGls_p90 coefficient (β²) — superstar convexity test',interpret:'Partial support. Age² is negative and significant across all 4 positions — wages follow an inverted-U with age, peaking at 31.5 yrs (DEF), 32.2 yrs (MID), 32.3 yrs (FWD), 36.0 yrs (GK). However, superstar wage convexity for Forwards (NPGls_p90²) does not meet significance (p=0.261). Salary compression is confirmed for Midfielders (β²=−1.446, p=0.036).'},
     {key:'H2',title:'League Heterogeneity',subtitle:'Do leagues follow different salary-setting norms?',
-     desc:'<strong>Theory:</strong> Institutional differences between leagues (salary caps, FSR rules, broadcast revenue sharing, transfer market depth) should lead to heterogeneous efficiency variance. A Levene\'s test compares efficiency score variance across leagues.<br><br><strong>Test:</strong> Is the between-league variance in efficiency scores significantly different (Levene\'s F test)?',
-     metric:"Levene's W statistic (homogeneity of variances)",interpret:'Confirmed in all positions. Efficiency variance differs significantly across leagues (p<0.0001 for all). The Premier League shows wider efficiency distributions; Ligue 1 shows compressed variance post-FSR — consistent with frozen wages reducing natural adjustment.'},
-    {key:'H3',title:'Intra-Club Wage Clustering',subtitle:'Do clubs set wages uniformly, or does individual performance dominate?',
-     desc:'<strong>Theory:</strong> If clubs compress wages internally (e.g. pay scales, solidarity norms), players within the same club should show similar efficiency scores. This is measured by the <strong>Intraclass Correlation Coefficient (ICC)</strong> from a mixed-effects model.<br><br><strong>Test:</strong> Is ICC > 0.1, indicating meaningful club-level clustering?',
-     metric:'ICC (Intraclass Correlation Coefficient)',interpret:'Not confirmed as a major driver. ICC is close to zero across all positions (< 0.01%), meaning club membership explains almost none of the wage variation after controlling for individual performance. Individual statistics — not club identity — drive salary levels.'},
+     desc:'<strong>Theory:</strong> Institutional differences between leagues (FSR enforcement, broadcast revenue concentration, ownership structure) should lead to heterogeneous wage dispersion. A Levene\'s test compares efficiency score variance across leagues for each position group.<br><br><strong>Test:</strong> Is variance in efficiency scores significantly different across leagues (Levene\'s W test)?',
+     metric:"Levene's W statistic (homogeneity of variances)",interpret:'Confirmed across all 4 position groups (W = 2.44–10.96, all p&lt;0.05). European leagues differ not just in mean wage level but in wage dispersion around the mean. The Premier League shows consistently the widest efficiency distributions; the Bundesliga the most compressed — consistent with the 50+1 ownership rule enforcing wage discipline. Ligue 1 narrows visibly across seasons, consistent with FSR-driven wage compression.'},
+    {key:'H3',title:'Club-Level Efficiency Clustering',subtitle:'Does club identity drive wage premiums beyond individual performance?',
+     desc:'<strong>Theory:</strong> Superstar premiums should cluster at high-profile clubs for commercially visible positions (Forwards, Goalkeepers), but not for Defenders and Midfielders where individual production functions dominate.<br><br><strong>Test:</strong> Is ICC &gt; 0.1 for Forwards and Goalkeepers, but near zero for Defenders and Midfielders?',
+     metric:'ICC (Intraclass Correlation Coefficient)',interpret:'Partially confirmed as predicted. Forwards (ICC=0.187) and Goalkeepers (ICC=0.203) show meaningful club-level clustering — for these positions, club affiliation matters more than individual per-90 statistics. Defenders and Midfielders show near-zero ICC (~0.000), meaning individual performance — not club identity — drives salary levels for these positions.'},
   ];
 
   const wrap=document.getElementById('hypCards');
   defs.forEach(d=>{
     const rows=hyp[d.key]||[];
     const nSig=rows.filter(r=>r.significant).length;
-    const result=d.key==='H3'?'nuanced':nSig>0?'confirmed':'rejected';
-    const tag=d.key==='H3'?{cls:'nuanced',icon:'ℹ',txt:'Nuanced — ICC minimal'}:nSig>0?{cls:'confirmed',icon:'✓',txt:`Confirmed — ${nSig}/${rows.length} positions`}:{cls:'rejected',icon:'✗',txt:'Not confirmed'};
+    let result,tag;
+    if(d.key==='H3'){
+      const iccSig=rows.filter(r=>r.icc>=0.1).length;
+      result='nuanced';
+      tag={cls:'nuanced',icon:'◑',txt:`Partial — ${iccSig}/${rows.length} positions (FWD & GK)`};
+    } else if(d.key==='H1'){
+      result='nuanced';
+      tag={cls:'nuanced',icon:'◑',txt:`Partial — age inverted-U confirmed all 4; superstar convexity not significant`};
+    } else {
+      result=nSig>0?'confirmed':'rejected';
+      tag=nSig>0?{cls:'confirmed',icon:'✓',txt:`Confirmed — ${nSig}/${rows.length} positions`}:{cls:'rejected',icon:'✗',txt:'Not confirmed'};
+    }
     wrap.innerHTML+=`<div class="hyp-card reveal">
       <div class="hyp-header">
         <div class="hyp-number">${d.key}</div>
@@ -1078,9 +1088,9 @@ document.querySelectorAll('[data-magnetic]').forEach(el => {
           <div style="font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:.6rem">${d.metric}</div>
           ${rows.map(r=>`<div class="stat-block-row">
             <span class="k">${r.model}</span>
-            <span class="v ${r.significant?'green':'muted'}">
+            <span class="v ${d.key==='H3'?(r.icc>=0.1?'green':'muted'):r.significant?'green':'muted'}">
               ${d.key==='H1'?`β²=${r.coef}`:d.key==='H2'?`W=${r.levene_W}`:``}
-              ${d.key==='H3'?`ICC=${(r.icc*100).toFixed(4)}% (${r.clubs} clubs)`:''}
+              ${d.key==='H3'?`ICC=${r.icc>=0.01?r.icc.toFixed(3):'~0.000'} (${r.clubs} clubs)`:''}
               · p=${d.key==='H3'?'—':r.pvalue<.001?'<0.001':Number(r.pvalue).toFixed(4)}
             </span>
           </div>`).join('')}
