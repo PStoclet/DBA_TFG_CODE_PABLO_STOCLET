@@ -1,56 +1,65 @@
-# Football Salary Efficiency — TFG Bachelor's Thesis
+# Football Salary Efficiency — BBA Thesis · IE University 2025
 
-> 🌐 **Live project page:** [pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET](https://pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET)
+> 🌐 **Live dashboard:** [pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET](https://pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET)
 
 Econometric analysis of salary efficiency in European football. The project estimates position-specific wage models using OLS regression, computes individual efficiency scores (observed vs. predicted log-wage), and applies the framework to scouting, squad restructuring, and market intelligence.
 
 **Leagues:** Premier League · La Liga · Bundesliga · Serie A · Ligue 1  
-**Seasons:** 2022–23 through 2024–25 · **Observations:** 6,702 player-seasons  
-**Data sources:** FBRef (performance stats), Capology (salary data)
+**Seasons:** 2022–23 · 2023–24 · 2024–25 · **Observations:** 6,702 player-seasons  
+**Data sources:** FBRef (performance stats) · Capology (salary data) · StatsBomb  
+**Author:** Pablo Stoclet · Supervisor: Prof. Paula Abascal Gutierrez-Colomer
 
 ---
 
 ## Research Questions
 
-1. Does the relationship between player productivity and wages follow a non-linear (concave) pattern? (**H1**)
-2. Are there systematic salary structure differences across the five major European leagues? (**H2**)
-3. What share of salary variance is explained by the club rather than by individual performance? (**H3**)
-4. Do Financial Sustainability Regulations (FSR) increase wage rigidity and efficiency mismatch persistence? (**H4**)
+| # | Hypothesis | Result |
+|---|---|---|
+| H1 | Does wage return follow a concave (inverted-U) age curve, and does superstar convexity exist for Forwards? | Partial — age curve confirmed all 4 positions; superstar convexity not significant (p=0.261) |
+| H2 | Do leagues follow systematically different wage-setting structures? | Confirmed — Levene's W = 2.44–10.96, all p < 0.05 |
+| H3 | Does club identity drive wage premiums beyond individual performance? | Partial — ICC meaningful for Forwards (0.187) and Goalkeepers (0.203); near-zero for DEF/MID |
+| H4 | Do frozen wages lock in mispricing and amplify efficiency persistence? | Confirmed — β̂ = 0.554, t = 17.32, p < 10⁻⁶⁴ |
 
 ---
 
 ## Key Concept: Efficiency Score
 
 ```
-efficiency_score = log_wage_observed − log_wage_estimated
+efficiency_score = log_wage_observed − log_wage_predicted
 ```
 
-- **> 0** → player earns above what the model predicts (tendency to be overpaid)
-- **< 0** → player earns below what the model predicts (tendency to be underpaid)
-- Labels (Overpaid / Fair / Underpaid) use a ±0.5 threshold on the log-residual scale
+- **> +0.5σ** → player earns above what the model predicts → classified **Overpaid**
+- **< −0.5σ** → player earns below what the model predicts → classified **Underpaid**
+- Within **±0.5σ** → classified **Fairly Priced**
+
+The threshold is ±0.5 standard deviations of the residual distribution, not a fixed percentage.
 
 ---
 
 ## Model Performance
 
-| Position | Adj. R² | Key Predictors |
-|---|---|---|
-| Forwards | 0.713 | Goals, xG, progressive runs, pressing |
-| Midfielders | 0.698 | Key passes, progressive passes, ball recoveries |
-| Defenders | 0.667 | Duels won, interceptions, aerials, build-up |
-| Goalkeepers | 0.634 | PSxG, save %, sweeper actions, distribution |
+| Position | Adj. R² | RMSE | Key Significant Predictors |
+|---|---|---|---|
+| Defenders | 0.713 | 0.631 | Minutes share, duels, progressive actions |
+| Midfielders | 0.692 | 0.672 | Shots on target, key passes, minutes share |
+| Forwards | 0.690 | 0.707 | Non-penalty goals p90, shots, goal conversion |
+| Goalkeepers | 0.634 | 0.722 | Minutes share, penalty save % |
 
-Each model is estimated with club and season fixed effects.
+Models use club-clustered standard errors. Wage peak ages: 31.5 (DEF) · 32.2 (MID) · 32.3 (FWD) · 36.0 (GK).
 
 ---
 
 ## Regression Specification
 
 ```
-log_wage = β₀ + β₁·Age + β₂·Age² + β₃·performance_metrics + β₄·league_dummies + ε
+log(annual_wage) = β₀ + β₁·Age + β₂·Age²
+                 + β₃·performance_metrics
+                 + β₄·league_dummies
+                 + β₅·log(club_wage_budget)
+                 + ε
 ```
 
-Position-specific performance variables (e.g., progressive carries, xG, pressures) plus club-level wage budget proxies and season fixed effects.
+Estimated separately per position group. Club-clustered standard errors throughout.
 
 ---
 
@@ -58,13 +67,16 @@ Position-specific performance variables (e.g., progressive carries, xG, pressure
 
 | Finding | Value |
 |---|---|
-| FSR interaction coefficient | +0.5541 (t=17.32, p=1.56e-64) |
-| Salary freeze persistence (with vs. without FSR adjustment) | 0.882 vs. 0.328 |
-| Forwards out-of-sample R² | ~0.51–0.56 |
-| Defenders / Midfielders out-of-sample R² | ~0.13–0.21 |
-| Jaccard stability at ±0.1 threshold variation | ~0.606 |
+| Wage rigidity interaction coefficient (H4) | β̂ = +0.554 (t = 17.32, p = 1.56×10⁻⁶⁴) |
+| Efficiency persistence — frozen wages | ρ = 0.882 |
+| Efficiency persistence — flexible wages | ρ = 0.328 |
+| Forwards in-sample Adj. R² | 0.690 |
+| Forwards out-of-sample R² | 0.51–0.56 |
+| Defenders / Midfielders OOS R² | 0.13–0.21 |
+| Chow structural break (Ligue 1 + Serie A midfielders) | F = 4.73–7.69, p < 0.001 |
+| Bootstrap ranking stability (top-20 underpaid) | Jaccard = 0.727 |
 
-FSR significantly increases wage rigidity — inefficiencies persist at nearly 3× the rate when salaries cannot adjust.
+Frozen-wage players show mispricing persistence nearly **3× higher** than players on adjusting contracts.
 
 ---
 
@@ -72,40 +84,55 @@ FSR significantly increases wage rigidity — inefficiencies persist at nearly 3
 
 ```
 TFG_Código/
-├── data/
-│   ├── raw/                    # Source data — not tracked by git (large files)
-│   │   ├── performance_stats/
-│   │   ├── player_salaries/
-│   │   └── club_wages/
-│   ├── processed/              # Cleaned and feature-engineered datasets — not tracked
-│   └── results/                # Pipeline outputs (regenerated by notebooks)
-│       ├── 01_model_coefficients/    # OLS coefficients and model summaries per position
-│       ├── 02_efficiency_scores/     # Individual scores, panel comparison, career trajectory
-│       ├── 03_hypothesis_tests/      # H1–H4 tests, FSR, Chow, defensive context
-│       ├── 04_robustness/            # Bootstrap, OOS validation, VIF, threshold stability
-│       ├── 05_scouting_hiring/       # Transfer intelligence, squad health, scouting scores
-│       ├── 06_descriptive_stats/     # Wage rigidity, nationality premium, league effects
-│       ├── 07_figures/               # Static figures for thesis
-│       ├── 08_injury_context/        # Injury-adjusted analysis
-│       └── 09_interactive_visualizations/  # Standalone HTML Plotly charts
+├── docs/                        # GitHub Pages site (live dashboard)
+│   ├── index.html               # Landing page
+│   ├── pages/                   # All dashboard pages
+│   │   ├── market.html          # League efficiency rankings
+│   │   ├── players.html         # Player wage rankings
+│   │   ├── squads.html          # Squad salary analysis
+│   │   ├── xi.html              # Best Value XI
+│   │   ├── models.html          # OLS coefficient explorer
+│   │   ├── hypotheses.html      # H1–H4 results
+│   │   └── applications.html    # Practical tools
+│   ├── data/                    # Static JSON served by api-shim.js
+│   └── images/                  # Team logos and player photos
 │
 ├── notebooks/
-│   ├── 01_scraping.ipynb             # FBRef and Capology data collection
-│   ├── 02_data_cleaning.ipynb        # Merging, deduplication, type fixes
+│   ├── 01_scraping.ipynb        # FBRef and Capology data collection
+│   ├── 02_data_cleaning.ipynb   # Merging, deduplication, type fixes
 │   ├── 03_feature_engineering.ipynb  # Age², league dummies, position groups
-│   ├── 04_ols_regression.ipynb       # Position-specific OLS models
+│   ├── 04_ols_regression.ipynb  # Position-specific OLS models
 │   └── 05_salary_efficiency_pipeline.ipynb  # Full pipeline: scores + all outputs
 │
-├── src/
-│   ├── dashboard/
-│   │   ├── app.py                    # Flask web app — run locally with python app.py
-│   │   └── templates/                # Jinja2 templates (base, players, squads, market, etc.)
-│   └── visualizations/               # Scripts for static thesis figures
+├── scripts/
+│   ├── figure_02_efficiency_by_position_league.py
+│   ├── figure_03_wage_premium_heatmap.py
+│   ├── figure_04_wage_rigidity_persistence.py
+│   ├── figure_05_bootstrap_rankings.py
+│   ├── figure_06_injury_robustness.py
+│   └── export_static_data.py    # Exports docs/data/ JSON for the dashboard
 │
-├── docs/
-│   ├── index.html               # GitHub Pages landing page (live site above)
-│   ├── thesis.pdf               # Full thesis document
-│   └── output_guide.md          # Field guide: what each results file contains
+├── src/
+│   ├── dashboard/app.py         # Flask web app — run locally
+│   └── visualizations/          # Legacy static figure scripts
+│
+├── data/                        # Not tracked by git (large files — regenerate locally)
+│   ├── raw/                     # Source data
+│   ├── processed/               # Cleaned datasets
+│   └── results/                 # Pipeline outputs
+│       ├── 01_model_coefficients/
+│       ├── 02_efficiency_scores/
+│       ├── 03_hypothesis_tests/
+│       ├── 04_robustness/
+│       ├── 05_scouting_hiring/
+│       ├── 06_descriptive_stats/
+│       ├── 07_figures/
+│       ├── 08_injury_context/
+│       └── 09_interactive_visualizations/
+│
+├── Database/
+│   └── Analysis_Results/
+│       └── 07_figures/          # Final thesis figures (figs 02–06)
 │
 ├── requirements.txt
 └── .gitignore
@@ -122,17 +149,22 @@ TFG_Código/
 pip install -r requirements.txt
 ```
 
-**1. Data collection → cleaning → feature engineering:**
+**1. Reproduce the full pipeline (data → model → scores → outputs):**
 ```bash
 jupyter notebook notebooks/01_scraping.ipynb
 jupyter notebook notebooks/02_data_cleaning.ipynb
 jupyter notebook notebooks/03_feature_engineering.ipynb
-```
-
-**2. Model estimation and full output pipeline:**
-```bash
 jupyter notebook notebooks/04_ols_regression.ipynb
 jupyter notebook notebooks/05_salary_efficiency_pipeline.ipynb
+```
+
+**2. Regenerate thesis figures:**
+```bash
+python scripts/figure_02_efficiency_by_position_league.py
+python scripts/figure_03_wage_premium_heatmap.py
+python scripts/figure_04_wage_rigidity_persistence.py
+python scripts/figure_05_bootstrap_rankings.py
+python scripts/figure_06_injury_robustness.py
 ```
 
 **3. Local dashboard** (reads from `data/results/`):
@@ -141,10 +173,14 @@ python src/dashboard/app.py
 # → http://localhost:5000
 ```
 
+**4. Export static JSON for the GitHub Pages dashboard:**
+```bash
+python scripts/export_static_data.py
+```
+
 ---
 
 ## Further Reading
 
-- **[docs/output_guide.md](docs/output_guide.md)** — field guide to every results file: columns, interpretation, and caveats.
-- **[Live project page](https://pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET)** — interactive charts and findings summary.
-- **[docs/thesis.pdf](docs/thesis.pdf)** — full thesis document.
+- **[Live dashboard](https://pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET)** — interactive charts and findings summary
+- **[docs/output_guide.md](docs/output_guide.md)** — field guide to every results file
