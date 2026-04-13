@@ -116,9 +116,9 @@ TFG_Código/
 │   ├── dashboard/app.py         # Flask web app — run locally
 │   └── visualizations/          # Legacy static figure scripts
 │
-├── data/                        # Not tracked by git (large files — regenerate locally)
-│   ├── raw/                     # Source data
-│   ├── processed/               # Cleaned datasets
+├── data/                        # Tracked in git (raw inputs + pipeline outputs)
+│   ├── raw/                     # Source data (club wages, player stats)
+│   ├── processed/               # Cleaned and feature-engineered datasets
 │   └── results/                 # Pipeline outputs
 │       ├── 01_model_coefficients/
 │       ├── 02_efficiency_scores/
@@ -126,19 +126,13 @@ TFG_Código/
 │       ├── 04_robustness/
 │       ├── 05_scouting_hiring/
 │       ├── 06_descriptive_stats/
-│       ├── 07_figures/
+│       ├── 07_figures/          # All thesis figures (figs 02–06 + earlier versions)
 │       ├── 08_injury_context/
 │       └── 09_interactive_visualizations/
-│
-├── Database/
-│   └── Analysis_Results/
-│       └── 07_figures/          # Final thesis figures (figs 02–06)
 │
 ├── requirements.txt
 └── .gitignore
 ```
-
-> `data/raw/`, `data/processed/`, and `data/results/` are excluded from version control. Regenerate outputs by running the notebooks in order.
 
 ---
 
@@ -183,4 +177,4 @@ python scripts/export_static_data.py
 ## Further Reading
 
 - **[Live dashboard](https://pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET)** — interactive charts and findings summary
-- **[docs/output_guide.md](docs/output_guide.md)** — field guide to every results file
+- **[docs/output_guide.md](docs/output_guide.md)** — field guide to every results file in `data/results/`
