@@ -1,4 +1,4 @@
-# Football Salary Efficiency — DBA Thesis · IE University 2025
+# Football Salary Efficiency — DBA Thesis · IE University 2026
 
 > 🌐 **Live dashboard:** [pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET](https://pstoclet.github.io/DBA_TFG_CODE_PABLO_STOCLET)
 
